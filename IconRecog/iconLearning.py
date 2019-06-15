@@ -122,7 +122,7 @@ model.compile(loss='sparse_categorical_crossentropy',
 model.fit(x_train, y_train, batch_size=64, epochs=10,verbose=1,validation_split=0.2)
 
 # Save the model including architecture and weights in an h5 file
-model.save('iconModelPrototype.h5')
+model.save('iconModelPrototype.h5') # Make sure model is including in .gitignore -- too large to push
 
 # Evaluate how well the model did
 score = model.evaluate(x_test, y_test, verbose=0)

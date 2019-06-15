@@ -1,4 +1,4 @@
 /IconRecog/testingImages/*
 /IconRecog/trainingImages/*
 /IconRecog/validationImages/*
-/IconRecog/iconModelPrototype.h5
+/iconModelPrototype.h5
