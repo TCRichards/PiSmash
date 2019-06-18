@@ -205,7 +205,7 @@ def makeModel():
 def testModel():
     # Evaluate how well the model did
     model = tf.keras.models.load_model(modelName)
-    score = model.evaluate(x_test, y_test, verbose=1)
+    score = model.evaluate(x_test, y_test, verbose=1) # Current model seems to suffer from overfitting -> goes from 96% acc to 78%
     print('Metrics tracked are: ' + str(model.metrics_names))
     print('Loss = ' + str(score[0]))
     print('Accuracy = ' + str(score[1]))
@@ -219,7 +219,7 @@ def testModel():
 
         probs = model.predict(randomX).ravel()  # Returns a numpy array with probabilities of each target; forced into 1d array
         charNames = list(characterDict.keys())
-        print(probs)
+
         #for i in range(len(charNames)):
         #print(probs[i])
         #print(charNames[i] + '-> ' + str(round(probs[i]*100, 2)))
