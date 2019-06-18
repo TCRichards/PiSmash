@@ -30,6 +30,7 @@ datagen = ImageDataGenerator(
         horizontal_flip=True,
         fill_mode='nearest')
 
+#print(os.listdir(iconDir))
 
 def createTrainingData():
     # Take original images and distort, then store in player's directory
@@ -68,7 +69,7 @@ def createTrainingData():
             for batch in datagen.flow(img, batch_size=1,
                               save_to_dir= trainingDir + '/' + charName, save_prefix=charName+'_train', save_format='jpeg'):
                 i += 1
-                if i > 30:
+                if i > 50:
                     break  # otherwise the generator would loop indefinitely
 
             # Eventually, testing data should be pictures captured from screen (different than training data), but for now use random changes to original
@@ -81,4 +82,4 @@ def createTrainingData():
                     break   # otherwise the generator would loop indefinitely
 
 # Keep main call commented unless recreating training data
-# createTrainingData()
+#createTrainingData()
