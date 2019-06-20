@@ -173,8 +173,8 @@ y_test = testLabelList                                     # Refer to the labels
 
 def makeModel():
     # Train the model!
-    EPOCHS = 15
-    BATCH_SIZE = 30
+    EPOCHS = 75
+    BATCH_SIZE = 32
 
     # Make a sequential neural network
     model = tf.keras.Sequential()
@@ -196,11 +196,11 @@ def makeModel():
                  optimizer='adam',
                  metrics=['accuracy'])
 
-    model.fit(x_train, y_train, epochs=EPOCHS,verbose=1,validation_split=0.2)
+    history = model.fit(x_train, y_train, epochs=EPOCHS,verbose=1,validation_split=0.2)
 
     # Save the model including architecture and weights in an h5 file
     model.save(modelName) # Make sure model is including in .gitignore -- too large to push
-
+    return history
 
 def testModel():
     # Evaluate how well the model did
@@ -227,8 +227,8 @@ def testModel():
     print(probs)
 
 def main(): # Main function allows us to create and test our model seperately
-    #makeModel()
-    testModel()
+    makeModel()
+    #testModel()
 
 
 

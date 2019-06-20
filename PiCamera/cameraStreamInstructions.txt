@@ -1,0 +1,10 @@
+To do it the n00b way:
+raspivid -o - -t 0 -fps 30| cvlc -vvv stream:///dev/stdin --sout '#rtp{sdp=rtsp://:8554/}' :demux=h264
+This method is MUCH simpler but does introduce a noticeably higher latency and lower framerate
+
+Instructions from https://www.linux-projects.org/uv4l/tutorials/rtsp-server/
+I set up uv4l which has a much lower latency.  Once the PiCamera is registered (on mine it is device 4 -- notice video4 in following command), type the following into the terminal:
+dd if=/dev/video0 bs=1M | cvlc -vvv stream:///dev/stdin --sout '#rtp{sdp=rtsp://:8554/}' --demux=h264
+
+The following command theoretically should work but kept hanging for me (buggy vlc).  Use the above instead
+#cvlc -vvv v4l2c:///dev/video4:width=640:height=480:chroma=H264 --sout '#rtp{sdp=rtsp://:8554/}' --demux h264
