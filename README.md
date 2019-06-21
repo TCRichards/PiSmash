@@ -15,7 +15,7 @@
 
 
 ## 2.	Send collected video and audio over Wi-Fi:
-### Status: Complete
+### Status: Complete; using UV4l library to network stream from RPi
 
   **a.**	If using IP P2P camera, this is done automatically   
   **b.**	If using Pi Camera, photos are taken continuously and then sent over Wi-Fi using MJPG-Streamer, an open-source streaming library   
@@ -47,16 +47,16 @@
 ## 5.	Create Website!
 ### Status: Not started
 
-    **a.**	Website's backend will store the database with all smash data.  
-    **b.**	Website's frontend will provide an interface for users to access to see all statistics
+   **a.**	Website's backend will store the database with all smash data.  
+   **b.**	Website's frontend will provide an interface for users to access to see all statistics
         **i.**	Provide capabilities for determining probabilities based on certain matchups, record the characters played in all games to provide substantially improved control over Smash's built-in statistics."
 
 ## 6.	Send detections and processed data from host computer to database on website's backend:
 ### Status: Not started
 
-    **a.**	Our website's backend could be a database that each Raspberry Pi monitors.  Easy to write data from PC to database, and have Raspberry Pi register changes.
-      **i.**	Ideally would use SQL, but a big spreadsheet wouldn't be terrible
-      **ii.**	Since changes are made to database, we can use this master database to run any statistics
+   **a.**	Our website's backend could be a database that each Raspberry Pi monitors.  Easy to write data from PC to database, and have Raspberry Pi register changes.
+     **i.**	Ideally would use SQL, but a big spreadsheet wouldn't be terrible
+     **ii.**	Since changes are made to database, we can use this master database to run any statistics
 
 ## 7.	Gather data from Server
 ### Status: Not Started
