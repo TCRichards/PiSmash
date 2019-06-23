@@ -2,3 +2,6 @@
 /IconRecog/trainingImages/*
 /IconRecog/validationImages/*
 /iconModelPrototype.h5
+/ScreenClassifier/Victory/*
+/ScreenClassifier/Game/*
+/ScreenClassifier/Select/*
