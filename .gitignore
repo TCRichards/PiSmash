@@ -1,6 +1,5 @@
 /IconClassifier/testingImages/*
 /IconClassifier/trainingImages/*
-/IconClassifier/validationImages/*
 /iconModelPrototype.h5
 /screenModelPrototype.h5
 /iconModel.h5
