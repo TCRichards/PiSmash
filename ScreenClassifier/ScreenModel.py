@@ -7,6 +7,7 @@ import makeScreens
 import sys
 sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
 import modelHelper
+from collections import OrderedDict
 
 trainingDir = makeScreens.trainingDir
 testingDir = makeScreens.testingDir

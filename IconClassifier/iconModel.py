@@ -8,6 +8,7 @@ import makeIcons
 import sys
 sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
 import modelHelper
+from collections import OrderedDict
 
 trainingDir = makeIcons.trainingDir
 testingDir = makeIcons.testingDir
