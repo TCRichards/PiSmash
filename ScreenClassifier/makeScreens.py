@@ -1,12 +1,9 @@
-<<<<<<< HEAD
 '''
 Uses character icons from Nintendo to generate a ton of training data
 Author: Thomas Richards
 Date Modified: 6/11/19
 '''
 
-=======
->>>>>>> 3bd098514bd71a8c2e3b949463ba742baf54a513
 import vlc
 import pafy
 import time
@@ -17,7 +14,6 @@ import numpy as np
 # Records screenshots and stores them in different directories depending on type
 # IMPORTANT: After screenshots are recorded, go through directories and delete erroneous pictures
 
-<<<<<<< HEAD
 curDir = 'ScreenClassifier/'
 trainingDir = curDir + 'trainingImages/'
 testingDir = curDir + 'testingImages/'
@@ -28,11 +24,6 @@ selectDir = trainingDir+'Select/'
 
 num_rows, num_cols = 200, 200
 
-=======
-winDir = 'ScreenClassifier/Victory/'
-gameDir = 'ScreenClassifier/Game/'
-selectDir = 'ScreenClassifier/Select/'
->>>>>>> 3bd098514bd71a8c2e3b949463ba742baf54a513
 directories = [winDir, gameDir, selectDir]
 
 # Links to YouTube videos containing screenshots relevant to each category
@@ -41,19 +32,12 @@ gameURL = ['https://www.youtube.com/watch?v=CyuRaYwb2XQ',
 'https://www.youtube.com/watch?v=TIV2PYIFkqE&t=33s',
 'https://www.youtube.com/watch?v=9nnZgn2v2r0',
 'https://www.youtube.com/watch?v=uuCcTgIRWeE',       # Included one 8-player game to spice things up
-<<<<<<< HEAD
 'https://www.youtube.com/watch?v=rZsmUnhiQ5Q',
 'https://www.youtube.com/watch?v=5UuK89BaCSQ']
+
 # This video only uses select screens with 2 players.  May need to add another
 selectURLs = ['https://www.youtube.com/watch?v=KQvCBxsg_Z0']
 
-=======
-'https://www.youtube.com/watch?v=rZsmUnhiQ5Q']
-# This video only uses select screens with 2 players.  May need to add another
-selectURLs = ['https://www.youtube.com/watch?v=KQvCBxsg_Z0']
-
-
->>>>>>> 3bd098514bd71a8c2e3b949463ba742baf54a513
 # Make new directories if necessary
 for directory in directories:
     try:
@@ -78,23 +62,16 @@ def getParameters(type):
     if type == 'win':
         prefix = 'vicScreen_'
         dir = winDir
-        initialWait = 14.3
-        wait = 6.98
+        initialWait = 14.4
+        wait = 6.90
     elif type == 'game':
         dir = gameDir
         prefix = 'gameScreen_'
         initialWait = 0
-<<<<<<< HEAD
         wait = 5
     elif type == 'select':
         initialWait = 15
         wait = 3
-=======
-        wait = 15
-    elif type == 'select':
-        initialWait = 15
-        wait = 4
->>>>>>> 3bd098514bd71a8c2e3b949463ba742baf54a513
         dir = selectDir
         prefix = 'selectScreen_'
     return initialWait, wait, prefix, dir
@@ -147,10 +124,6 @@ def makeGameScreens(index, trial):
 def makeSelectScreens(index, trial):
     scanVideo('select', selectURLs[index], trial)
 
-<<<<<<< HEAD
 #makeGameScreens(4, 4)
 #makeWinScreens(0)
-makeSelectScreens(0, 0)
-=======
-makeSelectScreens(0, 1)
->>>>>>> 3bd098514bd71a8c2e3b949463ba742baf54a513
+#makeWinScreens(2)
