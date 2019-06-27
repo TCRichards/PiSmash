@@ -13,6 +13,10 @@ from PIL import Image
 import pathlib
 from collections import OrderedDict
 
+'''
+Given a directory where training data is located, and a dictionary containing mappings between each
+sub-directory name and classification label, this method outputs training data in numpy arrays
+'''
 def getTrainingData(trainingDir, myDict, num_rows, num_cols):
     # Create empty numpy arrays to store file names and corresponding labels
     trainFileList = np.array([], dtype = str)                       # List of filenames as str
