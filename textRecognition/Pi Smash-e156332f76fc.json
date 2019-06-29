@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "glass-stratum-245220",
+  "private_key_id": "e156332f76fc45cb94b0b6ec3e1ed7370b2a54ab",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD0CxqNewS+zXUn\nAh0t7Z6xaMSBd6BIURezXD14t2HGEXTmTD5k6kUK6yXZQ8xD4nbq51/kx0RhFcoQ\naG19OqGsKfdbzw5EVhZQixFHO/lrWBOjuCyk/C+qyKucudWAv4hBC3dh0dYWM+4y\nsfDnLE98PtbTAACwRa2Rbd9tMbLfdS1KmVN35rH5SAH4K2kgDtkAlRpiPTwOh/A/\nPm1brouNuf8t3F9eAvnWz9MxDYts3bhLfVOVp2lJ/WMKmztDZlQml3wa2gYEfaZt\nHHRZmRPOVIkzMgvSgo2ZfxO422dcNlmP8gqrio41JviFiysIgoFZ07oRuMnvfHzG\neEhm1a4bAgMBAAECggEAJU/dS2xXmWSIWOJ126PM84r1IGZN10CuwvmDXIWNKV9Z\n5CwcDgnTbIvvSXyYKnjhfaDKhIwC5GUUc9XDh7YDKfNwolTR9ZjD6KSai62bwNHC\njvGFwePc1dvAgUHYZsrh5i/+nLIcbWCbNp0GHBImRPTGm5QQhuLgWq/VzTggBRH0\n4CvPS8fWaKsBPC+Y40KcKryeEmhbPq/EC4tsCTFWISDk0lZfBoayWpjhvIE2yKGk\n3mgJ5g784GvE5s4OhUZXgB5h6TKUckdk1GhFBkObylrnDvMxa3UZYDKEVq+8UZ3V\nsYDImWSx7Rh9qai72N6Yul44C+kkWF53tFj2A9zZYQKBgQD7DzanwQ9e9CotgJXF\nQhifly/HjqbDiqOApXRPu+ROuMIZaPNJ3oEsZAzYabaIo6sgNhHLJnpTDXeIzoGf\nN8JBvAm61NR3EG5Du2w2Gk1KBblx26w0LX4x31zth+HbAxcuiu3VeLQfFua2LgNc\nrIrl18nDBfmLta/iDvdrlrD1lQKBgQD42It13hs6eul1CX+j/5jVBW2u09UTDzXQ\n6JiPws7ajxdtGIbw/cbdQWuyLzKLlCWt2ZzIjz4uRHpFRR6ves7FF+57fBIWIt6p\nNtI82p4A0R8Xf7r5gX2kqWBFOl/5QQz+rwGzjxZS3c5Xv4Ef+Pq8FW6Q5eeAaPEW\nGOD337TI7wKBgFsVxO2N5Ka9jQPfL/dWKJrV/ja3cZdmGDXXUWCQOZ+59mnDoui8\n+j6BugtWJyxhvPc9xqzes+in7SNMUMjUMP0qXJlVGBRueKLIP9VNK5dchlBhs5Nm\noe80K4HeF7oe3+056FnXpfnVlDSqcvvPecEzzfacl1Hxw/MPHQMCtAcVAoGABhQ8\nK+/2GFKiW2KVBKuczy9nw4qXPPT1KppUB8cJiJtQRjEAMujwL72GZP70LCa9WObl\nBp1BNp4jooeSvVSxsmzoPYoFYxcM+3NEZYotq/Vv3gIXzjqUmC4vFOHdMFifeaVK\n1FkdgX67qLcb720Eqw2W+uEy65cktJZ9AHEtmG8CgYEAq90I7v5CVXXV+GRTPkfR\npX0OpGQDSRHKT+JXiSIbo3HFz1aZXe0ZIdYvPGJg0HoO54xLBl3rL/qDTSv8SLpf\ngzLo/Zuo0PcoyOJ3J3IFn0cKY38liAKKaMAk+gwQwnzdA0ONyznyjyzflPOKzsm7\n7iIVzWy11W/q0rdUpnD9fcY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "testing-text-detection@glass-stratum-245220.iam.gserviceaccount.com",
+  "client_id": "101940822426655337438",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/testing-text-detection%40glass-stratum-245220.iam.gserviceaccount.com"
+}

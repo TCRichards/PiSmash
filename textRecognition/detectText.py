@@ -1,7 +1,7 @@
 '''
 This example was cookie-cutter copied from https://www.pyimagesearch.com/2018/09/17/opencv-ocr-and-text-recognition-with-tesseract/,
-except I replaced command-line arguemnts
-Read the above guide for how to use all the stuff.
+except I replaced command-line arguemnts with hard-coded values
+Read the above guide for how the code works and more about OCV's EAST text detector.
 Follow the guide and download the source code to access the model frozen_east_text_detection.pb,
 which is too large for Github
 '''
@@ -17,12 +17,12 @@ from PIL import Image
 import pytesseract
 
 curDir = 'textRecognition/'
-imagePath = curDir+'resultsScreen.jpg'
+imagePath = curDir+'results2.png'
 eastPath = curDir+'frozen_east_text_detection.pb'
 
 width, height = 320, 320
-min_confidence = 0.6
-padding = 1.2
+min_confidence = 0.9
+padding = 0.05
 
 def decode_predictions(scores, geometry):
 	# grab the number of rows and columns from the scores volume, then
@@ -82,9 +82,44 @@ def decode_predictions(scores, geometry):
 	return (rects, confidences)
 
 # load the input image and grab the image dimensions
-image = cv2.imread(imagePath)
+img = cv2.imread(imagePath)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+'''
+
+# Define white color in HSV colorspace
+lower_white = np.array([0, 0, 150])
+upper_white = np.array([255, 100, 255])
+brightHSV = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+
+maskHSV = cv2.inRange(brightHSV, lower_white, upper_white)
+resultHSV = cv2.bitwise_and(brightHSV, brightHSV, mask = maskHSV)
+resultNormal = cv2.cvtColor(resultHSV, cv2.COLOR_HSV2RGB)
+'''
+kernel = np.ones((2, 2), np.uint8)
+img = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)	# This seems to be by far the best tool
+
+# Convert to gray
+#img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+#ret, thresh1 = cv2.threshold(img, 20, 255, cv2.THRESH_BINARY)
+# Apply dilation and erosion to remove some noise
+img = cv2.dilate(img, kernel, iterations=1)	# Makes everything smoother
+img = cv2.erode(img, kernel, iterations=2)	# Makes edges more pronounced
+# Apply blur to smooth out the edges
+#img = cv2.GaussianBlur(img, (3, 3), 0)
+#img = cv2.bilateralFilter(img,9,75,75)
+#img = cv2.medianBlur(img, 1)
+#img = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY )[1]
+#img = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+#cv2.adaptiveThreshold(img, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2)
+
+plt.imshow(img)
+plt.show()
+
+image = img
+
 orig = image.copy()
 (origH, origW) = image.shape[:2]
+
 
 # set the new width and height and then determine the ratio in change
 # for both the width and height
@@ -93,7 +128,7 @@ rW = origW / float(newW)
 rH = origH / float(newH)
 
 # resize the image and grab the new image dimensions
-image = cv2.resize(image, (newW, newH))
+image = cv2.resize(image, (newW, newH), interpolation=cv2.INTER_AREA)
 (H, W) = np.array(image).shape[:2]
 
 # define the two output layer names for the EAST detector model that
@@ -206,7 +241,7 @@ for (startX, startY, endX, endY) in boxes:
 	# wish to use the LSTM neural net model for OCR, and finally
 	# (3) an OEM value, in this case, 7 which implies that we are
 	# treating the ROI as a single line of text
-	config = ("-l eng --oem 1 --psm 3")
+	config = ("-l eng --oem 1 --psm 5")
 	text = pytesseract.image_to_string(roi, config=config)
 
 	# add the bounding box coordinates and OCR'd text to the list
