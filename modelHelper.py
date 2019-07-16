@@ -80,22 +80,22 @@ def makeImageModel(x_train, y_train, modelName, numTargets, EPOCHS, BATCH_SIZE):
     model = tf.keras.Sequential()
     # Create CNN model=======================================================================
     # Must define the input shape in the first layer of the neural network
-    model.add(tf.keras.layers.Conv2D(filters=64, kernel_size=2, padding='same', activation='relu', input_shape=(num_rows,num_cols,3)))    #TODO: Not sure if this shape is correct
-    model.add(tf.keras.layers.MaxPooling2D(pool_size=2))
-    model.add(tf.keras.layers.Dropout(0.3))
+    model.add(tf.keras.layers.Conv2D(filters=64, kernel_size=2, padding='same', activation='relu', input_shape=(num_rows,num_cols,3)))    #TODO: Not sure if this shape is correct. convolves filters/kernels with input layer to produce an output matrix
+    model.add(tf.keras.layers.MaxPooling2D(pool_size=2)) #pools together subregions of inputs and extracts the maximum value
+    model.add(tf.keras.layers.Dropout(0.3)) #sets a fraction of inputs to 0, to prevent overfitting
     model.add(tf.keras.layers.Conv2D(filters=32, kernel_size=2, padding='same', activation='relu'))
     model.add(tf.keras.layers.MaxPooling2D(pool_size=2))
     model.add(tf.keras.layers.Dropout(0.3))
-    model.add(tf.keras.layers.Flatten())
+    model.add(tf.keras.layers.Flatten()) #like np.reshape but with 'C' ordering
     model.add(tf.keras.layers.Dense(256, activation='relu'))
     model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(numTargets, activation='softmax'))    # Final layer must have 1 node per character
     # Take a look at the model summary
     #model.summary()
 
-    model.compile(loss='sparse_categorical_crossentropy',
+    model.compile(loss='sparse_categorical_crossentropy', #loss function to be used
                  optimizer='adam',
-                 metrics=['accuracy'])
+                 metrics=['accuracy']) #things to monitor while the NN is in use
 
     history = model.fit(x_train, y_train, epochs=EPOCHS,verbose=1,validation_split=0.2)
 
