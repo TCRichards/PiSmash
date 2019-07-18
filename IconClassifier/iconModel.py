@@ -121,6 +121,6 @@ def main(): # Main function allows us to create and test our model seperately
     testModel()
 
 
-
-main()
+# keep commented so we can import for the dictionary
+#main()
 #=============================================

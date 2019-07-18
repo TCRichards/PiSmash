@@ -15,9 +15,10 @@ import pytesseract as tes
 import time
 import OCVDetection
 
+
 # Explicitly add google credentials to the command line if not there already
 curDir = os.getcwd() + '/textRecognition/'
-imagePath = curDir+'images/marthVicScreen.jpg'
+imagePath = curDir+'selectScreens/screen3.jpg'
 #imagePath = 'textRecognition/opencv-text-recognition/images/example_01.jpg'
 credentialsPath = curDir+'Pi Smash-ecdcebce34a8.json'
 eastPath = curDir+'frozen_east_text_detection.pb'
@@ -27,7 +28,7 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialsPath
 # Instantiates a client
 client = vision.ImageAnnotatorClient()
 
-def detect_text_vision(path):
+def detect_text_vision(path, printing=False):
     """Detects text in the file."""
     from google.cloud import vision
     client = vision.ImageAnnotatorClient()
@@ -44,19 +45,19 @@ def detect_text_vision(path):
     #print('Texts:')
 
     for text in texts:
-        ''' Print Outputs
-        print('\n"{}"'.format(text.description.encode('utf-8')))
         vertices = (['({},{})'.format(vertex.x, vertex.y)
                     for vertex in text.bounding_poly.vertices])
-        print('bounds: {}'.format(','.join(vertices)))
-        '''
+        if printing:
+            # Print Outputs
+            print('\n"{}"'.format(text.description.encode('utf-8')))
+            print('bounds: {}'.format(','.join(vertices)))
         labels = np.append(labels, text.description.encode('utf-8'))   # Have to encode in utf-8 to avoid some error
         bounds.append(text.bounding_poly)
 
     return labels, bounds
 
 def detect_text_openCV(path, min_confidence=0.5, padding=0):
-    return OCVDetection.loadImage(imagePath)
+    return OCVDetection.loadImage(path)
 
 def draw_boxes(path, bounds, color,width=5):
     image = Image.open(path)
@@ -90,9 +91,20 @@ def rankOrder(labels, bounds):
         print('P{}'.format(item[0]))
 
     return scoreDict
+def ShowDetectedImage():
+    #detect_text_openCV(imagePath)
+    labels, bounds = detect_text_vision(imagePath)
+    annotated_image = draw_boxes(imagePath, bounds, 'green')
+    plt.imshow(annotated_image)
+    plt.show()
 
-
-image, results = detect_text_openCV(imagePath)
+"""
+#image, results = detect_text_openCV(imagePath)
+labels, bounds = detect_text_vision(imagePath)
+annotated_image = draw_boxes(imagePath, bounds, 'green')
+plt.imshow(annotated_image)
+plt.show()
+"""
 
 '''
 # General pattern for end screen seems to be different for different numbers of players:

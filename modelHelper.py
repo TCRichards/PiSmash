@@ -128,10 +128,10 @@ def testModel(x_test, y_test, modelPath, matchDict):
 
         names = matchDict.keys()
         probDict = OrderedDict(sorted(zip(names, probs), key = lambda t: t[1], reverse=True)) # Place in an ordered dict to sort names along with probs
-        keys = np.array(list(probDict.keys()))[:5]               # Extract ordered names and probabilities from ordered dict
+        keys = np.array(list(probDict.keys()))[:5]                      # Extract ordered names and probabilities from ordered dict
         probabilities = np.array(list(probDict.values()))[:5]           # Keep maximum length of both to top 5 answers
 
-        probLabels = []                                                 # Make fancy labels explaining probabilities
+        probLabels = []                                                 # Make some nifty labels explaining probabilities
         for j in range(len(keys)):
             probLabels.append('{}: {:.2f} %'.format(keys[j], probabilities[j]*100))
         testFig.add_subplot(2,6,i+2)

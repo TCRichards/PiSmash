@@ -9,7 +9,6 @@ import numpy as np
 
 output_file("bargraphSmash.html")
 
-
 #example data for testing only
 #players = ['BEEF', 'Thomato', 'postmabone', 'curt', 'LONG']
 #counts = [75, 56, 69, 24, 101]
@@ -22,7 +21,7 @@ src = ColumnDataSource(data=dict(players = players, counts = counts))
 # sorting the bars means sorting the range factors
 #sorted_players = sorted(players, key=lambda x: counts[players.index(x)])
 
-p = Figure(plot_height = 400, plot_width = 600, x_range=players, 
+p = Figure(plot_height = 400, plot_width = 600, x_range=players,
            x_axis_label = 'player name',
            y_axis_label = '',
            title="Stats per player", tools = "xpan, xwheel_zoom",
@@ -70,7 +69,7 @@ callbackWin = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0
 
     axis.axis_label = "Win Count";
 
-    src.change.emit();   
+    src.change.emit();
     p.change.emit();
 """)
 
@@ -103,7 +102,7 @@ callbackKO = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]
     axis.axis_label = "KO Count";
 
     src.change.emit();
-    p.change.emit();   
+    p.change.emit();
 """)
 
 

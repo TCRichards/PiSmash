@@ -15,7 +15,7 @@ curDir = 'IconClassifier'
 trainingDir = curDir + '/trainingImages'
 testingDir = curDir + '/testingImages'
 validationDir = curDir + '/validationImages'
-iconDir = curDir + './rawIcons'
+iconDir = curDir + '/rawIcons'
 
 # Image dimensions
 num_rows, num_cols = 200, 200

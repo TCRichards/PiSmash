@@ -144,7 +144,7 @@ def loadImage(path, min_confidence=0.6):
 	# initialize the list of results
 	results = []
 
-	orig = processImage(orig)
+	#orig = processImage(orig)
 	# loop over the bounding boxes
 	for (startX, startY, endX, endY) in boxes:
 		# scale the bounding box coordinates based on the respective
@@ -170,11 +170,11 @@ def loadImage(path, min_confidence=0.6):
 		roi = orig[startY:endY, startX:endX]
 
 		# in order to apply Tesseract v4 to OCR text we must supply
-		# (1) a language, (2) an OEM flag of 4, indicating that the we
+		# (1) a language, (2) an OEM flag of 1, indicating that the we
 		# wish to use the LSTM neural net model for OCR, and finally
 		# (3) an OEM value, in this case, 7 which implies that we are
 		# treating the ROI as a single line of text
-		config = ("-c tessedit_char_whitelist=1234PMARTH --user-words foo --oem 1 --psm 11")
+		config = ("-c tessedit_char_whitelist=1234PMARTH --user-words foo --oem 1 --psm 7")
 		text = pytesseract.image_to_string(roi, config=config)
 
 		# add the bounding box coordinates and OCR'd text to the list
@@ -202,7 +202,9 @@ def loadImage(path, min_confidence=0.6):
 			cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
 
 		# show the output image
-		cv2.imshow("Text Detection", output)
+		#cv2.imshow("Text Detection", output)
+		plt.imshow(image)
+		plt.show()
 		cv2.waitKey(0)
 
 	return image, results
