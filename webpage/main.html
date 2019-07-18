@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Bokeh Plot</title>
+
+
+
+
+    <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-1.2.0.min.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.2.0.min.css" type="text/css" />
+
+
+
+    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-1.2.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.2.0.min.js"></script>
+    <script type="text/javascript">
+        Bokeh.set_log_level("info");
+    </script>
+
+    <script src="/s/jquery-331min.js"></script>
+
+
+
+
+</head>
+
+
+<body>
+
+
+
+    <div id="plotBar" style="padding:25px">
+
+        <div class="bk-root" id="f7213a4d-c12b-493b-aabd-2b944fc91685" data-root-id="1037"></div>
+
+
+
+
+
+        <script type="application/json" id="1101">
+            {"72e1b320-5b1c-4a43-8a37-56c7716db024":{"roots":{"references":[{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"value":"#1f77b4"},"line_alpha":{"value":0.1},"line_color":{"value":"#1f77b4"},"top":{"field":"counts"},"width":{"value":0.9},"x":{"field":"players"}},"id":"1029","type":"VBar"},{"attributes":{"active_drag":{"id":"1022","type":"PanTool"},"active_inspect":"auto","active_multi":null,"active_scroll":{"id":"1023","type":"WheelZoomTool"},"active_tap":"auto","tools":[{"id":"1022","type":"PanTool"},{"id":"1023","type":"WheelZoomTool"}]},"id":"1024","type":"Toolbar"},{"attributes":{"axis_label":"player name","axis_label_text_font_size":{"value":"14pt"},"formatter":{"id":"1041","type":"CategoricalTickFormatter"},"ticker":{"id":"1014","type":"CategoricalTicker"}},"id":"1013","type":"CategoricalAxis"},{"attributes":{"dimensions":"width"},"id":"1023","type":"WheelZoomTool"},{"attributes":{},"id":"1039","type":"BasicTickFormatter"},{"attributes":{},"id":"1014","type":"CategoricalTicker"},{"attributes":{"fill_color":{"value":"#1f77b4"},"line_color":{"value":"#1f77b4"},"top":{"field":"counts"},"width":{"value":0.9},"x":{"field":"players"}},"id":"1028","type":"VBar"},{"attributes":{"data_source":{"id":"1001","type":"ColumnDataSource"},"glyph":{"id":"1028","type":"VBar"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1029","type":"VBar"},"selection_glyph":null,"view":{"id":"1031","type":"CDSView"}},"id":"1030","type":"GlyphRenderer"},{"attributes":{},"id":"1041","type":"CategoricalTickFormatter"},{"attributes":{"button_type":"primary","callback":null,"icon":null,"js_event_callbacks":{"button_click":[{"id":"1032","type":"CustomJS"}]},"label":"Show Win Count (Default)"},"id":"1034","type":"Button"},{"attributes":{"grid_line_color":null,"ticker":{"id":"1014","type":"CategoricalTicker"}},"id":"1016","type":"Grid"},{"attributes":{"below":[{"id":"1013","type":"CategoricalAxis"}],"center":[{"id":"1016","type":"Grid"},{"id":"1021","type":"Grid"}],"left":[{"id":"1017","type":"LinearAxis"}],"plot_height":400,"renderers":[{"id":"1030","type":"GlyphRenderer"}],"title":{"id":"1003","type":"Title"},"toolbar":{"id":"1024","type":"Toolbar"},"x_range":{"id":"1005","type":"FactorRange"},"x_scale":{"id":"1009","type":"CategoricalScale"},"y_range":{"id":"1007","type":"DataRange1d"},"y_scale":{"id":"1011","type":"LinearScale"}},"id":"1002","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"1009","type":"CategoricalScale"},{"attributes":{"text":"Stats per player"},"id":"1003","type":"Title"},{"attributes":{},"id":"1043","type":"Selection"},{"attributes":{"args":{"axis":{"id":"1017","type":"LinearAxis"},"p":{"id":"1002","subtype":"Figure","type":"Plot"},"src":{"id":"1001","type":"ColumnDataSource"},"x_range":{"id":"1005","type":"FactorRange"}},"code":"\n\n    p.reset.emit();\n\n    let result = createKOBars();\n    let players_result = result[0];\n    let KOcounts_result = result[1];\n\n    x_range.factors = players_result;\n\n    var data = src.data;\n\n    data['players'] = [];\n    data['counts'] = [];\n\n    players = data['players']\n    counts = data['counts']\n\n    for (let i = 0; i &lt; players_result.length; i++){\n        players[i] = players_result[i];\n        counts[i] = KOcounts_result[i];\n    }\n\n    data['players'] = players;\n    data['counts'] = counts;\n\n    axis.axis_label = \"KO Count\";\n\n    src.change.emit();\n    p.change.emit();   \n"},"id":"1033","type":"CustomJS"},{"attributes":{"dimensions":"width"},"id":"1022","type":"PanTool"},{"attributes":{"args":{"axis":{"id":"1017","type":"LinearAxis"},"p":{"id":"1002","subtype":"Figure","type":"Plot"},"src":{"id":"1001","type":"ColumnDataSource"},"x_range":{"id":"1005","type":"FactorRange"}},"code":"\n\n    p.reset.emit();\n\n    let result = createWinBars();\n    let players_result = result[0];\n    let wincounts_result = result[1];\n\n    x_range.factors = players_result;\n\n    players = [];\n    counts = [];\n\n    var data = src.data;\n\n    data['players'] = [];\n    data['counts'] = [];\n\n    players = data['players']\n    counts = data['counts']\n\n    for (let i = 0; i &lt; players_result.length; i++){\n        players[i] = players_result[i];\n        counts[i] = wincounts_result[i];\n    }\n\n    data['players'] = players;\n    data['counts'] = counts;\n\n    axis.axis_label = \"Win Count\";\n\n    src.change.emit();   \n    p.change.emit();\n"},"id":"1032","type":"CustomJS"},{"attributes":{"children":[{"id":"1036","type":"Row"},{"id":"1002","subtype":"Figure","type":"Plot"}]},"id":"1037","type":"Column"},{"attributes":{},"id":"1044","type":"UnionRenderers"},{"attributes":{"source":{"id":"1001","type":"ColumnDataSource"}},"id":"1031","type":"CDSView"},{"attributes":{},"id":"1018","type":"BasicTicker"},{"attributes":{"button_type":"primary","callback":null,"icon":null,"js_event_callbacks":{"button_click":[{"id":"1033","type":"CustomJS"}]},"label":"Show KO Count"},"id":"1035","type":"Button"},{"attributes":{"axis_label_text_font_size":{"value":"14pt"},"formatter":{"id":"1039","type":"BasicTickFormatter"},"ticker":{"id":"1018","type":"BasicTicker"}},"id":"1017","type":"LinearAxis"},{"attributes":{"callback":null},"id":"1005","type":"FactorRange"},{"attributes":{"callback":null,"data":{"counts":[],"players":[]},"selected":{"id":"1043","type":"Selection"},"selection_policy":{"id":"1044","type":"UnionRenderers"}},"id":"1001","type":"ColumnDataSource"},{"attributes":{"children":[{"id":"1034","type":"Button"},{"id":"1035","type":"Button"}]},"id":"1036","type":"Row"},{"attributes":{"callback":null,"start":0},"id":"1007","type":"DataRange1d"},{"attributes":{"dimension":1,"ticker":{"id":"1018","type":"BasicTicker"}},"id":"1021","type":"Grid"},{"attributes":{},"id":"1011","type":"LinearScale"}],"root_ids":["1037"]},"title":"Bokeh Application","version":"1.2.0"}}
+        </script>
+        <script type="text/javascript">
+            (function () {
+                var fn = function () {
+                    Bokeh.safely(function () {
+                        (function (root) {
+                            function embed_document(root) {
+
+                                var docs_json = document.getElementById('1101').textContent;
+                                var render_items = [{ "docid": "72e1b320-5b1c-4a43-8a37-56c7716db024", "roots": { "1037": "f7213a4d-c12b-493b-aabd-2b944fc91685" } }];
+                                root.Bokeh.embed.embed_items(docs_json, render_items);
+
+                            }
+                            if (root.Bokeh !== undefined) {
+                                embed_document(root);
+                            } else {
+                                var attempts = 0;
+                                var timer = setInterval(function (root) {
+                                    if (root.Bokeh !== undefined) {
+                                        embed_document(root);
+                                        clearInterval(timer);
+                                    }
+                                    attempts++;
+                                    if (attempts > 100) {
+                                        console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                                        clearInterval(timer);
+                                    }
+                                }, 10, root)
+                            }
+                        })(window);
+                    });
+                };
+                if (document.readyState != "loading") fn();
+                else document.addEventListener("DOMContentLoaded", fn);
+            })();
+        </script>
+
+    </div>
+
+</body>
+
+</html>
+<script>
+    //for testing only:
+    var rawData = "1,BEEF,BEEF:2 Thomato:8 curt:1 postmabone:10,Thomato:559 BEEF:200 postmabone:999 curt:10\n2,Thomato,Thomato:3 BEEF:2 postmabone:8 curt:9,postmabone:119 BEEF:100 Thomato:980 curt:2";
+    var matches = { //this needs to be global so that bokeh callbacks can access it (I think)
+        numbers: [],
+        winners: [],
+        KOs: [],
+        damPercs: []
+    };
+    //numbers is array enumerating all matches; winners is array with the winner of each match; 
+    //KOs is an array full of arrays where each sub-array (for each game) contains (1) an ordered array of players and (2) their corresponding KO count.
+    //similar construction for damPercs (damage percentages).
+
+    function getData() { //pulls data from NN computer. 
+        //execute this whenever the page loads
+
+        //rawData = ...
+        return;
+    }
+
+    function initializeData() { //converts pulled data into usable format
+        matches.numbers = [], matches.winners = [], matches.KOs = [], matches.damPercs = []; //clears old data
+
+        let matchArr = rawData.split("\n");
+        let matchTemp = [], KOStrTemp = [], KOTemp = [[], []], KOPair = [], damPercStrTemp = [], damPercTemp = [[], []], damPercPair = [];
+        for (let i = 0; i < matchArr.length; i++) {
+            KOStrTemp = [], KOTemp = [[], []], damPercStrTemp = [], damPercTemp = [[],[]];
+
+            matchTemp = matchArr[i].split(",");
+
+            matches.numbers.push(Number(matchTemp[0]));
+            matches.winners.push(matchTemp[1]);
+
+            //organizes KO data
+            KOStrTemp = matchTemp[2].split(" ");
+            for (let j = 0; j < KOStrTemp.length; j++) {
+                KOPair = KOStrTemp[j].split(":");
+
+                KOTemp[0].push(KOPair[0]);
+                KOTemp[1].push(Number(KOPair[1]));
+            }
+
+            matches.KOs.push(KOTemp);
+
+            //organizes damage percentage data
+            damPercStrTemp = matchTemp[3].split(" ");
+            for (let j = 0; j < damPercStrTemp.length; j++) {
+                damPercPair = damPercStrTemp[j].split(":");
+
+                damPercTemp[0].push(damPercPair[0]);
+                damPercTemp[1].push(Number(damPercPair[1]));
+            }
+
+            matches.damPercs.push(damPercTemp);
+
+        }
+
+        return;
+    
+    }
+
+    function sortBars(players, counts) {
+        let sortedNames = players;
+        let sortedCounts = counts.sort(function (a, b) { return b - a }); //ascending order
+
+        for (let i = 0; i < sortedCounts.length; i++) {
+            for (let j = 0; j < counts.length; j++) {
+                if (sortedCounts[i] == counts[j]) {
+                    sortedNames.push(players[j]);
+                }
+            }
+        }
+
+        sortedNames = sortedNames.slice(0, counts.length); //prevents double counting
+
+        return [sortedNames, sortedCounts];
+    }
+
+    function createWinBars() {
+        //players is arr of str, wincounts is (same order) of win count
+
+        let uniqueWinnersSet = new Set(matches.winners);
+
+        let players = [...uniqueWinnersSet];
+        let wincounts = new Array(players.length).fill(0);
+
+        for (let i = 0; i < matches.winners.length; i++) {
+            for (let j = 0; j < players.length; j++) {
+                if (matches.winners[i] === players[j]) {
+                    wincounts[j] += 1;
+                }
+            }
+        }
+
+
+        let sorted = sortBars(players, wincounts);
+
+        return sorted;
+    }
+
+    function createKOBars() {
+
+        let allplayers = [];
+
+        for (let i = 0; i < matches.KOs.length; i++) { //from every match, ever, creates a list of every player, then removes duplicates
+            for (let j = 0; j < matches.KOs[i][0].length; j++) {
+                allplayers.push(matches.KOs[i][0][j]);
+            }
+        }
+
+        let uniquePlayersSet = new Set(allplayers);
+
+        let players = [...uniquePlayersSet];
+        let KOcounts = new Array(players.length).fill(0);
+
+        for (let i = 0; i < matches.KOs.length; i++) {
+            for (let j = 0; j < matches.KOs[i][0].length; j++) {
+                for (let k = 0; k < players.length; k++) {
+                    if (matches.KOs[i][0][j] === players[k]) {
+                        KOcounts[k] += matches.KOs[i][1][j]
+                    }
+                }
+            }
+        }
+
+        let sorted = sortBars(players, KOcounts);
+
+        return sorted;
+    }
+
+    function main() {
+        console.log("Getting Data...");
+        getData(); //gets data from NN computer
+        console.log("Initializing Data...");
+        initializeData(); //converts data for usage on here
+    }
+
+
+    $(document).ready(main());
+</script>
