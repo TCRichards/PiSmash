@@ -4,23 +4,22 @@ from bokeh.layouts import column, row, widgetbox
 from bokeh.models import CustomJS, ColumnDataSource, Slider, Button, BoxZoomTool, Range1d
 from bokeh.plotting import Figure, output_file, show, save
 from bokeh.transform import linear_cmap
+from bokeh.models.tools import HoverTool
 
 import numpy as np
 
 output_file("bargraphSmash.html")
 
-
 #example data for testing only
 #players = ['BEEF', 'Thomato', 'postmabone', 'curt', 'LONG']
 #counts = [75, 56, 69, 24, 101]
+
+#initial plot
 
 players = []
 counts = []
 
 src = ColumnDataSource(data=dict(players = players, counts = counts))
-
-# sorting the bars means sorting the range factors
-#sorted_players = sorted(players, key=lambda x: counts[players.index(x)])
 
 p = Figure(plot_height = 400, plot_width = 600, x_range=players, 
            x_axis_label = 'player name',
@@ -28,15 +27,19 @@ p = Figure(plot_height = 400, plot_width = 600, x_range=players,
            title="Stats per player", tools = "xpan, xwheel_zoom",
            active_scroll='xwheel_zoom', active_drag = "xpan")
 
+p.title.text_font_size = "30pt"
 p.xaxis.axis_label_text_font_size = "14pt"
 p.yaxis.axis_label_text_font_size = "14pt"
 
-#try:
-#    p.vbar(source = src, x='players', top='wincounts', width=0.9, fill_color=linear_cmap('wincounts', 'Viridis256', 0, max(wincounts)))
-#except ValueError: #this just happens because on page load, data isn't loaded so the plotting gets grumpy
-#    p.vbar(source = src, x='players', top='wincounts', width=0.9, fill_color=linear_cmap('wincounts', 'Viridis256', 0, 0))
+try:
+    p.vbar(source = src, x='players', top='counts', width=0.9, fill_color=linear_cmap('counts', 'Viridis256', 0, max(counts)))
+except ValueError: #this just happens because on page load, data isn't loaded so the plotting gets grumpy
+    p.vbar(source = src, x='players', top='counts', width=0.9, fill_color=linear_cmap('counts', 'Viridis256', 0, 0))
 
-p.vbar(source = src, x='players', top='counts', width=0.9)
+# tools
+p.add_tools(HoverTool(tooltips=[("Player name", "@players"), ("Count", "@counts")]))
+
+
 # JS callbacks
 
 callbackWin = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
@@ -104,6 +107,7 @@ callbackKO = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]
 
     src.change.emit();
     p.change.emit();   
+
 """)
 
 
