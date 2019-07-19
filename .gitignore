@@ -8,6 +8,8 @@
 /ScreenClassifier/testingImages/*
 /textRecognition/frozen_east_text_detection.pb
 /textRecognition/Pi Smash-ecdcebce34a8.json
+/textRecognition/resultsScreens/
+/textRecognition/selectScreens/
 /.vs/slnx.sqlite
 /.vs/ProjectSettings.json
 /.vs/PiSmash/v15/.suo
