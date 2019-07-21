@@ -7,7 +7,7 @@
 /ScreenClassifier/trainingImages/*
 /ScreenClassifier/testingImages/*
 /textRecognition/frozen_east_text_detection.pb
-/textRecognition/Pi Smash-ecdcebce34a8.json
+/textRecognition/credentials.json
 /textRecognition/resultsScreens/
 /textRecognition/selectScreens/
 /.vs/slnx.sqlite

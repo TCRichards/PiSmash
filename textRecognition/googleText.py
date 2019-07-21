@@ -10,7 +10,7 @@ from google.cloud import vision
 # Explicitly add google credentials to the command line if not there already
 curDir = os.getcwd() + '/'
 imagePath = curDir + 'selectScreens/screen3.jpg'
-credentialsPath = curDir + 'Pi Smash-ecdcebce34a8.json'
+credentialsPath = curDir + 'credentials.json'
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialsPath
 

@@ -104,4 +104,6 @@ def loadImage(path, printing=False, showing=False):
     return players
 
 
-loadImage(imagePath, printing=False, showing=False)
+players = loadImage(imagePath, printing=False, showing=False)
+for player in players:
+    player.printOut()
