@@ -1,27 +1,32 @@
+'''
+Script that loads an image from the select screen and captures information about each player in the game
+Stores information about character played, player name, player number in a Player object
+Date Created: 7/21/2019
+'''
 import sys
 import os
+import pdb
 
-sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
 from IconClassifier import iconModel
-import googleText as goog
-from player import Player   # Class wrapping a Player's character, tag, and rank
+from . import googleText as goog
+from .player import Player   # Class wrapping a Player's character, tag, and rank
+from .game import Game
 
 import cv2
 import numpy as np
 
-import pdb
-
-curDir = os.getcwd()
+curDir = os.getcwd() + '/textRecognition/'
 screenDir = curDir + '/SelectScreens/'
-imagePath = screenDir + 'screen6.jpg'
+imagePath = screenDir + 'screen1.jpg'
 
 
 def loadImage(path, printing=False, showing=False):
     labels, bounds = goog.detect_text_vision(path, printing=printing)
     bottomLabels = np.array([])
     bottomBounds = np.array([])
+    imgHeight = cv2.imread(path).shape[0]
     for i in range(len(bounds)):
-        if bounds[i].vertices[0].y >= 500:  # Only look at the text near the bottom of the screen
+        if bounds[i].vertices[0].y >= imgHeight * 2 // 3:  # Only look at the text near the bottom of the screen
             bottomLabels = np.append(bottomLabels, labels[i])
             bottomBounds = np.append(bottomBounds, bounds[i])
 
@@ -59,29 +64,29 @@ def loadImage(path, printing=False, showing=False):
         else:
             tagColumn.append([label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
 
+    charHeight = charColumn[0][2]
+    playerNumHeight = playerColumn[0][2]
+
     # Goes through the contents of otherCol and keeps only tag names
-    def filterTags(charCol, playerCol, otherCol):
-        charHeight = charCol[0][2]
-        playerNumHeight = playerCol[0][2]
-
-        for o in otherCol:  # Tag names are the only text located between player numbers and character names
+    def filterTags(tagCol):
+        for o in tagCol:  # Tag names are the only text located between player numbers and character names
             if not charHeight + 20 < o[2] < playerNumHeight - 20:
-                otherCol.remove(o)
+                tagCol.remove(o)
 
-        for o in otherCol:
+        for o in tagCol:
             if o[0] == 'Player':   # In order to get the proper player number, look for an integer directly to the right
-                possibleNums = sorted(otherCol, key=lambda entry: abs(entry[1] - o[1]))
+                possibleNums = sorted(tagCol, key=lambda entry: abs(entry[1] - o[1]))
                 for entry in possibleNums:
                     val = entry[0]
                     try:
                         int(val)    # Will throw a TypeError exception if not a number
-                        otherCol.remove(entry)    # After we find the number, remove it from the list
+                        tagCol.remove(entry)    # After we find the number, remove it from the list
                         o[0] += ' ' + val
                         break       # Move onto the next input
                     except ValueError:
                         pass
 
-    filterTags(charColumn, playerColumn, tagColumn)  # Filter the tagColumn so that it only contains player tags
+    filterTags(tagColumn)  # Filter the tagColumn so that it only contains player tags
 
     # Matches each player name with character name, and stores the matched duple in a Player object
     def matchLabels(charCol, playerCol, tagCol):
@@ -97,13 +102,16 @@ def loadImage(path, printing=False, showing=False):
             playerNum = sortedPlayers[0][0]
             newPlayer = Player(playerTag, charName, playerNum, -1)
             players.append(newPlayer)
+            playerCol.remove(sortedPlayers[0])
+            tagCol.remove(sortedTags[0])
+
         return players
 
     players = matchLabels(charColumn, playerColumn, tagColumn)  # Matches each text label to fully describe each player
+    game = Game(players)
+    return game
 
-    return players
 
-
-players = loadImage(imagePath, printing=False, showing=False)
-for player in players:
+game = loadImage(imagePath, printing=False, showing=False)
+for player in game.players:
     player.printOut()

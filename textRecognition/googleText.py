@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw
 from google.cloud import vision
 
 # Explicitly add google credentials to the command line if not there already
-curDir = os.getcwd() + '/'
+curDir = os.getcwd() + '/textRecognition/'
 imagePath = curDir + 'selectScreens/screen3.jpg'
 credentialsPath = curDir + 'credentials.json'
 

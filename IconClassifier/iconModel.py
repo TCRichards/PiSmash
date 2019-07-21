@@ -4,13 +4,12 @@ Author: Thomas Richards
 Date Modified: 6/18/19
 '''
 
-from IconClassifier import makeIcons
-import sys
-sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
+from . import makeIcons
 import modelHelper
 
 trainingDir = makeIcons.trainingDir
 testingDir = makeIcons.testingDir
+
 
 # Image dimensions
 num_rows, num_cols = makeIcons.num_rows, makeIcons.num_cols
@@ -73,7 +72,7 @@ charDict = {
     "peach": 51,
     "pichu": 52,
     "pikachu": 53,
-    "piranhaPlant": 54,                 # May need to include other color icons for this one
+    "piranhaPlant": 54,     # May need to include other color icons for this one
     "pit": 55,
     "richter": 56,
     "ridley": 57,
@@ -100,69 +99,69 @@ charDict = {
 }
 
 
-# Compares a string to the the entries in charDict to see if there's a match
-# Accounts for multi-word names by treating separately
-def isCharacter(name):
-    # Use uppercase to compare
-    if name.upper() in [k.upper() for k in charDict.keys()]:
-        return name.lower()
-    # But any name that is more than one word will be missed.  Deal with each one separately
-    name = name.upper()
-    if name == 'BANJO':
+def isCharacter(label):
+    if label.upper() in [k.upper() for k in charDict.keys()]:
+        return label.lower()
+    label = label.upper()
+    if label == 'BANJO':
         return 'banjo&kazooie'
-    elif name == 'CAPTAIN':
+    elif label == 'CAPTAIN':
         return 'captainFalcon'
-    elif name == 'PIT':     # This will only be triggered by Dark Pit, since Pit would be found in the keys
+    elif label == 'PIT':
         return 'darkPit'
-    elif name == 'SAMUS':
+    elif label == 'SAMUS':
         return 'darkSamus'
-    elif name == 'DIDDY':
+    elif label == 'DIDDY':
         return 'diddyKong'
-    elif name == 'DONKEY':
+    elif label == 'DONKEY':
         return 'donkeyKong'
-    elif name in 'DR.':  # Not sure if the text recognition will include the period so account for both
-        return 'drMario'
-    elif name == 'DUCK':
+    elif label == 'DUCK':
         return 'duckHunt'
-    elif name == 'ICE':
+    elif label == 'ICE':
         return 'iceClimbers'
-    elif name == 'POKEMON':
+    elif label == 'POKEMON':
         return 'pokemonTrainer'
-    elif name == 'DEDEDE':
+    elif label == 'DEDEDE':
         return 'kingDedede'
-    elif name == 'ROOL':
+    elif label == 'ROOL':
         return 'kingKRool'
-    elif name == 'LITTLE':
+    elif label == 'MAC':
         return 'littleMac'
-    elif name == 'MEGA':
+    elif label == 'MEGA':
         return 'megaMan'
-    elif name == 'META':
+    elif label == 'META':
         return 'metaKnight'
-    elif name == 'BRAWLER':
-        return 'miiBrawler'
-    elif name == 'FIGHTER':
+    elif label == 'FIGHTER':
         return 'miiFighter'
-    elif name == 'GUNNER':
+    elif label == 'GUNNER':
         return 'miiGunner'
-    elif name == 'WATCH':
+    elif label == 'BRAWLER':
+        return 'miiBrawler'
+    elif label == 'SWORDFIGHTER':
+        return 'miiSwordfighter'
+    elif label == 'WATCH':
         return 'mrGame&Watch'
-    elif name == 'PAC':
+    elif label == 'PAC':
         return 'pac-man'
-    elif name == 'PLANT':
+    elif label == 'PLANT':
         return 'piranhaPlant'
-    elif name == 'WII':
-        return 'wiiFitTrainer'
-    elif name == 'YOUNG':
+    elif label == 'TOON':
+        return 'toonLink'
+    elif label == 'YOUNG':
         return 'youngLink'
-    elif name == 'ZERO':
+    elif label == 'ZERO':
         return 'zeroSuitSamus'
+    elif label == 'RANDOM':
+        return 'random'
     return None
 
 
 def makeModel():
     x_train, y_train = modelHelper.getTrainingData(trainingDir, charDict, num_rows, num_cols)
+
     EPOCHS = 75
     BATCH_SIZE = 32
+
     return modelHelper.makeImageModel(x_train, y_train, modelName, len(charDict), EPOCHS, BATCH_SIZE)
 
 
@@ -172,11 +171,9 @@ def testModel():
     modelHelper.testModel(x_test, y_test, modelName, charDict)
 
 
-# Main function allows us to create and test our model seperately
-def main():
+def main():     # Main function allows us to create and test our model seperately
     # makeModel()
     testModel()
 
 
-# keep commented so we can import for the dictionary
 # main()

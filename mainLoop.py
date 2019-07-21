@@ -2,6 +2,9 @@ import keras
 import vlc
 import time
 
+from textRecognition import selectDetect as sd
+from textRecognition import resultsDetect as rd
+
 screenModelPath = 'screenModelPrototype.h5'
 iconModelPath = 'iconModelPrototype.h5'
 
@@ -22,6 +25,16 @@ def captureVideo():
         time.sleep(0.1)
         player.video_take_snapshot(0, 'Screenshots/{}.snapshot.tmp.png'.format(picNum), 0, 0)
         i += 1
+
+
+def makeGame():
+    game = sd.loadImage(sd.imagePath)
+    for player in game.players:
+        player.printOut()
+    rd.loadImage(rd.imagePath, game)
+
+
+makeGame()
 
 
 def main():

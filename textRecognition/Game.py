@@ -1,5 +1,4 @@
 class Game:
 
-    def __init__(self, players, time):
+    def __init__(self, players):
         self.players = players
-        self.time = time

@@ -1,85 +1,65 @@
+'''
+Script that loads an image from the results screen and every player's ranking
+Given the list of players in the game (determined by selectDetect.py) as input,
+and modifies each player's 'rank' field with the proper position
+'''
 import sys
 import os
 
 sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
-from IconClassifier import iconModel
-import googleText as goog
-from player import Player   # Class wrapping a Player's character, tag, and rank
+from . import googleText as goog
 
 import cv2
 import numpy as np
+from collections import OrderedDict
 
 import pdb
 
-curDir = os.getcwd()
-screenDir = curDir + '/resultScreens/'
+curDir = os.getcwd() + '/textRecognition/'
+screenDir = curDir + 'resultScreens/'
 imagePath = screenDir + 'vicScreen_0_0.jpg'
 
 
-def loadImage(path, printing=False, showing=False):
-    labels, bounds = goog.detect_text_vision(path, printing=printing)
-    bottomLabels = np.array([])
-    bottomBounds = np.array([])
-    for i in range(len(bounds)):
-        if bounds[i].vertices[0].y >= 500:  # Only look at the text near the bottom of the screen
-            bottomLabels = np.append(bottomLabels, labels[i])
-            bottomBounds = np.append(bottomBounds, bounds[i])
+def rankOrder(labels, bounds, printing=False):
+    playerBounds = []   # Make an array storing the bounding boxes for each time player number is seen
+    playerNums = []
+    pdb.set_trace()
+    # Calculates the number of players present
+    for i in range(1, 9):
+        if ('P{}'.format(i)).encode('utf-8') in labels:
+            index = np.where(labels == ('P{}'.format(i)).encode('utf-8'))[0][0]
+            playerBounds.append(bounds[index])
+            playerNums.append(labels[index])
+        else:
+            break   # If the player number isn't seen, then one less is the total number of players
 
-    annotated_image = goog.draw_boxes(path, bottomBounds, 'red')
+    xBounds = [bound.vertices[0].x for bound in playerBounds]
+
+    scoreDict = OrderedDict(sorted(zip(playerNums, xBounds), key=lambda t: t[1]))   # Sorts the player numbers with the x coordinates in ascending order
+    if printing:
+        print('Rankings are:')
+        for item in scoreDict.items():
+            print('P{}'.format(item[0]))
+    return scoreDict.keys()     # Returns a list of players 'P{}' in sorted order of rank
+
+
+def loadImage(path, game, printing=False, showing=False):
+    labels, bounds = goog.detect_text_vision(path, printing=printing)
+    annotated_image = goog.draw_boxes(path, bounds, 'red')
     if showing:
         # Display the image
         cv2.imshow('Image', np.array(annotated_image))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
 
-    # These lists will store relevant text and positions
-    playerColumns = []
-    otherColumns = []
-    charColumns = []
+    sortedPlayers = rankOrder(labels, bounds, printing=False)   # List of players 'P{}' order of rank
+    for rank, playerNum in enumerate(sortedPlayers, 1):
+        for player in game.players:
+            if player.playerNum == playerNum:
+                player.rank = rank
+                break           # Breaks out of the inner loop -> next rank
 
-    # Functions that we use to filter the meaning behind each detected text
-    def isPlayer(label):    # Right now this double counts CPU
-        return 'P' in label or 'CPU' in label
-
-    def isCharacter(label):
-        return iconModel.isCharacter(label)
-
-    def isOther(label):
-        return not isOther() and not isCharacter
-
-    # Iterate over all the text and sort into proper lists
-    for i, byteLabel in enumerate(bottomLabels):
-        label = byteLabel.decode('unicode_escape')
-        if isCharacter(label):        # Doesn't deal properly with CPU, since it appears twice
-            formattedName = isCharacter(label)  # Convert the label to the same format as stored in iconModel's charDict
-            charColumns.append((formattedName, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y))
-        elif isPlayer(label):  # Checking for charNames will need to make 100% names match, which they don't
-            playerColumns.append((label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y))
-        else:
-            otherColumns.append((label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y))
-
-    # Matches each player name with character name, and stores the matched duple in a Player object
-    def matchTagsToChars(charCols, playerCols):
-        players = []
-        for i in range(len(charCols)):
-            charName = charCols[i][0]    # Name of the character
-            charX = charCols[i][1]       # x-position of one of the vertices
-            # Sort player names by distance to the character we're looking at
-            sortedPlayers = sorted(playerCols, key=lambda play: play[1] - charX)
-            playerTag = sortedPlayers[0][0]
-            newPlayer = Player(playerTag, charName, -1)
-            players.append(newPlayer)
-        return players
-
-    players = matchTagsToChars(charColumns, playerColumns)
-    pdb.set_trace()
-
-    if printing:
-        for play in players:
-            play.printOut()
-        print('Other stuff... = {}'.format(otherColumns))
-
-    return players
+    return game
 
 
 loadImage(imagePath, printing=False, showing=True)
