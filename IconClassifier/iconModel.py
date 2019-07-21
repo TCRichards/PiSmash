@@ -4,14 +4,13 @@ Author: Thomas Richards
 Date Modified: 6/18/19
 '''
 
-import makeIcons
+from IconClassifier import makeIcons
 import sys
 sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
 import modelHelper
 
 trainingDir = makeIcons.trainingDir
 testingDir = makeIcons.testingDir
-
 
 # Image dimensions
 num_rows, num_cols = makeIcons.num_rows, makeIcons.num_cols
@@ -99,6 +98,65 @@ charDict = {
     "zelda": 76,
     "zeroSuitSamus": 77
 }
+
+
+# Compares a string to the the entries in charDict to see if there's a match
+# Accounts for multi-word names by treating separately
+def isCharacter(name):
+    # Use uppercase to compare
+    if name.upper() in [k.upper() for k in charDict.keys()]:
+        return name.lower()
+    # But any name that is more than one word will be missed.  Deal with each one separately
+    name = name.upper()
+    if name == 'BANJO':
+        return 'banjo&kazooie'
+    elif name == 'CAPTAIN':
+        return 'captainFalcon'
+    elif name == 'PIT':     # This will only be triggered by Dark Pit, since Pit would be found in the keys
+        return 'darkPit'
+    elif name == 'SAMUS':
+        return 'darkSamus'
+    elif name == 'DIDDY':
+        return 'diddyKong'
+    elif name == 'DONKEY':
+        return 'donkeyKong'
+    elif name in 'DR.':  # Not sure if the text recognition will include the period so account for both
+        return 'drMario'
+    elif name == 'DUCK':
+        return 'duckHunt'
+    elif name == 'ICE':
+        return 'iceClimbers'
+    elif name == 'POKEMON':
+        return 'pokemonTrainer'
+    elif name == 'DEDEDE':
+        return 'kingDedede'
+    elif name == 'ROOL':
+        return 'kingKRool'
+    elif name == 'LITTLE':
+        return 'littleMac'
+    elif name == 'MEGA':
+        return 'megaMan'
+    elif name == 'META':
+        return 'metaKnight'
+    elif name == 'BRAWLER':
+        return 'miiBrawler'
+    elif name == 'FIGHTER':
+        return 'miiFighter'
+    elif name == 'GUNNER':
+        return 'miiGunner'
+    elif name == 'WATCH':
+        return 'mrGame&Watch'
+    elif name == 'PAC':
+        return 'pac-man'
+    elif name == 'PLANT':
+        return 'piranhaPlant'
+    elif name == 'WII':
+        return 'wiiFitTrainer'
+    elif name == 'YOUNG':
+        return 'youngLink'
+    elif name == 'ZERO':
+        return 'zeroSuitSamus'
+    return None
 
 
 def makeModel():

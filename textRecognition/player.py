@@ -1,17 +1,14 @@
 class Player:
 
-    def __init__(self, tag, charName, rank):
+    def __init__(self, tag, charName, playerNum, rank):
         self.tag = tag
         self.charName = charName
+        self.playerNum = playerNum
         self.rank = rank
-
-    def __init__(self, tag, charName):
-        self.tag = tag
-        self.charName = charName
-        self.rank = -1  # If we don't yet know the rank (as in from select screen), set it to -1
 
     # Conviniently print out all data
     def printOut(self):
         print('Character Name = ' + self.charName)
         print('Player Tag = ' + self.tag)
-        print('Current Rank = ' + str(rank))
+        print('Player Number = ' + str(object=self.playerNum))
+        print('Current Rank = ' + str(self.rank))
