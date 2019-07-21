@@ -7,3 +7,6 @@
 /ScreenClassifier/trainingImages/*
 /ScreenClassifier/testingImages/*
 /textRecognition/credentials.json
+
+/textRecognition/resultsScreens/*
+/textRecognition/frozen_east_text_detection.pb
