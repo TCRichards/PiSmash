@@ -3,9 +3,8 @@ Uses screenshots from gameplay to make a model that classifies a game in one of 
 Author: Thomas Richards
 Date Modified: 6/24/19
 '''
-import makeScreens
+from . import makeScreens
 import sys
-sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
 import modelHelper
 from collections import OrderedDict
 
@@ -44,4 +43,4 @@ def main():
     # testModel()
 
 
-main()
+# main()

@@ -43,7 +43,7 @@ selectURLs = ['https://www.youtube.com/watch?v=KQvCBxsg_Z0']
 for directory in directories:
     try:
         os.mkdir(directory)
-    except FileNotFoundError:
+    except FileExistsError:
         pass
 
 
