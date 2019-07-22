@@ -1,3 +1,7 @@
 game no.,winner name,KO counts,Damage percentages
 1,BEEF,BEEF:2 Thomato:8 curt:1 postmabone:10,Thomato:559 BEEF:200 postmabone:999 curt:10
 2,Thomato,Thomato:3 BEEF:2 postmabone:8 curt:9,postmabone:119 BEEF:100 Thomato:980 curt:2
+3,curt,Thomato:1 BEEF:5 postmabone:7 curt:2 LONG:2,LONG:456 postmabone:119 BEEF:100 Thomato:980 curt:2
+4,postmabone,Thomato:2 BEEF:3 postmabone:1 curt:3 LONG:1 sivad:4,LONG:456 sivad:890 postmabone:119 BEEF:100 Thomato:980 curt:2
+5,postmabone,BEEF:2 postmabone:3,BEEF:780 postmabone:10
+6,sivad,Thomato:7 BEEF:3 postmabone:11 curt:2 LONG:7 sivad:4,LONG:230 sivad:891 postmabone:1119 BEEF:102 Thomato:98 curt:890
