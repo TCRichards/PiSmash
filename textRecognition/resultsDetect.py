@@ -16,22 +16,19 @@ from collections import OrderedDict
 import pdb
 
 curDir = os.getcwd() + '/textRecognition/'
-screenDir = curDir + 'resultScreens/'
-imagePath = screenDir + 'vicScreen_0_0.jpg'
+screenDir = curDir + 'resultsScreens/'
+imagePath = screenDir + 'vicScreen_0_2.png'
 
 
 def rankOrder(labels, bounds, printing=False):
     playerBounds = []   # Make an array storing the bounding boxes for each time player number is seen
     playerNums = []
-    pdb.set_trace()
     # Calculates the number of players present
     for i in range(1, 9):
-        if ('P{}'.format(i)).encode('utf-8') in labels:
-            index = np.where(labels == ('P{}'.format(i)).encode('utf-8'))[0][0]
+        if ('P{}'.format(i)) in labels:
+            index = np.where(labels == ('P{}'.format(i)))[0][0]
             playerBounds.append(bounds[index])
             playerNums.append(labels[index])
-        else:
-            break   # If the player number isn't seen, then one less is the total number of players
 
     xBounds = [bound.vertices[0].x for bound in playerBounds]
 
@@ -62,4 +59,4 @@ def loadImage(path, game, printing=False, showing=False):
     return game
 
 
-loadImage(imagePath, printing=False, showing=True)
+# loadImage(imagePath, printing=False, showing=True)

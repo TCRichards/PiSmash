@@ -3,9 +3,7 @@ Script that loads an image from the select screen and captures information about
 Stores information about character played, player name, player number in a Player object
 Date Created: 7/21/2019
 '''
-import sys
 import os
-import pdb
 
 from IconClassifier import iconModel
 from . import googleText as goog
@@ -17,7 +15,7 @@ import numpy as np
 
 curDir = os.getcwd() + '/textRecognition/'
 screenDir = curDir + '/SelectScreens/'
-imagePath = screenDir + 'screen1.jpg'
+imagePath = screenDir + 'screen4.png'
 
 
 def loadImage(path, printing=False, showing=False):
@@ -54,8 +52,7 @@ def loadImage(path, printing=False, showing=False):
         return iconModel.isCharacter(label)
 
     # Iterate over all the text and sort into proper lists
-    for i, byteLabel in enumerate(bottomLabels):
-        label = byteLabel.decode('unicode_escape')  # Converts the label from bytes to string
+    for i, label in enumerate(bottomLabels):
         if isCharacter(label):
             formattedName = isCharacter(label)  # Convert the label to the same format as stored in iconModel's charDict
             charColumn.append([formattedName, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
@@ -90,7 +87,6 @@ def loadImage(path, printing=False, showing=False):
 
     # Matches each player name with character name, and stores the matched duple in a Player object
     def matchLabels(charCol, playerCol, tagCol):
-        pdb.set_trace()
         players = []
         for i in range(len(charCol)):
             charName = charCol[i][0]    # Name of the character
@@ -100,6 +96,8 @@ def loadImage(path, printing=False, showing=False):
             sortedTags = sorted(tagCol, key=lambda tag: abs(tag[1] - charX))
             playerTag = sortedTags[0][0]
             playerNum = sortedPlayers[0][0]
+            if playerNum == 'CPU':
+                playerTag = 'CPU'   # CPU doesn't have a tag so just copy 'CPU' over
             newPlayer = Player(playerTag, charName, playerNum, -1)
             players.append(newPlayer)
             playerCol.remove(sortedPlayers[0])
@@ -112,6 +110,7 @@ def loadImage(path, printing=False, showing=False):
     return game
 
 
-game = loadImage(imagePath, printing=False, showing=False)
-for player in game.players:
-    player.printOut()
+def main():
+    game = loadImage(imagePath, printing=False, showing=False)
+    for player in game.players:
+        player.printOut()

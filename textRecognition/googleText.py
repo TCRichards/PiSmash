@@ -39,10 +39,10 @@ def detect_text_vision(path, printing=False):
                     for vertex in text.bounding_poly.vertices])
         if printing:
             # Print Outputs
-            print('\n"{}"'.format(text.description.encode('utf-8')))
+            print('\n"{}"'.format(text.description))
             print('bounds: {}'.format(','.join(vertices)))
         # Have to encode in utf-8 to avoid some error
-        labels = np.append(labels, text.description.encode('utf-8'))
+        labels = np.append(labels, text.description)
         bounds.append(text.bounding_poly)
 
     return labels, bounds
