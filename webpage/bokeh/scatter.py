@@ -28,7 +28,8 @@ src = ColumnDataSource(data=dict(KOs = KOs, wins = wins, players = players))
 p = Figure(plot_height = 600, plot_width = 600, 
            x_axis_label = 'KO count (per player)',
            y_axis_label = 'Win count (per player)',
-           title="KO count vs. Win count per player", tools = "pan, wheel_zoom",
+           title="KO count vs. Win count per player", 
+           tools = "pan, wheel_zoom, reset",
            active_scroll='wheel_zoom', active_drag = "pan")
 
 p.title.text_font_size = "18pt"

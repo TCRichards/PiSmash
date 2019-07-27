@@ -22,7 +22,8 @@ src = ColumnDataSource(data=dict(players = players, counts = counts))
 p = Figure(plot_height = 400, plot_width = 600, x_range=players, 
            x_axis_label = 'Player name',
            y_axis_label = '',
-           title="Stats Per Player", tools = "xpan, xwheel_zoom",
+           title="Stats Per Player", 
+           tools = "xpan, xwheel_zoom, reset",
            active_scroll='xwheel_zoom', active_drag = "xpan")
 
 p.title.text_font_size = "18pt"
