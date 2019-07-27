@@ -13,8 +13,6 @@ import cv2
 import numpy as np
 from collections import OrderedDict
 
-import pdb
-
 curDir = os.getcwd() + '/textRecognition/'
 screenDir = curDir + 'resultsScreens/'
 imagePath = screenDir + 'vicScreen_0_2.png'

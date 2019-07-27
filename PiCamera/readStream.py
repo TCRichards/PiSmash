@@ -19,3 +19,7 @@ def stream():
         time.sleep(0.3)
         player.video_take_snapshot(0, 'Screenshots/shot_{}.png'.format(picNum), 0, 0)
         i += 1
+
+
+if __name__ == '__main__':
+    stream()

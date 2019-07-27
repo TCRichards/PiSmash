@@ -8,9 +8,9 @@ from PIL import Image, ImageDraw
 from google.cloud import vision
 
 # Explicitly add google credentials to the command line if not there already
-curDir = os.getcwd() + '/textRecognition/'
-imagePath = curDir + 'selectScreens/screen3.jpg'
-credentialsPath = curDir + 'credentials.json'
+curDir = '\\textRecognition\\'
+imagePath = curDir + 'selectScreens\\screen3.jpg'
+credentialsPath = os.getcwd() + '\\textRecognition\\credentials.json'
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialsPath
 
@@ -70,3 +70,6 @@ def detectAndAnnotate(imagePath, showing=False):
         cv2.waitKey(0)
         cv2.destroyAllWindows()
     return annotatedImage, labels, bounds
+
+
+detect_text_vision('textRecognition/images/example_01.jpg')

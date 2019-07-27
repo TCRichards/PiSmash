@@ -29,16 +29,18 @@ def loadModels():
 
 
 def getMostRecentFile(directory):
-    """Iterates through all files that are under the given path."""
+    # Iterates through all files that are under the given path
     for cur_path, dirnames, filenames in os.walk(directory):
         for filename in filenames:
             yield os.path.join(cur_path, filename)
 
 
-def main():
+if __name__ == '__main__':
     iconModel, screenModel = loadModels()
     # Constantly monitor the stream and take screenshots using a separate thread
     # streamThread = threading.Thread(target=readStream.stream, daemon=True)  # Runs forever
+    import pdb
+    pdb.set_trace()
     while True:
         latestFile = max(getMostRecentFile(screenDir), key=os.path.getmtime)
         rawIm = Image.open(latestFile)
@@ -49,6 +51,3 @@ def main():
         matchIdx = np.argmax(outputs)
         screenType = list(screenDict.keys())[matchIdx]
         print(screenType)
-
-
-main()
