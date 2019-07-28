@@ -139,3 +139,9 @@ def testModel(x_test, y_test, modelPath, matchDict):
         plt.pie(probabilities)
         plt.legend(loc=9, labels=probLabels, bbox_to_anchor=(0.5, 1.4), shadow=True, fancybox=True)
     plt.show()
+
+
+def makePrediction(model, matchDict, img):
+    probs = model.predict(img)[0, :]    # Initial shape is (1, #possibilities)
+    names = matchDict.keys()
+    return list(names)[np.argmax(probs)]

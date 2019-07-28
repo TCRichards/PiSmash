@@ -37,7 +37,9 @@ gameURL = ['https://www.youtube.com/watch?v=CyuRaYwb2XQ',
            ]
 
 # This video only uses select screens with 2 players.  May need to add another
-selectURLs = ['https://www.youtube.com/watch?v=KQvCBxsg_Z0']
+selectURLs = ['https://www.youtube.com/watch?v=KQvCBxsg_Z0',
+              'https://www.youtube.com/watch?v=Tm577RyV-Fc'
+              ]
 
 # Make new directories if necessary
 for directory in directories:
@@ -107,7 +109,7 @@ def scanVideo(type, URL, trial):
             # Slightly change the wait time parameters and repeat
             initialWait = np.random.normal(initialWait, 0.01)
             steadyWait = np.random.normal(wait, 0.025)
-            captureShots(type, media, i, initialWait=initialWait, steadyWait=steadyWait)
+            captureShots(type, media, i, inputInitialWait=initialWait, inputWait=steadyWait)
     else:           # For game or select screens
         captureShots(type, media, trial)
 
@@ -133,6 +135,8 @@ def makeSelectScreens(index, trial):
     scanVideo('select', selectURLs[index], trial)
 
 
-# makeGameScreens(4, 4)
-# makeWinScreens(0)
-# makeWinScreens(2)
+if __name__ == '__main__':
+    # makeGameScreens(4, 4)
+    # makeWinScreens(0)
+    makeWinScreens(6)
+    makeSelectScreens(1, 3)
