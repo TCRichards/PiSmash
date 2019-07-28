@@ -1,17 +1,45 @@
-To do it the n00b way:
-raspivid -o - -t 0 -fps 30| cvlc -vvv stream:///dev/stdin --sout '#rtp{sdp=rtsp://:8554/}' :demux=h264
-This method is MUCH simpler but does introduce a noticeably higher latency and lower framerate
+The goal of the Raspberry Pi is to be able to stream video immediately upon startup so that we don't have
+SSH on every time we want the program to start.  I accomplished this using a variety of complicated tools, so
+this guide should help others (and me) do the same.
 
-Instructions from https://www.linux-projects.org/uv4l/tutorials/rtsp-server/
-I set up uv4l which has a much lower latency.  Once the PiCamera is registered (on mine it is device 4 -- notice video4 in following command), type the following into the terminal:
+The library used for streaming is called uv4l. It's very similar to raspivid and other more conventional libraries
+but offers SIGNIFICANTLY lower latencies by taking a few shortcuts.
+
+Instructions on downloading and setting up uv4l at:
+https://www.linux-projects.org/uv4l/installation/
+To be safe, download every recommended additional capability, since I'm not sure which capabilities my solution is using.
+
+Once the uv4l library is set up, we can following the instructions below to stream to a RTSP server using the command line:
+https://www.linux-projects.org/uv4l/tutorials/rtsp-server/
+The two commands you'll need from the command line are:
+
 dd if=/dev/video0 bs=1M | cvlc -vvv stream:///dev/stdin --sout '#rtp{sdp=rtsp://:8554/}' --demux=h264
 
-The following command theoretically should work but kept hanging for me (buggy vlc).  Use the above instead
 cvlc -vvv v4l2c:///dev/video0:width=640:height=480:chroma=H264 --sout '#rtp{sdp=rtsp://:8554/}' --demux h264
 
+For me, I found that I could only get consistent performance by running the second command followed by the first.
 
-Doing this to have the stream begin as soon as the rpi launches:
-https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
+In order to automate these commands, I placed them in a Python script: PiCamera/streamRTSP.py, which
+uses a few tricks to emulate launching the second command from the command line for 5 seconds, kills
+it, then launches the first.
 
-Currently, I have to run the command beginning with 'cvlc' command, which mentions there are no matches for 'any'.
-Then, running the original command succeeds.  No idea why this works only in this order.
+In order to have the program executed at boot, you must edit the Raspberry Pi's crontab file using
+
+sudo crontab -e
+
+At the bottom, beneath all of the file's comments, add the following line:
+
+@reboot sudo python3 /home/pi/PiSmash/PiCamera/streamRTSP.py &
+
+Make sure to include 'sudo', which is necessary for all root programs, use Python3, use your corresponding
+path to the file (although I bet they're all the same), and add the & to allow the system to boot while
+this program is being executed (because it never ends and would otherwise hog the CPU)
+
+In order to get VLC to run on startup, you have to give it root access.  This is accomplished via the
+following command into the terminal:
+
+$ sudo sed -i 's/geteuid/getppid/' /usr/bin/vlc
+
+
+After all these are accomplished, your Raspberry Pi should begin streaming video whenever it's powered on.
+To return it to normal, simply remove the extra line in crontab using: sudo crontab -e
