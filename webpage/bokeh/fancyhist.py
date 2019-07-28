@@ -1,7 +1,7 @@
 #----- Author: Nick Konz -----#
 
 from bokeh.layouts import column, row, widgetbox, gridplot
-from bokeh.models import CustomJS, ColumnDataSource, Dropdown, Slider, Button, BoxZoomTool, Range1d, BoxSelectTool, LassoSelectTool, Select
+from bokeh.models import CustomJS, ColumnDataSource, Dropdown, Slider, Button, BoxZoomTool, Range1d, BoxSelectTool, LassoSelectTool, Select, CheckboxGroup
 from bokeh.plotting import Figure, output_file, show, save, curdoc
 from bokeh.transform import linear_cmap
 from bokeh.models.tools import HoverTool
@@ -34,17 +34,22 @@ srcHist = ColumnDataSource(data=dict(hhist = hhist, hleft = hleft, hright = hrig
 #srcSelection = ColumnDataSource(data=dict(selection = selection))
 
 # create the scatter plot
-TOOLS="pan,wheel_zoom,box_select,lasso_select,reset"
+TOOLS="pan,wheel_zoom,reset"
 
 p = Figure(tools=TOOLS, plot_width=600, plot_height=600, min_border=10, min_border_left=50,
-           toolbar_location="above", x_axis_location=None, y_axis_location=None,
-           title="Linked Histograms")
+           toolbar_location="above",
+           title="Linked Histograms of Game Data",
+           active_scroll='wheel_zoom', 
+           active_drag = "pan"
+           )
 p.background_fill_color = "#fafafa"
 
 p.select(BoxSelectTool).select_every_mousemove = False
 p.select(LassoSelectTool).select_every_mousemove = False
 
 r = p.scatter(source = srcData, x='x', y='y', size=6, color="#3A5785", alpha=0.6)
+
+p.add_tools(HoverTool(tooltips=[("x", "@x"), ("y", "@y")]))
 
 # create the horizontal histogram
 
@@ -82,7 +87,7 @@ vh2 = pv.quad(source = srcHist, left=0, bottom="vleft", top="vright", right="vze
 
 #JS callbacks
 
-callbackPlot = CustomJS(args=dict(srcData=srcData, srcHist=srcHist, p=p, pv=pv, ph=ph, pvx_range=pv.x_range, phy_range=ph.y_range), code="""
+callbackPlot = CustomJS(args=dict(srcData=srcData, srcHist=srcHist, p=p, pv=pv, ph=ph, pvx_range=pv.x_range, phy_range=ph.y_range, xaxis=p.xaxis[0], yaxis=p.yaxis[0]), code="""
     p.reset.emit();
     ph.reset.emit();
     pv.reset.emit();
@@ -186,6 +191,9 @@ callbackPlot = CustomJS(args=dict(srcData=srcData, srcHist=srcHist, p=p, pv=pv, 
     //console.log(hhist, hleft, hright, hzeros);
     //console.log(vhist, vleft, vright, vzeros);
 
+    xaxis.axis_label = fancyHistAxes[0];
+    yaxis.axis_label = fancyHistAxes[1];
+
     srcData.change.emit();   
     srcHist.change.emit();  
     p.change.emit();
@@ -196,11 +204,21 @@ callbackPlot = CustomJS(args=dict(srcData=srcData, srcHist=srcHist, p=p, pv=pv, 
 """)
 
 callbackUpdateHAxis = CustomJS(code="""
-    fancyHistHAxis = this.value;
+    fancyHistAxes[0] = this.value;
 """)
 
 callbackUpdateVAxis = CustomJS(code="""
-    fancyHistVAxis = this.value;
+    fancyHistAxes[1] = this.value;
+""")
+
+callbackNormalization = CustomJS(code="""
+    let active = this.active;
+
+    fancyHistNormalization = [false, false];
+
+    for (let i = 0; i < active.length; i++){
+        fancyHistNormalization[active[i]] = true;
+    }
 """)
 
 #widgets
@@ -209,24 +227,27 @@ callbackUpdateVAxis = CustomJS(code="""
 #hdropdown = Dropdown(label="Time Period", button_type="success", menu=hmenu)
 #hdropdown.on_change('value', function_to_call)
 
-hOptions = ["Highest KO Count per Game (normalized)"]
-vOptions = ["Highest Damage Done per Game (normalized)", "Average Damage Done per Game (normalized)"]
+hOptions = ["Highest KO Count per Game", "Highest Damage Done per Game", "Average Damage Done per Game", "Player Count per Game"]
+vOptions = ["Highest KO Count per Game", "Highest Damage Done per Game", "Average Damage Done per Game", "Player Count per Game"]
 
 hSelect = Select(title =    "Horizontal Data", 
                  options =  hOptions,   #list of options
-                 value =   "Highest KO Count per Game (normalized)" #default value  
+                 value =   "Highest KO Count per Game" #default value  
                  )
 
 vSelect = Select(title =    "Vertical Data", 
                  options =  vOptions,   #list of options
-                 value =   "Highest Damage Done per Game (normalized)" #default value  
+                 value =   "Highest Damage Done per Game" #default value  
                  )
+
+checkboxNormalization = CheckboxGroup(
+        labels=["Normalize horizontal data", "Normalize vertical data"], active=[0,1])
 
 #layout
 
 grid = gridplot([[p, pv], [ph, None]], merge_tools=False)
-widgets = column(hSelect, vSelect)
-layout = row(widgets, grid)
+widgets = row(hSelect, vSelect, checkboxNormalization)
+layout = column(widgets, grid)
 
 curdoc().add_root(layout)
 curdoc().title = "Selection Histogram"
@@ -234,14 +255,17 @@ curdoc().title = "Selection Histogram"
 #interactivity
 
 p.js_on_event(MouseEnter, callbackPlot) #plot whichever axes are currently selected
-pv.js_on_event(MouseEnter, callbackPlot) #plot whichever axes are currently selected
-ph.js_on_event(MouseEnter, callbackPlot) #plot whichever axes are currently selected
+pv.js_on_event(MouseEnter, callbackPlot) 
+ph.js_on_event(MouseEnter, callbackPlot) 
 
 hSelect.js_on_change('value', callbackUpdateHAxis)
 vSelect.js_on_change('value', callbackUpdateVAxis)
 
 hSelect.js_on_change('value', callbackPlot)
 vSelect.js_on_change('value', callbackPlot)
+
+checkboxNormalization.js_on_change('active', callbackNormalization)
+checkboxNormalization.js_on_change('active', callbackPlot)
 
 #show(layout)
 save(layout)

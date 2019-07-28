@@ -1,8 +1,8 @@
 #----- Author: Nick Konz -----#
 
 from bokeh.layouts import column, row, widgetbox
-from bokeh.models import CustomJS, ColumnDataSource, Slider, Button, BoxZoomTool, Range1d
-from bokeh.plotting import Figure, output_file, show, save
+from bokeh.models import CustomJS, ColumnDataSource, Slider, Button, BoxZoomTool, Range1d, Select
+from bokeh.plotting import Figure, output_file, show, save, curdoc
 from bokeh.transform import linear_cmap
 from bokeh.models.tools import HoverTool
 from bokeh.palettes import Viridis256
@@ -44,13 +44,13 @@ p.add_tools(HoverTool(tooltips=[("Player name", "@players"), ("Count", "@counts"
 
 # JS callbacks
 
-callbackWin = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
+callbackPlot = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
 
     p.reset.emit();
 
-    let result = createWinBars();
+    let result = createBars();
     let players_result = result[0];
-    let wincounts_result = result[1];
+    let counts_result = result[1];
 
     x_range.factors = players_result;
 
@@ -67,103 +67,46 @@ callbackWin = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0
 
     for (let i = 0; i < players_result.length; i++){
         players[i] = players_result[i];
-        counts[i] = wincounts_result[i];
+        counts[i] = counts_result[i];
     }
 
     data['players'] = players;
     data['counts'] = counts;
 
-    axis.axis_label = "Win count";
+    axis.axis_label = barGraphAxis;
 
     src.change.emit();   
     p.change.emit();
 """)
 
-callbackKO = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
-
-    p.reset.emit();
-
-    let result = createKOBars();
-    let players_result = result[0];
-    let KOcounts_result = result[1];
-
-    x_range.factors = players_result;
-
-    var data = src.data;
-
-    data['players'] = [];
-    data['counts'] = [];
-
-    players = data['players']
-    counts = data['counts']
-
-    for (let i = 0; i < players_result.length; i++){
-        players[i] = players_result[i];
-        counts[i] = KOcounts_result[i];
-    }
-
-    data['players'] = players;
-    data['counts'] = counts;
-
-    axis.axis_label = "KO count";
-
-    src.change.emit();
-    p.change.emit();   
-
+callbackAxis = CustomJS(code="""
+    barGraphAxis = this.value;
 """)
 
-callbackDamPerc = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
+# layout
+options = ["KO Counts per Player", "Win Counts per Player", "Damage Done per Player"]
 
-    p.reset.emit();
-
-    let result = createDamPercBars();
-    let players_result = result[0];
-    let damPercCounts_result = result[1];
-
-    x_range.factors = players_result;
-
-    var data = src.data;
-
-    data['players'] = [];
-    data['counts'] = [];
-
-    players = data['players']
-    counts = data['counts']
-
-    for (let i = 0; i < players_result.length; i++){
-        players[i] = players_result[i];
-        counts[i] = damPercCounts_result[i];
-    }
-
-    data['players'] = players;
-    data['counts'] = counts;
-
-    axis.axis_label = "Total damage percentage";
-
-    src.change.emit();
-    p.change.emit();   
-
-""")
-
-# layout & callback setup
-
-p.js_on_event(MouseEnter, callbackWin)
-
-buttonWin = Button(label = "Show Win Count (default)", button_type = "primary")
-buttonWin.js_on_click(callbackWin)
-
-buttonKO = Button(label = "Show KO Count", button_type = "primary")
-buttonKO.js_on_click(callbackKO)
-
-buttonDamPerc = Button(label = "Show Total Damage Percentages", button_type = "primary")
-buttonDamPerc.js_on_click(callbackDamPerc)
+select = Select(title =    "Data Category", 
+                 options =  options,   #list of options
+                 value =   "KO Counts per Player" #default value  
+                 )
 
 p.xgrid.grid_line_color = None
 p.y_range.start = 0
 
-buttons = column(buttonWin, buttonKO, buttonDamPerc)
+widgets = row(select)
 
-layout = row(buttons, p)
+layout = column(widgets, p)
+
+curdoc().add_root(layout)
+curdoc().title = "Bar Graph"
+
+#interactivity
+
+p.js_on_event(MouseEnter, callbackPlot) #plot whichever axes are currently selected
+
+select.js_on_change('value', callbackAxis)
+select.js_on_change('value', callbackPlot)
 
 #show(layout)
 save(layout)
