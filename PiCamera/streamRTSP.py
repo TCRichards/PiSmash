@@ -1,7 +1,8 @@
 import subprocess
 
+curDir = '/home/pi/PiSmash/PiCamera/'   # Absolute path to program
 # create two files to hold the output and errors, respectively
-with open('PiCamera/streamLogs.txt', 'w+') as logs:    # Errors (although everything from streaming is interpreted as an error)
+with open(curDir + 'streamLogs.txt', 'w+') as logs:    # Errors (although everything from streaming is interpreted as an error)
     firstCommand = subprocess.Popen(
         ["""cvlc -vvv v4l2c:///dev/video0:width=640:height=480:chroma=H264 --sout '#rtp{sdp=rtsp://:8554/}' --demux h264"""],
         stderr=logs, shell=True)
