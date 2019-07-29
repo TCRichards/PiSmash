@@ -43,7 +43,7 @@ if __name__ == '__main__':
     streamThread = threading.Thread(target=readStream.stream, daemon=True)  # Runs forever
     streamThread.start()
 
-    while True: 
+    while True:
         latestFile = getMostRecentFile(screenDir)
         rawIm = Image.open(latestFile)
         newIm = rawIm.resize((num_rows, num_cols))                  # Rescale the image to num_rows x num_cols
