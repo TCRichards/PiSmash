@@ -25,7 +25,7 @@ screenDir = curDir + '/SelectScreens/'
 imagePath = screenDir + 'screen4.png'
 
 
-def loadImage(path, printing=False, showing=False):
+def imageToGame(path, printing=False, showing=False):
     import pdb
     pdb.set_trace()
     labels, bounds = goog.detect_text_vision(path, printing=printing)
@@ -120,6 +120,6 @@ def loadImage(path, printing=False, showing=False):
 
 
 if __name__ == '__main__':
-    game = loadImage(imagePath, printing=False, showing=False)
+    game = imageToGame(imagePath, printing=False, showing=False)
     for player in game.players:
         player.printOut()
