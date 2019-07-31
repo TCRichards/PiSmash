@@ -14,13 +14,13 @@ import numpy as np
 # Records screenshots and stores them in different directories depending on type
 # IMPORTANT: After screenshots are recorded, go through directories and manually delete erroneous pictures
 
-curDir = 'ScreenClassifier/'
-trainingDir = curDir + 'trainingImages/'
-testingDir = curDir + 'testingImages/'
+curDir = os.path.dirname(__file__)
+trainingDir = os.path.join(curDir, 'trainingImages/')
+testingDir = os.path.join(curDir, 'testingImages/')
 
-winDir = trainingDir + 'Victory/'
-gameDir = trainingDir + 'Game/'
-selectDir = trainingDir + 'Select/'
+winDir = os.path.join(curDir, 'Victory/')
+gameDir = os.path.join(curDir, 'Game/')
+selectDir = os.path.join(curDir, 'Select/')
 
 num_rows, num_cols = 200, 200
 

@@ -6,12 +6,15 @@ Date Modified: 6/11/19
 
 import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+
+
 # Paths
-curDir = 'IconClassifier'
-trainingDir = curDir + '/trainingImages'
-testingDir = curDir + '/testingImages'
-validationDir = curDir + '/validationImages'
-iconDir = curDir + './rawIcons'
+curDir = os.path.dirname(__file__)
+
+trainingDir = os.path.join(curDir, 'trainingImages')
+testingDir = os.path.join(curDir, 'testingImages')
+validationDir = os.path.join(curDir, 'validationImages')
+iconDir = os.path.join(curDir, 'rawIcons')
 
 # Image dimensions
 num_rows, num_cols = 200, 200

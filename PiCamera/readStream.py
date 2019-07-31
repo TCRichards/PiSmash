@@ -1,17 +1,19 @@
-# Need to create JSON files to capture video?
 import vlc
+import os
 import time
 
 PiIPAddress = '192.168.0.103'                   # Local address of my Raspberry Pi
 streamURL = "rtsp://" + PiIPAddress + ":8554/"  # URL over which the Pi streams video
 
-if __name__ == '__main__':
-    imageDir = '/PiCamera/screenShots/'
-else:
-    imageDir = 'PiCamera/screenShots/'
+curDir = os.path.dirname(__file__)
+imageDir = os.path.join(curDir, 'screenShots/')
 
 
 def stream():
+    # Clear the directory of old images
+    for im in os.listdir(imageDir):
+        os.remove(imageDir + im)
+
     # Capture the video using VLC.  OpenCV didn't work but that API is clearly superior
     vlcInstance = vlc.Instance()
     player = vlcInstance.media_player_new()
