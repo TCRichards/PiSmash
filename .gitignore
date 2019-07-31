@@ -10,6 +10,7 @@
 /textRecognition/credentials.json
 /textRecognition/resultsScreens/
 /textRecognition/selectScreens/
+/PiCamera/screenShots/*
 /.vs/slnx.sqlite
 /.vs/ProjectSettings.json
 /.vs/PiSmash/v15/.suo
