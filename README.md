@@ -1,5 +1,5 @@
 # "Technical Objectives for Smash Analysis Project
-### Last edited Saturday, June 15, 2019
+### Last edited Saturday, June 27, 2019
 
 ## 1.	Collect video and audio using Raspberry Pi or microcontroller
 ### Status: Complete
@@ -21,42 +21,35 @@
   **b.**	If using Pi Camera, photos are taken continuously and then sent over Wi-Fi using MJPG-Streamer, an open-source streaming library   
 
 ## 3.	Capture data from Wi-Fi and funnel into Python sketch on a host computer:
-### Status: Nearly complete; can read stream using VLC but choppy method of capturing frames
+### Status: Complete
 
-  **a.**	Video is meant to viewed in a browser. If we liked JavaScript we could use Tensorflow in the browser directly   
-    **i.**	https://hackernoon.com/tensorflow-js-real-time-object-detection-in-10-lines-of-code-baf15dfb95b2   
-  **b.**	Can collect image data from website using HTTP requests from Python using requests library   
-    **i.**	https://www.youtube.com/watch?v=v5TIu67oTWg   
+  **a.**	The Raspberry Pi streams video to a rtsp server using the uv4l library.  The following example was used to set up Pi: https://www.linux-projects.org/uv4l/tutorials/rtsp-server/
+  **b.**	The PC running the sketch can capture this rtsp stream using VLC's Python library.  This was very straightforward to accomplish.
 
 
-## 4.	Use Deep Learning algorithms to process audio and video: 
-### Status: Halfway; Model is made, but can only classify, not detect objects 
+## 4.	Use Deep Learning algorithms to process audio and video:
+### Status: Halfway; Model is made, but can only classify, not detect objects
 
   **a.**	Use image recognition to detect victory screen and identify character icons   
     **i.** Make neural network capable of detecting a victory screen    
     **ii.** Make neural network capable of detecting player icons    
     **iii.** Once victory screen is detected, use background colors to segment screen into a separate panel for each player.    
   **b.**	Use text recognition to gather data on damage and kills within each panel   
-    **i.**	Michael Reeves (great YouTuber) used Python's optical character recognition (OCR) to read health data from screen: https://www.youtube.com/watch?v=D75ZuaSR8nQ    
-    **ii.** OCR libraries can handle the text recognition -- we don't need to make our own network for that            
-    **iii.**	pyTesseract seems to be the most common Python OCR library.  Much simpler than Tensorflow since we don't need to train the neural networks, but may require some image processing to get in a readable format    
-  **c.**	Use audio recognition to constantly listen for key sounds (spikes)   
-    **i.**	Added bonus.  Would require additional hardware for the microphone, so let's work on this once the rest is done.    
+    **i.**	Google Vision API provides incredible text recognition ability for relatively cheaply ($1.50 for 1000 images analyzed).  We're going with this approach 'for now'
+    **ii.** There's lots of information online about the open-source OpenCV library, but after a week of trying to run text recognition and getting terrible results, I opted for Google Vision.  
 
 
 ## 5.	Create Website!
-### Status: Not started
+### Status: In progress
 
    **a.**	Website's backend will store the database with all smash data.  
    **b.**	Website's frontend will provide an interface for users to access to see all statistics
         **i.**	Provide capabilities for determining probabilities based on certain matchups, record the characters played in all games to provide substantially improved control over Smash's built-in statistics."
 
-## 6.	Send detections and processed data from host computer to database on website's backend:
+## 6.	Send detections and processed data from host computer to database:
 ### Status: Not started
 
-   **a.**	Our website's backend could be a database that each Raspberry Pi monitors.  Easy to write data from PC to database, and have Raspberry Pi register changes.
-     **i.**	Ideally would use SQL, but a big spreadsheet wouldn't be terrible
-     **ii.**	Since changes are made to database, we can use this master database to run any statistics
+   **a.**	It doesn't look like there's a way for a website to store it's own data file, so instead we can have the computer serving the website locally store a database with all data logged.  Whenever the website is launched, a JavaScript callback will retrieve the data from the server and update the website.
 
 ## 7.	Gather data from Server
 ### Status: Not Started

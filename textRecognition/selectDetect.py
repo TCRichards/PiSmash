@@ -4,7 +4,14 @@ Stores information about character played, player name, player number in a Playe
 Date Created: 7/21/2019
 '''
 import os
+import sys
+from inspect import getsourcefile
 
+current_path = os.path.abspath(getsourcefile(lambda: 0))
+current_dir = os.path.dirname(current_path)
+parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
+
+sys.path.insert(0, parent_dir)
 from IconClassifier import iconModel
 from . import googleText as goog
 from .player import Player   # Class wrapping a Player's character, tag, and rank
@@ -18,7 +25,9 @@ screenDir = curDir + '/SelectScreens/'
 imagePath = screenDir + 'screen4.png'
 
 
-def loadImage(path, printing=False, showing=False):
+def imageToGame(path, printing=False, showing=False):
+    import pdb
+    pdb.set_trace()
     labels, bounds = goog.detect_text_vision(path, printing=printing)
     bottomLabels = np.array([])
     bottomBounds = np.array([])
@@ -110,7 +119,7 @@ def loadImage(path, printing=False, showing=False):
     return game
 
 
-def main():
-    game = loadImage(imagePath, printing=False, showing=False)
+if __name__ == '__main__':
+    game = imageToGame(imagePath, printing=False, showing=False)
     for player in game.players:
         player.printOut()

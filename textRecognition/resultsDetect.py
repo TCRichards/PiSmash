@@ -13,8 +13,6 @@ import cv2
 import numpy as np
 from collections import OrderedDict
 
-import pdb
-
 curDir = os.getcwd() + '/textRecognition/'
 screenDir = curDir + 'resultsScreens/'
 imagePath = screenDir + 'vicScreen_0_2.png'
@@ -40,7 +38,7 @@ def rankOrder(labels, bounds, printing=False):
     return scoreDict.keys()     # Returns a list of players 'P{}' in sorted order of rank
 
 
-def loadImage(path, game, printing=False, showing=False):
+def rankGame(path, game, printing=False, showing=False):
     labels, bounds = goog.detect_text_vision(path, printing=printing)
     annotated_image = goog.draw_boxes(path, bounds, 'red')
     if showing:
