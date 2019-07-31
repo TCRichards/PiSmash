@@ -18,9 +18,9 @@ curDir = os.path.dirname(__file__)
 trainingDir = os.path.join(curDir, 'trainingImages/')
 testingDir = os.path.join(curDir, 'testingImages/')
 
-winDir = os.path.join(curDir, 'Victory/')
-gameDir = os.path.join(curDir, 'Game/')
-selectDir = os.path.join(curDir, 'Select/')
+winDir = os.path.join(trainingDir, 'Victory/')
+gameDir = os.path.join(trainingDir, 'Game/')
+selectDir = os.path.join(trainingDir, 'Select/')
 
 num_rows, num_cols = 200, 200
 

@@ -2,7 +2,8 @@ import vlc
 import os
 import time
 
-PiIPAddress = '192.168.0.103'                   # Local address of my Raspberry Pi
+# Create interface to easily edit the IP address on launch?
+PiIPAddress = '192.168.0.101'                   # Local address of my Raspberry Pi
 streamURL = "rtsp://" + PiIPAddress + ":8554/"  # URL over which the Pi streams video
 
 curDir = os.path.dirname(__file__)

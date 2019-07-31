@@ -14,7 +14,7 @@ if __name__ == '__main__':  # If we're running the file here, then imports are r
     parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
 
     sys.path.insert(0, parent_dir)  # Add it
-    import modelHelper  # Import module from parent directory
+    import modelHelper              # Import module from parent directory
 else:   # If we're running the program from mainLoop, then paths are relative to project folder
     from . import makeScreens
     import modelHelper
@@ -51,5 +51,5 @@ def testModel():
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
-    makeModel()
-    # testModel()
+    # makeModel()
+    testModel()
