@@ -6,7 +6,7 @@ import errno
 from driveUpload import upload
 
 
-def capture(videoSource, targetDir, maxCapacity=100, total=1000, delay=1, outputFormat='number', uploading=False):
+def capture(videoSource, targetDir, maxCapacity=100, total=1000, delay=1, outputFormat='date', uploading=False):
     try:    # Attempt to create a new target directory
         os.mkdir(targetDir)
     except OSError as e:    # If the target directory already exists
@@ -25,16 +25,16 @@ def capture(videoSource, targetDir, maxCapacity=100, total=1000, delay=1, output
 
     i = 0
     while i < total:
-        picNum = i % maxCapacity    # Modulo everything by 100 to only keep 100 most recent images
+        picNum = i % maxCapacity    # Modulo everything by the maximum capacity to only keep that many most recent images
         # import pdb
         # pdb.set_trace()
         if outputFormat == 'number':
-            label = 'shot_{}.png'.format(picNum)
+            driveName = 'shot_{}.png'.format(picNum)
         else:
             label = datetime.datetime.now().strftime('shot_%m_%d_{}.png'.format(picNum))
 
         label = os.path.join(targetDir, label)
-        print(label)
+        localName = 'shot_{}.png'.format(picNum)
         time.sleep(delay)     # 0.3 seconds between image
         result = player.video_take_snapshot(0, label, 0, 0)
         i += 1

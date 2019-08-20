@@ -1,11 +1,12 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
-from pathlib import Path
+
 
 curDir = os.path.dirname(__file__)
-projectDir = Path(curDir).parent
 credentialsPath = os.path.join(curDir, 'driveCredentials.json')
+secretsPath = os.path.join(curDir, 'client_secrets.json')
+GoogleAuth.DEFAULT_SETTINGS['client_config_file'] = secretsPath
 
 
 def loadCreds():
@@ -41,11 +42,8 @@ drive = loadCreds()
 trainingDirID = getTrainingFolder(drive)
 
 
-def upload(path, name):
-    # Make sure the destination name has the proper file extension
-    if '.png' not in name:
-        name += '.png'
-    file_drive = drive.CreateFile({'title': name,
+def upload(path):
+    file_drive = drive.CreateFile({'title': os.path.basename(path),
                                    "parents": [{"kind": "drive#fileLink", "id": trainingDirID}]
                                    })
     file_drive.SetContentFile(path)
@@ -53,4 +51,4 @@ def upload(path, name):
 
 
 if __name__ == '__main__':
-    upload(os.path.join(curDir, 'screenShots/shot_5.png'), 'UploadTest.png')
+    upload(os.path.join(curDir, 'screenShots/shot_5.png'))
