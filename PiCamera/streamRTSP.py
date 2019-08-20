@@ -9,6 +9,10 @@ Date Modified: 7/29/2019
 import subprocess
 import socket
 import time
+from screenCapture import capture
+import os
+import sys
+
 
 curDir = '/home/pi/PiSmash/PiCamera/'   # Absolute path to program
 
@@ -53,3 +57,14 @@ if __name__ == '__main__':
             logs.seek(0)
             # save all stream outputs
             errors = logs.read()
+
+    try:
+        host_name = socket.gethostname()
+        PiIPAddress = socket.gethostbyname(host_name)
+    except:     # Not sure which type of exception this raises
+        print('Unable to find IP address')
+        sys.exit(1)
+
+    streamURL = "rtsp://" + PiIPAddress + ":8554/"  # URL over which the Pi streams video
+    targetDir = os.path.join(os.path.dirname(__file__), 'autoShots')
+    capture(streamURL, targetDir, outputFormat='date', uploading=True)

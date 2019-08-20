@@ -2,8 +2,6 @@
 /IconClassifier/trainingImages/*
 /iconModelPrototype.h5
 /screenModelPrototype.h5
-/iconModel.h5
-/screenModel.h5
 /ScreenClassifier/trainingImages/*
 /ScreenClassifier/testingImages/*
 /textRecognition/frozen_east_text_detection.pb
@@ -16,3 +14,5 @@
 /.vs/PiSmash/v15/.suo
 /.vs/VSWorkspaceState.json
 /.vs/config/applicationhost.config
+/PiCamera/Videos
+/*.h5                       # Covers any keras models
