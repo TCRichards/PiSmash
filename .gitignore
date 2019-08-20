@@ -18,5 +18,5 @@
 /*.h5                       # Covers any keras models
 
 # Prevent any Google Authentication .json files from being exposed
-/*/*.json
-/*.json
+/PiCamera/*.json
+/textRecognition/*.json
