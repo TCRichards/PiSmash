@@ -4,6 +4,7 @@ from driveUpload import upload
 import datetime
 import time
 import socket
+import errno
 
 
 curDir = os.path.dirname(__file__)
@@ -34,10 +35,13 @@ while time.time() < startTime + 10:
 
 if foundWifi:   # Only begin the stream if wifi is detected
     # Make the new directory if necessary
-    try:    # Attempt to create a new target directory
+    try:
         os.mkdir(targetDir)
-    except FileExistsError:    # If the target directory already exists
-        pass
+    except OSError as e:
+        if e.errno == errno.EEXIST:
+            print('Directory not created.')
+    else:
+        raise
 
     # Setup the camera so that it auto-closes when finished
     with picamera.PiCamera() as camera:
