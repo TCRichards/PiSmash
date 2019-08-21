@@ -7,7 +7,7 @@ import socket
 import errno
 
 
-curDir = os.path.dirname(__file__)
+curDir = 'home/pi/PiSmash/PiCamera/'
 targetDir = os.path.join(curDir, 'trainingData')
 maxCapacity = 100   # Total number of
 total = 1e4         # Max out at 10,000 images
@@ -51,7 +51,7 @@ if foundWifi:   # Only begin the stream if wifi is detected
             picNum = i % maxCapacity    # Modulo everything by the maximum capacity to only keep that many most recent images
             if picNum == 0:
                 for img in os.listdir(targetDir):
-                    os.remove(os.path.join(os.path.dirname(__file__), img))
+                    os.remove(os.path.join(targetDir, img))
 
             imageName = datetime.datetime.now().strftime('pic_%m%d-%H%M%S_{}.png'.format(picNum))
 
