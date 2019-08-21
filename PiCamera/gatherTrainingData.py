@@ -49,7 +49,7 @@ if foundWifi:   # Only begin the stream if wifi is detected
                 for img in os.listdir(targetDir):
                     os.remove(os.path.join(os.path.dirname(__file__), img))
 
-            imageName = datetime.datetime.now().strftime('pic_%m%d-%H:%M:%S_{}.png'.format(picNum))
+            imageName = datetime.datetime.now().strftime('pic_%m%d-%H%M%S_{}.png'.format(picNum))
 
             pathToImage = os.path.join(targetDir, imageName)
             time.sleep(delay)   # Time (s) between consecutive pictures

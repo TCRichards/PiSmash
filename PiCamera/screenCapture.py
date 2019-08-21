@@ -31,9 +31,12 @@ def capture(videoSource, targetDir, maxCapacity=100, total=1000, delay=1, output
         if outputFormat == 'number':
             label = 'shot_{}.png'.format(picNum)
         else:
-            label = datetime.datetime.now().strftime('shot_%m_%d_{}.png'.format(picNum))
-
+            label = datetime.datetime.now().strftime('shot_%m%d-%H:%M:%S_{}.png'.format(picNum))
+        import pdb
+        pdb.set_trace()
         label = os.path.join(targetDir, label)
+
+
         time.sleep(delay)     # 0.3 seconds between image
         result = player.video_take_snapshot(0, label, 0, 0)
         i += 1
@@ -46,4 +49,4 @@ def capture(videoSource, targetDir, maxCapacity=100, total=1000, delay=1, output
 if __name__ == '__main__':
     targetDir = os.path.join(os.path.dirname(__file__), 'testShots')
     videoSource = os.path.join(os.path.dirname(__file__), 'Videos/sampleVid1.MOV')
-    capture(videoSource, targetDir, outputFormat='date', uploading=True)
+    capture(videoSource, targetDir)

@@ -1,0 +1,437 @@
+[01366950] main libvlc debug: VLC media player - 3.0.3 Vetinari
+[01366950] main libvlc debug: Copyright © 1996-2018 the VideoLAN team
+[01366950] main libvlc debug: revision 3.0.3-1-0-gc2bb759264
+[01366950] main libvlc debug: configured with ./configure  '--build=arm-linux-gnueabihf' '--prefix=/usr' '--includedir=${prefix}/include' '--mandir=${prefix}/share/man' '--infodir=${prefix}/share/info' '--sysconfdir=/etc' '--localstatedir=/var' '--disable-silent-rules' '--libdir=${prefix}/lib/arm-linux-gnueabihf' '--libexecdir=${prefix}/lib/arm-linux-gnueabihf' '--disable-maintainer-mode' '--disable-dependency-tracking' '--config-cache' '--disable-update-check' '--enable-fast-install' '--docdir=/usr/share/doc/vlc' '--with-binary-version=3.0.3-1-0+deb9u1+rpt1' '--enable-a52' '--enable-aa' '--enable-bluray' '--enable-avahi' '--enable-caca' '--enable-chromaprint' '--enable-chromecast' '--enable-dbus' '--enable-dca' '--enable-dvbpsi' '--enable-dvdnav' '--enable-faad' '--enable-flac' '--enable-fluidsynth' '--enable-freerdp' '--enable-freetype' '--enable-fribidi' '--enable-gles2' '--enable-gnutls' '--enable-harfbuzz' '--enable-jack' '--enable-kate' '--enable-libass' '--enable-libmpeg2' '--enable-libxml2' '--enable-lirc' '--enable-live555' '--enable-mad' '--enable-matroska' '--enable-mod' '--enable-mpc' '--enable-mpg123' '--enable-mtp' '--enable-ncurses' '--enable-notify' '--enable-ogg' '--enable-opus' '--enable-pulse' '--enable-qt' '--enable-realrtsp' '--enable-samplerate' '--enable-sdl-image' '--enable-sftp' '--enable-shine' '--enable-shout' '--enable-skins2' '--enable-sndio' '--enable-soxr' '--enable-speex' '--enable-svg' '--enable-svgdec' '--enable-taglib' '--enable-theora' '--enable-twolame' '--enable-upnp' '--enable-vdpau' '--enable-vnc' '--enable-vorbis' '--enable-x264' '--enable-x265' '--enable-zvbi' '--with-kde-solid=/usr/share/solid/actions/' '--disable-aribsub' '--disable-d3d11va' '--disable-decklink' '--disable-directx' '--disable-dsm' '--disable-dxva2' '--disable-fdkaac' '--disable-fluidlite' '--disable-goom' '--disable-gst-decode' '--disable-libplacebo' '--disable-libtar' '--disable-macosx' '--disable-macosx-avfoundation' '--disable-macosx-qtkit' '--disable-mfx' '--disable-opencv' '--disable-projectm' '--disable-schroedinger' '--disable-sparkle' '--disable-srt' '--disable-telx' '--disable-vpx' '--disable-vsxu' '--disable-wasapi' '--enable-alsa' '--enable-dc1394' '--enable-dv1394' '--enable-linsys' '--enable-nfs' '--enable-omxil' '--enable-udev' '--enable-v4l2' '--enable-wayland' '--enable-libva' '--enable-vcd' '--enable-smbclient' '--disable-oss' '--disable-crystalhd' '--disable-mmx' '--disable-sse' '--enable-neon' '--enable-mmal' 'MMAL_CFLAGS=-march=armv7-a -mfpu=neon-vfpv4' '--disable-altivec' 'build_alias=arm-linux-gnueabihf' 'CFLAGS=-g -O2 -fdebug-prefix-map=/build/vlc-ya3dpR/vlc-3.0.3-1=. -fstack-protector-strong -Wformat -Werror=format-security ' 'LDFLAGS=-Wl,-z,relro -Wl,-z,now -Wl,--as-needed' 'CPPFLAGS=-Wdate-time -D_FORTIFY_SOURCE=2' 'CXXFLAGS=-g -O2 -fdebug-prefix-map=/build/vlc-ya3dpR/vlc-3.0.3-1=. -fstack-protector-strong -Wformat -Werror=format-security ' 'OBJCFLAGS=-g -O2 -fdebug-prefix-map=/build/vlc-ya3dpR/vlc-3.0.3-1=. -fstack-protector-strong -Wformat -Werror=format-security'
+[01366950] main libvlc debug: searching plug-in modules
+[01366950] main libvlc debug: loading plugins cache file /usr/lib/arm-linux-gnueabihf/vlc/plugins/plugins.dat
+[01366950] main libvlc debug: recursively browsing `/usr/lib/arm-linux-gnueabihf/vlc/plugins'
+[01366950] main libvlc debug: plug-ins loaded: 521 modules
+[01366950] main libvlc debug: opening config file (/home/pi/.config/vlc/vlcrc)
+[01366b80] main logger debug: looking for logger module matching "any": 4 candidates
+[01366b80] main logger debug: using logger module "console"
+[01366950] main libvlc debug: translation test: code is "C"
+[01366c48] main keystore debug: looking for keystore module matching "memory": 4 candidates
+[01366c48] main keystore debug: using keystore module "memory"
+[01366950] main libvlc debug: CPU has capabilities ARM_NEON FPU 
+[013c0840] main input debug: Creating an input for 'Media Library'
+[013c0840] main input debug: Input is a meta file: disabling unneeded options
+[013c0840] main input debug: using timeshift granularity of 50 MiB
+[013c0840] main input debug: using default timeshift path
+[013c0840] main input debug: `file/directory:///home/pi/.local/share/vlc/ml.xspf' gives access `file' demux `directory' path `/home/pi/.local/share/vlc/ml.xspf'
+[013c4598] main input source debug: creating demux: access='file' demux='directory' location='/home/pi/.local/share/vlc/ml.xspf' file='/home/pi/.local/share/vlc/ml.xspf'
+[013c46b8] main demux debug: looking for access_demux module matching "file": 17 candidates
+[013c46b8] main demux debug: no access_demux modules matched
+[013d5de0] main stream debug: creating access: file:///home/pi/.local/share/vlc/ml.xspf
+[013d5de0] main stream debug:  (path: /home/pi/.local/share/vlc/ml.xspf)
+[013d5de0] main stream debug: looking for access module matching "file": 28 candidates
+[013d5de0] main stream debug: using access module "filesystem"
+[013d6780] main stream debug: looking for stream_filter module matching "prefetch,cache_read": 26 candidates
+[013d6780] cache_read stream debug: Using stream method for AStream*
+[013d6780] cache_read stream debug: starting pre-buffering
+[013d6780] cache_read stream debug: received first data after 0 ms
+[013d6780] cache_read stream debug: pre-buffering done 296 bytes in 0s - 2919 KiB/s
+[013d6780] main stream debug: using stream_filter module "cache_read"
+[013d7278] main stream debug: looking for stream_filter module matching "any": 26 candidates
+[013d7278] playlist stream debug: using XSPF playlist reader
+[013d7278] main stream debug: using stream_filter module "playlist"
+[013d7278] main stream debug: stream filter added to 0x13d6780
+[013d8590] main stream debug: looking for stream_filter module matching "any": 26 candidates
+[013d8590] main stream debug: no stream_filter modules matched
+[013d8590] main stream_directory debug: looking for stream_directory module matching "any": 1 candidates
+[013d8590] main stream_directory debug: no stream_directory modules matched
+[013c4598] main input source debug: attachment of directory-extractor failed for file:///home/pi/.local/share/vlc/ml.xspf
+[013dbac8] main stream debug: looking for stream_filter module matching "record": 26 candidates
+[013dbac8] main stream debug: using stream_filter module "record"
+[013c4598] main input source debug: creating demux: access='file' demux='directory' location='/home/pi/.local/share/vlc/ml.xspf' file='/home/pi/.local/share/vlc/ml.xspf'
+[013dbfb0] main demux debug: looking for demux module matching "directory": 55 candidates
+[013dbfb0] main demux debug: using demux module "directory"
+[013dc658] main demux meta debug: looking for meta reader module matching "any": 2 candidates
+[013dc658] lua demux meta debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/meta/reader
+[013dc658] lua demux meta debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/reader
+[013dc658] lua demux meta debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/reader/filename.luac
+[013dc658] lua demux meta debug: Trying Lua scripts in /usr/share/vlc/lua/meta/reader
+[013dc658] main demux meta debug: no meta reader modules matched
+[013c0840] main input debug: `file/directory:///home/pi/.local/share/vlc/ml.xspf' successfully opened
+[013e31a8] main xml reader debug: looking for xml reader module matching "any": 1 candidates
+[013e31a8] main xml reader debug: using xml reader module "xml"
+[013c0840] main input debug: EOF reached
+[013dbfb0] main demux debug: removing module "directory"
+[013dbac8] main stream debug: removing module "record"
+[013d7278] main stream debug: removing module "playlist"
+[013d6780] main stream debug: removing module "cache_read"
+[013d5de0] main stream debug: removing module "filesystem"
+[013cf0d8] main playlist debug: creating audio output
+[013d5cd0] main audio output debug: looking for audio output module matching "any": 6 candidates
+[013d5cd0] vlcpulse audio output debug: using library version 10.0.0
+[013d5cd0] vlcpulse audio output debug:  (compiled with version 10.0.0, protocol 32)
+XDG_RUNTIME_DIR (/run/user/1000) is not owned by us (uid 0), but by uid 1000! (This could e g happen if you try to connect to a non-root PulseAudio as a root user, over the native protocol. Don't do that.)
+[013d5cd0] vlcpulse audio output error: PulseAudio server connection failure: Connection refused
+[013d5cd0] alsa audio output debug: Available ALSA PCM devices:
+[013d5cd0] alsa audio output debug: Discard all samples (playback) or generate zero samples (capture) (null)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Default Audio Device (default:CARD=ALSA)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Default Audio Device (sysdefault:CARD=ALSA)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Direct sample mixing device (dmix:CARD=ALSA,DEV=0)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Direct sample mixing device (dmix:CARD=ALSA,DEV=1)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Direct sample snooping device (dsnoop:CARD=ALSA,DEV=0)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Direct sample snooping device (dsnoop:CARD=ALSA,DEV=1)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Direct hardware device without any conversions (hw:CARD=ALSA,DEV=0)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Direct hardware device without any conversions (hw:CARD=ALSA,DEV=1)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Hardware device with all software conversions (plughw:CARD=ALSA,DEV=0)
+[013d5cd0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Hardware device with all software conversions (plughw:CARD=ALSA,DEV=1)
+[013d5cd0] main audio output debug: using audio output module "alsa"
+[013cf0d8] main playlist debug: keeping audio output
+[013de6c0] main interface debug: looking for interface module matching "dbus,none": 19 candidates
+[013de6c0] dbus interface error: Failed to connect to the D-Bus session daemon: Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.
+[013de6c0] main interface debug: no interface modules matched
+[013de6c0] main interface error: no suitable interface module
+[01366950] main libvlc error: interface "dbus,none" initialization failed
+[013eb9c8] main interface debug: looking for interface module matching "hotkeys,none": 19 candidates
+[013eb9c8] main interface debug: using interface module "hotkeys"
+[013de6c0] main interface debug: looking for interface module matching "globalhotkeys,none": 19 candidates
+[013de6c0] main interface debug: using interface module "xcb_hotkeys"
+[013ec878] main interface debug: looking for interface module matching "dummy": 19 candidates
+[013ec878] dummy interface: using the dummy interface module...
+[013ec878] main interface debug: using interface module "dummy"
+[013cf0d8] main playlist debug: processing request item: null, node: Playlist, skip: 0
+[013cf0d8] main playlist debug: rebuilding array of current - root Playlist
+[013cf0d8] main playlist debug: rebuild done - 1 items, index -1
+[013cf0d8] main playlist debug: starting playback of new item
+[013cf0d8] main playlist debug: resyncing on v4l2c:///dev/video0:width=640:height=480:chroma=H264
+[013cf0d8] main playlist debug: v4l2c:///dev/video0:width=640:height=480:chroma=H264 is at 0
+[013cf0d8] main playlist debug: creating new input thread
+[73e00568] main input debug: Creating an input for 'v4l2c:///dev/video0:width=640:height=480:chroma=H264'
+[013cf0d8] main playlist debug: requesting art for new input thread
+[73b006f0] main stream output debug: using sout chain=`rtp{sdp=rtsp://:8554/}'
+[73b006f0] main stream output debug: stream=`rtp'
+[73b008f8] main stream out debug: looking for sout stream module matching "rtp": 23 candidates
+[72a004f0] main meta fetcher debug: looking for meta fetcher module matching "any": 1 candidates
+[72a004f0] lua meta fetcher debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/meta/fetcher
+[72a004f0] lua meta fetcher debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/fetcher
+[72a004f0] lua meta fetcher debug: Trying Lua scripts in /usr/share/vlc/lua/meta/fetcher
+[72a004f0] main meta fetcher debug: no meta fetcher modules matched
+[72a004f0] main art finder debug: looking for art finder module matching "any": 2 candidates
+[73b008f8] main stream out debug: set config option: sout-rtp-sdp to rtsp://:8554/
+[73b008f8] stream_out_rtp stream out debug: RTSP stream at /
+[72a004f0] lua art finder debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/meta/art
+[72a004f0] lua art finder debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art
+[73b008f8] main stream out debug: net: listening to * port 8554
+[73b008f8] main stream out debug: using sout stream module "stream_out_rtp"
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/00_musicbrainz.luac
+[73e00568] main input debug: using timeshift granularity of 50 MiB
+[73e00568] main input debug: using default timeshift path
+[73e00568] main input debug: `v4l2c:///dev/video0:width=640:height=480:chroma=H264' gives access `v4l2c' demux `h264' path `/dev/video0:width=640:height=480:chroma=H264'
+[73b02918] main input source debug: creating demux: access='v4l2c' demux='h264' location='/dev/video0:width=640:height=480:chroma=H264' file='/dev/video0:width=640:height=480:chroma=H264'
+[73b02a00] main demux debug: looking for access_demux module matching "v4l2c": 17 candidates
+[73b02a00] main demux debug: no access_demux modules matched
+[73b02c80] main stream debug: creating access: v4l2c:///dev/video0:width=640:height=480:chroma=H264
+[73b02c80] main stream debug:  (path: /dev/video0:width=640:height=480:chroma=H264)
+[73b02c80] main stream debug: looking for access module matching "v4l2c": 28 candidates
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/00_musicbrainz.luac
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/01_googleimage.luac
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/01_googleimage.luac
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/02_frenchtv.luac
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/02_frenchtv.luac
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/03_lastfm.luac
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/03_lastfm.luac
+[72a004f0] lua art finder debug: Trying Lua scripts in /usr/share/vlc/lua/meta/art
+[72a004f0] main art finder debug: no art finder modules matched
+[73b02c80] v4l2 stream debug: opening device '/dev/video0'
+[73b02c80] v4l2 stream debug: device Camera Board OV5647 using driver raspicam (version 0.0.0) on CSI
+[73b02c80] v4l2 stream debug:  with unknown capabilities  (overall 0x05000001)
+[73b02c80] v4l2 stream debug: video input default (0) is camera
+[73b02c80] v4l2 stream debug: selected input 0
+[73b02c80] v4l2 stream debug: no video standard selection
+[73b02c80] v4l2 stream debug: no tuning required (analog baseband input)
+[73b02c80] v4l2 stream debug: no audio input available
+[73b02c80] v4l2 stream debug: selected format H264
+[73b02c80] v4l2 stream debug:  requested frame internal: 1/60
+[73b02c80] v4l2 stream debug:  requested frame size: 640x480
+[73b02c80] v4l2 stream debug:   frame intervals from 1/0 to 1/120 supported
+[73b02c80] v4l2 stream debug: cannot get cropping properties: Invalid argument
+[73b02c80] v4l2 stream debug: 262144 bytes for complete image
+[73b02c80] v4l2 stream error: cannot map buffer 0: No such device
+[73b02c80] main stream debug: no access modules matched
+[73e00568] main input error: Your input can't be opened
+[73e00568] main input error: VLC is unable to open the MRL 'v4l2c:///dev/video0:width=640:height=480:chroma=H264'. Check the log for details.
+[013cf0d8] main playlist debug: dead input
+[73b006f0] main stream output debug: destroying useless sout
+[73b008f8] main stream out debug: destroying chain... (name=rtp)
+[73b008f8] main stream out debug: removing module "stream_out_rtp"
+[73b01f10] main http host debug: HTTP host removed
+[73b008f8] main stream out debug: destroying chain done
+[013cf0d8] main playlist debug: changing item without a request (current 0/1)
+[013cf0d8] main playlist debug: nothing to play
+[01e6e950] main libvlc debug: VLC media player - 3.0.3 Vetinari
+[01e6e950] main libvlc debug: Copyright © 1996-2018 the VideoLAN team
+[01e6e950] main libvlc debug: revision 3.0.3-1-0-gc2bb759264
+[01e6e950] main libvlc debug: configured with ./configure  '--build=arm-linux-gnueabihf' '--prefix=/usr' '--includedir=${prefix}/include' '--mandir=${prefix}/share/man' '--infodir=${prefix}/share/info' '--sysconfdir=/etc' '--localstatedir=/var' '--disable-silent-rules' '--libdir=${prefix}/lib/arm-linux-gnueabihf' '--libexecdir=${prefix}/lib/arm-linux-gnueabihf' '--disable-maintainer-mode' '--disable-dependency-tracking' '--config-cache' '--disable-update-check' '--enable-fast-install' '--docdir=/usr/share/doc/vlc' '--with-binary-version=3.0.3-1-0+deb9u1+rpt1' '--enable-a52' '--enable-aa' '--enable-bluray' '--enable-avahi' '--enable-caca' '--enable-chromaprint' '--enable-chromecast' '--enable-dbus' '--enable-dca' '--enable-dvbpsi' '--enable-dvdnav' '--enable-faad' '--enable-flac' '--enable-fluidsynth' '--enable-freerdp' '--enable-freetype' '--enable-fribidi' '--enable-gles2' '--enable-gnutls' '--enable-harfbuzz' '--enable-jack' '--enable-kate' '--enable-libass' '--enable-libmpeg2' '--enable-libxml2' '--enable-lirc' '--enable-live555' '--enable-mad' '--enable-matroska' '--enable-mod' '--enable-mpc' '--enable-mpg123' '--enable-mtp' '--enable-ncurses' '--enable-notify' '--enable-ogg' '--enable-opus' '--enable-pulse' '--enable-qt' '--enable-realrtsp' '--enable-samplerate' '--enable-sdl-image' '--enable-sftp' '--enable-shine' '--enable-shout' '--enable-skins2' '--enable-sndio' '--enable-soxr' '--enable-speex' '--enable-svg' '--enable-svgdec' '--enable-taglib' '--enable-theora' '--enable-twolame' '--enable-upnp' '--enable-vdpau' '--enable-vnc' '--enable-vorbis' '--enable-x264' '--enable-x265' '--enable-zvbi' '--with-kde-solid=/usr/share/solid/actions/' '--disable-aribsub' '--disable-d3d11va' '--disable-decklink' '--disable-directx' '--disable-dsm' '--disable-dxva2' '--disable-fdkaac' '--disable-fluidlite' '--disable-goom' '--disable-gst-decode' '--disable-libplacebo' '--disable-libtar' '--disable-macosx' '--disable-macosx-avfoundation' '--disable-macosx-qtkit' '--disable-mfx' '--disable-opencv' '--disable-projectm' '--disable-schroedinger' '--disable-sparkle' '--disable-srt' '--disable-telx' '--disable-vpx' '--disable-vsxu' '--disable-wasapi' '--enable-alsa' '--enable-dc1394' '--enable-dv1394' '--enable-linsys' '--enable-nfs' '--enable-omxil' '--enable-udev' '--enable-v4l2' '--enable-wayland' '--enable-libva' '--enable-vcd' '--enable-smbclient' '--disable-oss' '--disable-crystalhd' '--disable-mmx' '--disable-sse' '--enable-neon' '--enable-mmal' 'MMAL_CFLAGS=-march=armv7-a -mfpu=neon-vfpv4' '--disable-altivec' 'build_alias=arm-linux-gnueabihf' 'CFLAGS=-g -O2 -fdebug-prefix-map=/build/vlc-ya3dpR/vlc-3.0.3-1=. -fstack-protector-strong -Wformat -Werror=format-security ' 'LDFLAGS=-Wl,-z,relro -Wl,-z,now -Wl,--as-needed' 'CPPFLAGS=-Wdate-time -D_FORTIFY_SOURCE=2' 'CXXFLAGS=-g -O2 -fdebug-prefix-map=/build/vlc-ya3dpR/vlc-3.0.3-1=. -fstack-protector-strong -Wformat -Werror=format-security ' 'OBJCFLAGS=-g -O2 -fdebug-prefix-map=/build/vlc-ya3dpR/vlc-3.0.3-1=. -fstack-protector-strong -Wformat -Werror=format-security'
+[01e6e950] main libvlc debug: searching plug-in modules
+[01e6e950] main libvlc debug: loading plugins cache file /usr/lib/arm-linux-gnueabihf/vlc/plugins/plugins.dat
+[01e6e950] main libvlc debug: recursively browsing `/usr/lib/arm-linux-gnueabihf/vlc/plugins'
+[01e6e950] main libvlc debug: plug-ins loaded: 521 modules
+[01e6e950] main libvlc debug: opening config file (/home/pi/.config/vlc/vlcrc)
+[01e6eb80] main logger debug: looking for logger module matching "any": 4 candidates
+[01e6eb80] main logger debug: using logger module "console"
+[01e6e950] main libvlc debug: translation test: code is "C"
+[01e78018] main keystore debug: looking for keystore module matching "memory": 4 candidates
+[01e78018] main keystore debug: using keystore module "memory"
+[01e6e950] main libvlc debug: CPU has capabilities ARM_NEON FPU 
+[01ec8810] main input debug: Creating an input for 'Media Library'
+[01ec8810] main input debug: Input is a meta file: disabling unneeded options
+[01ec8810] main input debug: using timeshift granularity of 50 MiB
+[01ec8810] main input debug: using default timeshift path
+[01ec8810] main input debug: `file/directory:///home/pi/.local/share/vlc/ml.xspf' gives access `file' demux `directory' path `/home/pi/.local/share/vlc/ml.xspf'
+[01ecc5c8] main input source debug: creating demux: access='file' demux='directory' location='/home/pi/.local/share/vlc/ml.xspf' file='/home/pi/.local/share/vlc/ml.xspf'
+[01ecc6b0] main demux debug: looking for access_demux module matching "file": 17 candidates
+[01ecc6b0] main demux debug: no access_demux modules matched
+[01edddf0] main stream debug: creating access: file:///home/pi/.local/share/vlc/ml.xspf
+[01edddf0] main stream debug:  (path: /home/pi/.local/share/vlc/ml.xspf)
+[01edddf0] main stream debug: looking for access module matching "file": 28 candidates
+[01edddf0] main stream debug: using access module "filesystem"
+[01ede790] main stream debug: looking for stream_filter module matching "prefetch,cache_read": 26 candidates
+[01ede790] cache_read stream debug: Using stream method for AStream*
+[01ede790] cache_read stream debug: starting pre-buffering
+[01ede790] cache_read stream debug: received first data after 0 ms
+[01ede790] cache_read stream debug: pre-buffering done 296 bytes in 0s - 2862 KiB/s
+[01ede790] main stream debug: using stream_filter module "cache_read"
+[01edf228] main stream debug: looking for stream_filter module matching "any": 26 candidates
+[01edf228] playlist stream debug: using XSPF playlist reader
+[01edf228] main stream debug: using stream_filter module "playlist"
+[01edf228] main stream debug: stream filter added to 0x1ede790
+[01ee0570] main stream debug: looking for stream_filter module matching "any": 26 candidates
+[01ee0570] main stream debug: no stream_filter modules matched
+[01ee0570] main stream_directory debug: looking for stream_directory module matching "any": 1 candidates
+[01ee0570] main stream_directory debug: no stream_directory modules matched
+[01ecc5c8] main input source debug: attachment of directory-extractor failed for file:///home/pi/.local/share/vlc/ml.xspf
+[01ee3ad8] main stream debug: looking for stream_filter module matching "record": 26 candidates
+[01ee3ad8] main stream debug: using stream_filter module "record"
+[01ecc5c8] main input source debug: creating demux: access='file' demux='directory' location='/home/pi/.local/share/vlc/ml.xspf' file='/home/pi/.local/share/vlc/ml.xspf'
+[01ee3fc0] main demux debug: looking for demux module matching "directory": 55 candidates
+[01ee3fc0] main demux debug: using demux module "directory"
+[01ee4668] main demux meta debug: looking for meta reader module matching "any": 2 candidates
+[01ee4668] lua demux meta debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/meta/reader
+[01ee4668] lua demux meta debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/reader
+[01ee4668] lua demux meta debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/reader/filename.luac
+[01ee4668] lua demux meta debug: Trying Lua scripts in /usr/share/vlc/lua/meta/reader
+[01ee4668] main demux meta debug: no meta reader modules matched
+[01ec8810] main input debug: `file/directory:///home/pi/.local/share/vlc/ml.xspf' successfully opened
+[01eeb1b8] main xml reader debug: looking for xml reader module matching "any": 1 candidates
+[01eeb1b8] main xml reader debug: using xml reader module "xml"
+[01ec8810] main input debug: EOF reached
+[01ee3fc0] main demux debug: removing module "directory"
+[01ee3ad8] main stream debug: removing module "record"
+[01edf228] main stream debug: removing module "playlist"
+[01ede790] main stream debug: removing module "cache_read"
+[01edddf0] main stream debug: removing module "filesystem"
+[01ed70d0] main playlist debug: creating audio output
+[01eddcf0] main audio output debug: looking for audio output module matching "any": 6 candidates
+[01eddcf0] vlcpulse audio output debug: using library version 10.0.0
+[01eddcf0] vlcpulse audio output debug:  (compiled with version 10.0.0, protocol 32)
+XDG_RUNTIME_DIR (/run/user/1000) is not owned by us (uid 0), but by uid 1000! (This could e g happen if you try to connect to a non-root PulseAudio as a root user, over the native protocol. Don't do that.)
+[01eddcf0] vlcpulse audio output error: PulseAudio server connection failure: Connection refused
+[01eddcf0] alsa audio output debug: Available ALSA PCM devices:
+[01eddcf0] alsa audio output debug: Discard all samples (playback) or generate zero samples (capture) (null)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Default Audio Device (default:CARD=ALSA)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Default Audio Device (sysdefault:CARD=ALSA)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Direct sample mixing device (dmix:CARD=ALSA,DEV=0)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Direct sample mixing device (dmix:CARD=ALSA,DEV=1)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Direct sample snooping device (dsnoop:CARD=ALSA,DEV=0)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Direct sample snooping device (dsnoop:CARD=ALSA,DEV=1)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Direct hardware device without any conversions (hw:CARD=ALSA,DEV=0)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Direct hardware device without any conversions (hw:CARD=ALSA,DEV=1)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 ALSA Hardware device with all software conversions (plughw:CARD=ALSA,DEV=0)
+[01eddcf0] alsa audio output debug: bcm2835 ALSA, bcm2835 IEC958/HDMI Hardware device with all software conversions (plughw:CARD=ALSA,DEV=1)
+[01eddcf0] main audio output debug: using audio output module "alsa"
+[01ed70d0] main playlist debug: keeping audio output
+[01f00728] main interface debug: looking for interface module matching "dbus,none": 19 candidates
+[01f00728] dbus interface error: Failed to connect to the D-Bus session daemon: Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.
+[01f00728] main interface debug: no interface modules matched
+[01f00728] main interface error: no suitable interface module
+[01e6e950] main libvlc error: interface "dbus,none" initialization failed
+[01f00728] main interface debug: looking for interface module matching "hotkeys,none": 19 candidates
+[01f00728] main interface debug: using interface module "hotkeys"
+[01ef3a18] main interface debug: looking for interface module matching "globalhotkeys,none": 19 candidates
+[01ef3a18] main interface debug: using interface module "xcb_hotkeys"
+[01ef48c0] main interface debug: looking for interface module matching "dummy": 19 candidates
+[01ef48c0] dummy interface: using the dummy interface module...
+[01ef48c0] main interface debug: using interface module "dummy"
+[01ed70d0] main playlist debug: processing request item: null, node: Playlist, skip: 0
+[01ed70d0] main playlist debug: rebuilding array of current - root Playlist
+[01ed70d0] main playlist debug: rebuild done - 1 items, index -1
+[01ed70d0] main playlist debug: starting playback of new item
+[01ed70d0] main playlist debug: resyncing on stream:///dev/stdin
+[01ed70d0] main playlist debug: stream:///dev/stdin is at 0
+[01ed70d0] main playlist debug: creating new input thread
+[73c00520] main input debug: Creating an input for 'stream:///dev/stdin'
+[01ed70d0] main playlist debug: requesting art for new input thread
+[73a006f0] main stream output debug: using sout chain=`rtp{sdp=rtsp://:8554/}'
+[73a006f0] main stream output debug: stream=`rtp'
+[73a008f8] main stream out debug: looking for sout stream module matching "rtp": 23 candidates
+[72a004f0] main meta fetcher debug: looking for meta fetcher module matching "any": 1 candidates
+[72a004f0] lua meta fetcher debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/meta/fetcher
+[73a008f8] main stream out debug: set config option: sout-rtp-sdp to rtsp://:8554/
+[72a004f0] lua meta fetcher debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/fetcher
+[72a004f0] lua meta fetcher debug: Trying Lua scripts in /usr/share/vlc/lua/meta/fetcher
+[72a004f0] main meta fetcher debug: no meta fetcher modules matched
+[73a008f8] stream_out_rtp stream out debug: RTSP stream at /
+[72a004f0] main art finder debug: looking for art finder module matching "any": 2 candidates
+[73a008f8] main stream out debug: net: listening to * port 8554
+[72a004f0] lua art finder debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/meta/art
+[72a004f0] lua art finder debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art
+[73a008f8] main stream out debug: using sout stream module "stream_out_rtp"
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/00_musicbrainz.luac
+[73c00520] main input debug: using timeshift granularity of 50 MiB
+[73c00520] main input debug: using default timeshift path
+[73c00520] main input debug: `stream:///dev/stdin' gives access `stream' demux `h264' path `/dev/stdin'
+[73a02918] main input source debug: creating demux: access='stream' demux='h264' location='/dev/stdin' file='/dev/stdin'
+[73a02a18] main demux debug: looking for access_demux module matching "stream": 17 candidates
+[73a02a18] main demux debug: no access_demux modules matched
+[73a02c88] main stream debug: creating access: stream:///dev/stdin
+[73a02c88] main stream debug:  (path: /dev/stdin)
+[73a02c88] main stream debug: looking for access module matching "stream": 28 candidates
+[73a02c88] main stream debug: using access module "filesystem"
+[73a02d88] main stream debug: looking for stream_filter module matching "prefetch,cache_read": 26 candidates
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/00_musicbrainz.luac
+[73a02d88] prefetch stream debug: using 16777216 bytes buffer, 16384 bytes read
+[73a02d88] main stream debug: using stream_filter module "prefetch"
+[73a03018] main stream debug: looking for stream_filter module matching "any": 26 candidates
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/01_googleimage.luac
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/01_googleimage.luac
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/02_frenchtv.luac
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/02_frenchtv.luac
+[72a004f0] lua art finder debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/03_lastfm.luac
+[72a004f0] lua art finder debug: skipping script (unmatched scope) /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/art/03_lastfm.luac
+[72a004f0] lua art finder debug: Trying Lua scripts in /usr/share/vlc/lua/meta/art
+[72a004f0] main art finder debug: no art finder modules matched
+[73a03018] lua stream debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/playlist
+[73a03018] lua stream debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/anevia_streams.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/anevia_xml.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/appletrailers.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/bbc_co_uk.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/cue.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/dailymotion.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/jamendo.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/koreus.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/liveleak.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/newgrounds.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/rockbox_fm_presets.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/soundcloud.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/twitch.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/vimeo.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/vocaroo.luac
+[73a03018] lua stream debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/playlist/youtube.luac
+[73a03018] lua stream debug: Trying Lua scripts in /usr/share/vlc/lua/playlist
+[73a03018] main stream debug: no stream_filter modules matched
+[73a0ba78] main stream_directory debug: looking for stream_directory module matching "any": 1 candidates
+[73a0ba78] main stream_directory debug: no stream_directory modules matched
+[73a02918] main input source debug: attachment of directory-extractor failed for stream:///dev/stdin
+[73a03018] main stream debug: looking for stream_filter module matching "record": 26 candidates
+[73a03018] main stream debug: using stream_filter module "record"
+[73a02918] main input source debug: creating demux: access='stream' demux='h264' location='/dev/stdin' file='/dev/stdin'
+[73a064f8] main demux debug: looking for demux module matching "h264": 55 candidates
+[73a03c00] main demux packetizer debug: looking for packetizer module matching "any": 24 candidates
+[73a03c00] main demux packetizer debug: using packetizer module "h264"
+[73a064f8] main demux debug: using demux module "h26x"
+[73a03018] main stream error: unknown query 0x30e in demux_vaControlHelper
+[73c00520] main input debug: starting in async mode
+[73a0e0b0] main demux meta debug: looking for meta reader module matching "any": 2 candidates
+[73a0e0b0] lua demux meta debug: Trying Lua scripts in /home/pi/.local/share/vlc/lua/meta/reader
+[73a0e0b0] lua demux meta debug: Trying Lua scripts in /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/reader
+[73a0e0b0] lua demux meta debug: Trying Lua playlist script /usr/lib/arm-linux-gnueabihf/vlc/lua/meta/reader/filename.luac
+[73a0e0b0] lua demux meta debug: Trying Lua scripts in /usr/share/vlc/lua/meta/reader
+[73a0e0b0] main demux meta debug: no meta reader modules matched
+[73c00520] main input debug: `stream:///dev/stdin' successfully opened
+[73a03c00] h264 demux packetizer debug: found NAL_SPS (sps_id=0)
+[73a03c00] h264 demux packetizer debug: found NAL_PPS (pps_id=0 sps_id=0)
+[73c00520] main input debug: selecting program id=0
+[73a0e0b0] main decoder debug: looking for packetizer module matching "any": 24 candidates
+[73a0e0b0] h264 decoder debug: found NAL_SPS (sps_id=0)
+[73a0e0b0] h264 decoder debug: found NAL_PPS (pps_id=0 sps_id=0)
+[73a0e0b0] main decoder debug: using packetizer module "h264"
+[73c00520] main input debug: switching to sync mode
+[73a064f8] h26x demux debug: using 25.00 fps
+[73c00520] main input debug: Buffering 0%
+[73c00520] main input debug: Buffering 13%
+[73c00520] main input debug: Buffering 26%
+[73a006f0] main stream output debug: adding a new sout input for `h264` (sout_input: 0x71501ca8)
+[73a008f8] stream_out_rtp stream out debug: maximum RTP packet size: 1400 bytes
+[73a008f8] stream_out_rtp stream out debug: we found a startcode for NAL with TYPE:7
+[73a008f8] stream_out_rtp stream out debug: we found a startcode for NAL with TYPE:8
+[73a008f8] stream_out_rtp stream out debug: RTSP: adding /trackID=0
+[73a008f8] stream_out_rtp stream out debug: sdp=
+v=0
+o=- 16214989107170513860 16214989107170513860 IN IP4 tumuzPi
+s=Unnamed
+i=N/A
+c=IN IP4 0.0.0.0
+t=0 0
+a=tool:vlc 3.0.3
+a=recvonly
+a=type:broadcast
+a=charset:UTF-8
+m=video 0 RTP/AVP 96
+b=RR:0
+a=rtpmap:96 H264/90000
+a=fmtp:96 packetization-mode=1;profile-level-id=640028;sprop-parameter-sets=J2QAKKwrQFAe0A8SJqA=,KO4fLA==;
+
+[73c00520] main input debug: Buffering 40%
+[73c00520] main input debug: Buffering 53%
+[73c00520] main input debug: Buffering 66%
+[73c00520] main input debug: Buffering 80%
+[73c00520] main input debug: Buffering 93%
+[73c00520] main input debug: Stream buffering done (320 ms in 179 ms)
+[73c00520] main input debug: Decoder wait done in 0 ms
+[01e6e950] main libvlc debug: exiting
+[01e6e950] main libvlc debug: removing all interfaces
+[01ef48c0] main interface debug: removing module "dummy"
+[01ef3a18] main interface debug: removing module "xcb_hotkeys"
+[01f00728] main interface debug: removing module "hotkeys"
+[01ed70d0] main playlist debug: destroying
+[01ed70d0] [01366950] main playlist debug: main libvlc debug: deactivating the playlistexiting
+
+[01366950] main libvlc debug: [01ed70d0] removing all interfacesmain playlist debug: 
+incoming request - stopping current input[013ec878] 
+main interface debug: removing module "dummy"
+[013de6c0] main interface debug: removing module "xcb_hotkeys"
+[013eb9c8] main interface debug: removing module "hotkeys"
+[013cf0d8] main playlist debug: destroying
+[013cf0d8] main playlist debug: deactivating the playlist
+[013d5cd0] main audio output debug: removing module "alsa"
+[73a02d88] prefetch stream debug: end of stream
+[73a0e0b0] main decoder debug: killing decoder fourcc `h264'
+[73a0e0b0] main decoder debug: removing module "h264"
+[73a006f0] main stream output debug: removing a sout input (sout_input: 0x71501ca8)
+[013ec878] main playlist export debug: saving media library to file /home/pi/.local/share/vlc/ml.xspf.tmp1462
+[013ec878] main playlist export debug: looking for playlist export module matching "export-xspf": 4 candidates
+[73a064f8] main demux debug: removing module "h26x"
+[73a03c00] main demux packetizer debug: removing module "h264"
+[73a03018] main stream debug: removing module "record"
+[73a02d88] main stream debug: removing module "prefetch"
+[73a02c88] [013ec878] main playlist export debug: using playlist export module "export"
+[013ec878] main playlist export debug: removing module "export"
+[013cf0d8] main playlist debug: deleting item `Media Library'
+[013cf0d8] main playlist debug: deleting item `v4l2c:///dev/video0:width=640:height=480:chroma=H264'
+[013cf0d8] main playlist debug: deleting item `Playlist'
+[01366c48] main keystore debug: removing module "memory"
+main stream debug: removing module "filesystem"
+[73c00520] main input debug: Program doesn't contain anymore ES
+[01ed70d0] main playlist debug: dead input
+[73a006f0] main stream output debug: destroying useless sout
+[73a008f8] main stream out debug: destroying chain... (name=rtp)
+[73a008f8] main stream out debug: removing module "stream_out_rtp"
+[73a01f10] main http host debug: HTTP host removed
+[73a008f8] main stream out debug: destroying chain done
+[01ed70d0] main playlist debug: nothing to play
+[01eddcf0] main audio output debug: removing module "alsa"
+[01ef48c0] main playlist export debug: saving media library to file /home/pi/.local/share/vlc/ml.xspf.tmp1481
+[01ef48c0] main playlist export debug: looking for playlist export module matching "export-xspf": 4 candidates
+[01ef48c0] main playlist export debug: using playlist export module "export"
+[01ef48c0] main playlist export debug: removing module "export"
+[01ed70d0] main playlist debug: deleting item `Media Library'
+[01ed70d0] main playlist debug: deleting item `stream:///dev/stdin'
+[01ed70d0] main playlist debug: deleting item `Playlist'
+[01e78018] main keystore debug: removing module "memory"
+0+374 records in
+0+374 records out
+3745127 bytes (3.7 MB, 3.6 MiB) copied, 13.0789 s, 286 kB/s

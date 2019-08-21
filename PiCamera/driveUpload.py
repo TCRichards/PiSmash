@@ -51,4 +51,4 @@ def upload(path):
 
 
 if __name__ == '__main__':
-    upload(os.path.join(curDir, 'screenShots/shot_5.png'))
+    upload(os.path.join(curDir, 'screenShots/shot_5.jpg'))
