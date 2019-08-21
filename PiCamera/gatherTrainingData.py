@@ -7,7 +7,7 @@ import socket
 import errno
 
 
-curDir = 'home/pi/PiSmash/PiCamera/'
+curDir = '/home/pi/PiSmash/PiCamera/'
 targetDir = os.path.join(curDir, 'trainingData')
 maxCapacity = 100   # Total number of
 total = 1e4         # Max out at 10,000 images
