@@ -29,12 +29,11 @@ def capture(videoSource, targetDir, maxCapacity=100, total=1000, delay=1, output
         # import pdb
         # pdb.set_trace()
         if outputFormat == 'number':
-            driveName = 'shot_{}.png'.format(picNum)
+            label = 'shot_{}.png'.format(picNum)
         else:
             label = datetime.datetime.now().strftime('shot_%m_%d_{}.png'.format(picNum))
 
         label = os.path.join(targetDir, label)
-        localName = 'shot_{}.png'.format(picNum)
         time.sleep(delay)     # 0.3 seconds between image
         result = player.video_take_snapshot(0, label, 0, 0)
         i += 1
