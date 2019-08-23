@@ -30,8 +30,6 @@ def loadCreds():
 
 
 def ListSubfolders(parent):
-    import pdb
-    pdb.set_trace()
     folders = []
     file_list = drive.ListFile({'q': "'%s' in parents and trashed=false" % parent['id']}).GetList()
     for f in file_list:
