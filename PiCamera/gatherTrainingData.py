@@ -37,8 +37,8 @@ from driveUpload import upload
 curDir = '/home/pi/PiSmash/PiCamera/'
 targetDir = os.path.join(curDir, 'trainingData')
 maxCapacity = 100   # Total number of
-total = 1e4         # Max out at 10,000 images
-delay = 0.5         # Time between consecutive images
+total = 1e5         # Max out at 100,000 images in a row
+delay = 0.1         # Time between consecutive images
 
 
 # Make the new directory if necessary

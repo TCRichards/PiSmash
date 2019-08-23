@@ -1,6 +1,8 @@
 import os
+import sys
 from screenCapture import capture
-
+print('Im in the standard error', file=sys.stderr)
+print('Im in the stanard output', file=sys.stdout)
 # Create interface to easily edit the IP address on launch?
 PiIPAddress = '192.168.0.54'                    # Local address of my Raspberry Pi
 streamURL = "rtsp://" + PiIPAddress + ":8554/"  # URL over which the Pi streams video
