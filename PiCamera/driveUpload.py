@@ -29,12 +29,29 @@ def loadCreds():
     return drive
 
 
+def ListSubfolders(parent):
+    import pdb
+    pdb.set_trace()
+    folders = []
+    file_list = drive.ListFile({'q': "'%s' in parents and trashed=false" % parent['id']}).GetList()
+    for f in file_list:
+        if f['mimeType'] == 'application/vnd.google-apps.folder':   # if folder
+            folders.append({"id": f['id'], "title": f['title']})
+    return folders
+
+
 # Lists out the unique id of each folder
 def getTrainingFolder(drive):
     file_list = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
+
     for file1 in file_list:
-        if 'Raw Training Data' in file1['title']:
-            return file1['id']
+        print('{}: {}'.format(file1['title'], file1['id']))
+        if 'PiSmash' in file1['title']:
+            subFiles = ListSubfolders(file1)
+            for f in subFiles:
+                print(f['title'])
+                if 'Raw Training Data' in f['title']:
+                    return f['id']
     return None
 
 
@@ -51,4 +68,4 @@ def upload(path):
 
 
 if __name__ == '__main__':
-    upload(os.path.join(curDir, 'screenShots/shot_5.jpg'))
+    upload(os.path.join(curDir, 'screenShots/shot_5.png'))
