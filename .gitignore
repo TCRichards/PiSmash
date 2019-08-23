@@ -19,4 +19,5 @@
 
 # Prevent any Google Authentication .json files from being exposed
 /PiCamera/*.json
+/PiCamera/trainingData/*
 /textRecognition/*.json
