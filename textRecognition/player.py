@@ -10,5 +10,5 @@ class Player:
     def printOut(self):
         print('Character Name = ' + self.charName)
         print('Player Tag = ' + self.tag)
-        print('Player Number = ' + str(object=self.playerNum))
+        print('Player Number = ' + str(self.playerNum))
         print('Current Rank = ' + str(self.rank))

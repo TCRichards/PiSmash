@@ -2,7 +2,6 @@
 import io
 import cv2
 import os
-from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 # Imports the Google Cloud client library
