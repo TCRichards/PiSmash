@@ -3,6 +3,8 @@ Uses training images stored in directory to build neural network
 Author: Thomas Richards
 Date Modified: 6/18/19
 '''
+import os
+from inspect import getsourcefile
 
 from . import makeIcons
 import modelHelper
@@ -11,10 +13,14 @@ trainingDir = makeIcons.trainingDir
 testingDir = makeIcons.testingDir
 
 
+current_path = os.path.abspath(getsourcefile(lambda: 0))    # Add parent directory to the path
+current_dir = os.path.dirname(current_path)
+parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
+modelPath = os.path.join(parent_dir, 'iconModel.h5')
+
 # Image dimensions
 num_rows, num_cols = makeIcons.num_rows, makeIcons.num_cols
 
-modelName = 'iconModelPrototype.h5'
 
 # Maps character names to corresponding labels for classification
 charDict = {
@@ -162,13 +168,13 @@ def makeModel():
     EPOCHS = 75
     BATCH_SIZE = 32
 
-    return modelHelper.makeImageModel(x_train, y_train, modelName, len(charDict), EPOCHS, BATCH_SIZE)
+    return modelHelper.makeImageModel(x_train, y_train, modelPath, len(charDict), EPOCHS, BATCH_SIZE)
 
 
 def testModel():
     x_test, y_test = modelHelper.getTestingData(testingDir, charDict, num_rows, num_cols)
     print(x_test.shape, y_test.shape)
-    modelHelper.testModel(x_test, y_test, modelName, charDict)
+    modelHelper.testModel(x_test, y_test, modelPath, charDict)
 
 
 def main():     # Main function allows us to create and test our model seperately
