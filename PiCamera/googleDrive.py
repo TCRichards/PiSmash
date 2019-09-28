@@ -2,10 +2,9 @@ from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
 os.environ['TZ'] = 'EST'   # Make sure we're on Eastern time (although if we're doing this abroad that'd be sick)
-import time
-import datetime
 from inspect import getsourcefile
 import sys
+import errno
 from threading import Thread
 
 
@@ -109,6 +108,12 @@ def updateLocalData(drive, localDir='ScreenClassifier/trainingImages/'):
 
     def updateCategory(label):
         categoryFolder = os.path.join(localDir, label)  # This is the local folder of images of each classification
+        try:
+            os.mkdir(categoryFolder)
+        except OSError as exc:
+            if exc.errno != errno.EEXIST:
+                raise
+            pass
         currentImages = os.listdir(categoryFolder)
 
         imageDicts = listDriveFolder(drive, label)  # Each imageDict is dictionary with title, id and other info about the file
@@ -117,9 +122,13 @@ def updateLocalData(drive, localDir='ScreenClassifier/trainingImages/'):
                 image.GetContentFile(os.path.join(categoryFolder, image['title']))
                 print('Downloading {} from {}'.format(image['title'], label))
 
+    liveThreads = []
     for label in labels:    # Download from each folder simultaneously using threading
-        Thread(target=updateCategory, args=(label, ), daemon=False).start()    # Daemon=False prevents program from ending 
-    Thread.join()
+        downloadThread = Thread(target=updateCategory, args=(label, ), daemon=False)    # Daemon=False prevents program from ending
+        downloadThread.start()
+        liveThreads.append(downloadThread)
+    for t in liveThreads:
+        t.join()
 
 
 # Uploads the specified file to drive
