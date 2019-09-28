@@ -30,9 +30,14 @@ modelName = 'screenModelPrototype.h5'
 
 # Translates screen type to an integer
 screenDict = OrderedDict({
-    "Select": 0,
-    "Game": 1,
-    "Victory": 2
+    "Black": 0,
+    "Character-Select": 1,
+    "Game": 2,
+    "Other": 3,
+    "Pre-Game": 4,
+    "Results": 5,
+    "Stage-Select": 6,
+    "Victory": 7
 })
 
 
@@ -51,5 +56,5 @@ def testModel():
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
-    # makeModel()
-    testModel()
+    makeModel()
+    #testModel()
