@@ -74,7 +74,6 @@ def listDriveFolder(drive, label):
     rootFileList = drive.ListFile({'q': "'root' in parents and trashed=false"}).GetList()
 
     for driveObj in rootFileList:
-        # print('{}: {}'.format(file1['title'], file1['id']))
         if 'PiSmash Training Data' in driveObj['title']:
             subFolders = ListSubfolders(driveObj)
 
