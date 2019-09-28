@@ -41,7 +41,7 @@ def getTrainingData(trainingDir, myDict, num_rows, num_cols):
     for i in range(numTrainingFiles):
         rawIm = Image.open(trainFileList[i])
         newIm = rawIm.resize((num_rows, num_cols))                  # Rescale the image to num_rows x num_cols
-        newIm_array = np.array(newIm).astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
+        newIm_array = np.array(newIm)[:, :, :3].astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
         x_train[i] = newIm_array                                    # Stack the new image at the bottom of the training set
     y_train = trainLabelList                                        # Refer to the labels as y_train for continuity
     return x_train, y_train
@@ -77,8 +77,6 @@ def getTestingData(testingDir, myDict, num_rows, num_cols):
 
 
 def makeImageModel(x_train, y_train, modelName, numTargets, EPOCHS, BATCH_SIZE):
-    EPOCHS = 4
-    BATCH_SIZE = 32
     num_rows, num_cols = len(x_train[1]), len(x_train[2])
     # Make a sequential neural network
     model = keras.Sequential()
@@ -101,7 +99,7 @@ def makeImageModel(x_train, y_train, modelName, numTargets, EPOCHS, BATCH_SIZE):
                   optimizer='adam',
                   metrics=['accuracy'])
 
-    history = model.fit(x_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=1, validation_split=0.2)
+    history = model.fit(x_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=1, validation_split=0.1)
 
     # Save the model including architecture and weights in an h5 file
     model.save(modelName)   # Make sure model is included in .gitignore -- too large to push

@@ -11,7 +11,7 @@ from google.cloud import vision
 curDir = os.path.dirname(__file__)
 
 imagePath = os.path.join(curDir, 'selectScreens/screen3.jpg')
-credentialsPath = os.path.join(curDir, 'credentials.json')
+credentialsPath = os.path.join(curDir, 'visionCredentials.json')
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialsPath
 

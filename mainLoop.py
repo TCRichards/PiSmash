@@ -2,6 +2,7 @@ from textRecognition import selectDetect as sd
 from textRecognition import resultsDetect as rd
 from PiCamera import readStream
 from ScreenClassifier.ScreenModel import screenDict, num_rows, num_cols
+from ScreenClassifier.ScreenModel import modelPath as screenModelPath
 from modelHelper import makePrediction
 
 from tensorflow import keras
@@ -14,7 +15,6 @@ import time
 curDir = os.path.dirname(__file__)
 
 iconModelPath = os.path.join(curDir, 'iconModelPrototype.h5')
-screenModelPath = os.path.join(curDir, 'screenModelPrototype.h5')
 screenDir = readStream.imageDir
 
 
@@ -49,9 +49,9 @@ if __name__ == '__main__':
     status = GameStatus()
     screenModel = keras.models.load_model(screenModelPath)
     # Constantly monitor the stream and take screenshots using a separate thread
-    streamThread = threading.Thread(target=readStream.stream, daemon=True)  # Runs forever
+    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid1.MOV', ), daemon=True)  # Runs forever
     # Debugging ignoring stream
-    # streamThread.start()    # Give the other thread a 3 second headstart
+    streamThread.start()    # Give the other thread a 3 second headstart
 
     time.sleep(3)
 
@@ -59,16 +59,17 @@ if __name__ == '__main__':
     lastFile = ''
 
     while True:
-        import pdb
-        pdb.set_trace()
-
+        # import pdb
+        # pdb.set_trace()
         latestFile = getMostRecentFile(screenDir, lastFile)
+        if latestFile is None:
+            continue
         rawIm = Image.open(latestFile)
         newIm = rawIm.resize((num_rows, num_cols))          # Rescale the image to num_rows x num_cols
         img = np.array(newIm).astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
         img = img.reshape((1,) + img.shape)                 # Make 4D so that model can interpret
         guess = makePrediction(screenModel, screenDict, img)
-
+        print(guess)
         # FSM chooses when to apply text recognition based on guess and current state
 
         if status.status is None:

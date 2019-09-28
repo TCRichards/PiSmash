@@ -37,7 +37,7 @@ if __name__ == '__main__':
     if foundWifi:   # Only begin the stream if wifi is detected
         # create two files to hold the output and errors, respectively
         with open(curDir + 'streamLogs.txt', 'w+') as logs:    # Errors (although everything from streaming is interpreted as an error)
-            firstCommand = subprocess.Popen(
+            firstCommand = subprocess.Popen(    # I have no idea wtf this does but it works!
                 ["""cvlc -vvv v4l2c:///dev/video0:width=640:height=480:chroma=H264 --sout '#rtp{sdp=rtsp://:8554/}' --demux h264"""],
                 stderr=logs, shell=True)
             try:
