@@ -1,11 +1,12 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 import os
-os.environ['TZ']='EST'  # Make sure we're on Eastern time (although if we're doing this abroad that'd be sick)
+os.environ['TZ'] = 'EST'   # Make sure we're on Eastern time (although if we're doing this abroad that'd be sick)
 import time
 import datetime
 from inspect import getsourcefile
 import sys
+from threading import Thread
 
 
 current_path = os.path.abspath(getsourcefile(lambda: 0))
@@ -89,16 +90,6 @@ drive = loadCreds()
 PiSmashID = getFolderID(drive, '', getProjectFolder=True)
 
 
-# Returns the time since the Epoch of a Google Drive file
-def getCreatedDateOfFile(file):
-    fileCreatedDate = file['createdDate']
-    fileCreatedDate, head, tail = fileCreatedDate.partition(".")
-    fileCreatedDate = fileCreatedDate.replace("T", " ").replace('-', '.')
-    timePattern = '%Y.%m.%d %H:%M:%S'
-    epochTime = time.mktime(time.strptime(fileCreatedDate, timePattern))
-    return epochTime
-
-
 # Returns the most recent file added to a directory excluding the last file checked
 def getMostRecentFile(directory):
     fileNames = os.listdir(directory)
@@ -116,18 +107,19 @@ def getMostRecentFile(directory):
 # pathList = list of paths from project directory whose names match the locations inside Google Drive/PiSmash Training Data
 def updateLocalData(drive, localDir='ScreenClassifier/trainingImages/'):
 
-    for label in labels:    # The local categories
+    def updateCategory(label):
         categoryFolder = os.path.join(localDir, label)  # This is the local folder of images of each classification
         currentImages = os.listdir(categoryFolder)
-        lastUpdate = os.path.getmtime(getMostRecentFile(categoryFolder))    # We only want to download the most recent picturess
 
         imageDicts = listDriveFolder(drive, label)  # Each imageDict is dictionary with title, id and other info about the file
         for image in imageDicts:
-            imageTime = getCreatedDateOfFile(image)
-
             if image['title'] not in currentImages:  # If the image was added since our last Update
                 image.GetContentFile(os.path.join(categoryFolder, image['title']))
                 print('Downloading {} from {}'.format(image['title'], label))
+
+    for label in labels:    # Download from each folder simultaneously using threading
+        Thread(target=updateCategory, args=(label, ), daemon=False).start()    # Daemon=False prevents program from ending 
+    Thread.join()
 
 
 # Uploads the specified file to drive
