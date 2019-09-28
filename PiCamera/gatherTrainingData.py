@@ -31,7 +31,7 @@ if not foundWifi:
     sys.exit(1)
 
 # Needed to wait until connected to wifi in order to import
-from driveUpload import upload
+from googleDrive import upload
 
 
 curDir = '/home/pi/PiSmash/PiCamera/'
