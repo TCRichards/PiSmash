@@ -20,6 +20,7 @@
 # All possible credential names (Don't want to get hacked please :) )
 /textRecognition/credentials.json
 /PiCamera/driveCredentials.json
+/PiCamera/*.json
 
 # OpenCV Text Recognition Model
 /textRecognition/frozen_east_text_detection.pb
