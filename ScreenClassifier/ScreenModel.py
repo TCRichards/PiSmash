@@ -45,7 +45,7 @@ screenDict = OrderedDict({
 def makeModel():
     x_train, y_train = modelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
 
-    EPOCHS = 12
+    EPOCHS = 15
     BATCH_SIZE = 64
     return modelHelper.makeImageModel(x_train, y_train, modelPath, len(screenDict), EPOCHS, BATCH_SIZE)
 
