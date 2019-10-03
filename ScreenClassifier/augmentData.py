@@ -1,3 +1,10 @@
+'''
+Script that ensures that the training data for each category is equally partitioned, since game data
+naturally makes up the vast majority.  Uses Keras ImageDataGenerator to augment other data until equal
+Author: Thomas Richards
+Date: 10/3/2019
+'''
+
 import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 import numpy as np
