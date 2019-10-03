@@ -17,7 +17,7 @@
 ### Status: Complete
 **a.**	For one month, we captured screenshots of gameplay every three seconds using the Raspberry Pi's camera.  I wrote a
     Python sketch to automatically upload these screenshots to a repository in Google Drive, where they were later manually labeled.
-![data gathering] (https://github.com/TCRichards/PiSmash/blob/master/READMEImages/dataGatheringSetup.jpg)
+![data gathering] (https://raw.githubusercontent.com/TCRichards/PiSmash/master/READMEImages/dataGatheringSetup.jpg)
 
 
 
@@ -33,7 +33,7 @@
 
   **a.**	Use image classification to detect constantly monitor the status of the game and detect the victory screen.   
     **i.** Make neural network capable of choosing between [Character Select, Stage Select, Pre-Game, Game, Victory, Results, TV OFF, and Menu Screens] (this works surprisingly well)
-    ![Screen Classification] (https://github.com/TCRichards/PiSmash/blob/master/READMEImages/ScreenClassTest.png)
+    ![Screen Classification] (https://raw.githubusercontent.com/TCRichards/PiSmash/master/READMEImages/ScreenClassTest.png)
     **ii.** Make neural network capable of detecting player icons (Not implemented - would be cool to tell who killed whom)
   **b.**	Use text recognition to gather data on damage and kills within each panel   
     **i.**	Google Vision API provides incredible text recognition ability for relatively cheaply ($1.50 for 1000 images analyzed).  We're going with this approach 'for now'
