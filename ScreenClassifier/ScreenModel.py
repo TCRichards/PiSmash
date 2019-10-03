@@ -51,11 +51,11 @@ def makeModel():
 
 
 def testModel():
-    x_test, y_test = modelHelper.getTestingData(testingDir, screenDict, num_rows, num_cols)
+    x_test, y_test = modelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
     modelHelper.testModel(x_test, y_test, modelPath, screenDict)
 
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
-    makeModel()
-    # testModel()
+    # makeModel()
+    testModel()

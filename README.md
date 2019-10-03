@@ -13,12 +13,13 @@
     **iv.**	 Our project aside, could we ever sell a security camera for people to put in their houses and have us analyze? Definitely creepy   
   **c.**	Prototype using Pi Camera first and then test other options for cost efficiency?   
 
+## 2.	Gather massive amounts of training data
+### Status: Complete
+**a.**	For one month, we captured screenshots of gameplay every three seconds using the Raspberry Pi's camera.  I wrote a
+    Python sketch to automatically upload these screenshots to a repository in Google Drive, where they were later manually labeled.
+![data gathering] (READMEImages/dataGatheringSetup.jpg)
 
-## 2.	Send collected video and audio over Wi-Fi:
-### Status: Complete; using UV4l library to network stream from RPi
 
-  **a.**	If using IP P2P camera, this is done automatically   
-  **b.**	If using Pi Camera, photos are taken continuously and then sent over Wi-Fi using MJPG-Streamer, an open-source streaming library   
 
 ## 3.	Capture data from Wi-Fi and funnel into Python sketch on a host computer:
 ### Status: Complete
@@ -27,16 +28,17 @@
   **b.**	The PC running the sketch can capture this rtsp stream using VLC's Python library.  This was very straightforward to accomplish.
 
 
-## 4.	Use Deep Learning algorithms to process audio and video:
-### Status: Halfway; Model is made, but can only classify, not detect objects
+## 4.	Use Deep Learning to continuously classify screenshots from the game:
+### Status: Complete
 
-  **a.**	Use image recognition to detect victory screen and identify character icons   
-    **i.** Make neural network capable of detecting a victory screen    
-    **ii.** Make neural network capable of detecting player icons    
-    **iii.** Once victory screen is detected, use background colors to segment screen into a separate panel for each player.    
+  **a.**	Use image classification to detect constantly monitor the status of the game and detect the victory screen.   
+    **i.** Make neural network capable of choosing between [Character Select, Stage Select, Pre-Game, Game, Victory, Results, TV OFF, and Menu Screens] (this works surprisingly well)
+    ![Screen Classification] (READMEImages/ScreenClassTest.png)
+    **ii.** Make neural network capable of detecting player icons (Not implemented - would be cool to tell who killed whom)
   **b.**	Use text recognition to gather data on damage and kills within each panel   
     **i.**	Google Vision API provides incredible text recognition ability for relatively cheaply ($1.50 for 1000 images analyzed).  We're going with this approach 'for now'
     **ii.** There's lots of information online about the open-source OpenCV library, but after a week of trying to run text recognition and getting terrible results, I opted for Google Vision.  
+    **iii.** Once the results screen is detected, use location of player text  (specifically 'P#') to segment screen into a separate panel for each player.    
 
 
 ## 5.	Create Website!
