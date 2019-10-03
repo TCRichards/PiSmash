@@ -1,15 +1,32 @@
+# All image folders
 /IconClassifier/testingImages/*
 /IconClassifier/trainingImages/*
-/iconModelPrototype.h5
-/screenModelPrototype.h5
-/iconModel.h5
-/screenModel.h5
 /ScreenClassifier/trainingImages/*
 /ScreenClassifier/testingImages/*
-/textRecognition/frozen_east_text_detection.pb
-/textRecognition/Pi Smash-ecdcebce34a8.json
+/textRecognition/resultsScreens/*
+/textRecognition/selectScreens/*
+/PiCamera/screenShots/*
+
+# Sample gameplay videos for testing
+/exampleVideos/*
+# Visual Studio files
 /.vs/slnx.sqlite
 /.vs/ProjectSettings.json
 /.vs/PiSmash/v15/.suo
 /.vs/VSWorkspaceState.json
 /.vs/config/applicationhost.config
+
+
+# All possible credential names (Don't want to get hacked please :) )
+/textRecognition/credentials.json
+/PiCamera/driveCredentials.json
+/PiCamera/*.json
+
+# OpenCV Text Recognition Model
+/textRecognition/frozen_east_text_detection.pb
+
+# All possible keras models
+/iconModelPrototype.h5
+/screenModelPrototype.h5
+/iconModel.h5
+/screenModel.h5

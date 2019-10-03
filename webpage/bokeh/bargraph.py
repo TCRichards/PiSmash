@@ -12,15 +12,23 @@ import numpy as np
 
 output_file("bargraphSmash.html")
 
-#initial plot
+
+#example data for testing only
+#players = ['BEEF', 'Thomato', 'postmabone', 'curt', 'LONG']
+#counts = [75, 56, 69, 24, 101]
+
 
 players = []
 counts = []
 
 src = ColumnDataSource(data=dict(players = players, counts = counts))
 
-p = Figure(plot_height = 400, plot_width = 600, x_range=players, 
-           x_axis_label = 'Player name',
+
+# sorting the bars means sorting the range factors
+#sorted_players = sorted(players, key=lambda x: counts[players.index(x)])
+
+p = Figure(plot_height = 400, plot_width = 600, x_range=players,
+           x_axis_label = 'player name',
            y_axis_label = '',
            title="Stats Per Player", 
            tools = "xpan, xwheel_zoom, reset",
@@ -75,12 +83,41 @@ callbackPlot = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[
 
     axis.axis_label = barGraphAxis;
 
-    src.change.emit();   
+    src.change.emit();
     p.change.emit();
 """)
 
-callbackAxis = CustomJS(code="""
-    barGraphAxis = this.value;
+
+callbackKO = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
+
+    p.reset.emit();
+
+    let result = createKOBars();
+    let players_result = result[0];
+    let KOcounts_result = result[1];
+
+    x_range.factors = players_result;
+
+    var data = src.data;
+
+    data['players'] = [];
+    data['counts'] = [];
+
+    players = data['players']
+    counts = data['counts']
+
+    for (let i = 0; i < players_result.length; i++){
+        players[i] = players_result[i];
+        counts[i] = KOcounts_result[i];
+    }
+
+    data['players'] = players;
+    data['counts'] = counts;
+
+    axis.axis_label = "KO Count";
+
+    src.change.emit();
+    p.change.emit();
 """)
 
 # layout
@@ -105,7 +142,7 @@ curdoc().title = "Bar Graph"
 
 p.js_on_event(MouseEnter, callbackPlot) #plot whichever axes are currently selected
 
-select.js_on_change('value', callbackAxis)
+#select.js_on_change('value', callbackAxis)
 select.js_on_change('value', callbackPlot)
 
 #show(layout)

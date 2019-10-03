@@ -3,36 +3,17 @@ OpenCV's text recognition seems way too unreliable for this project. I'm going t
 Leaving this file here in case I come back to it
 '''
 
-# USAGE
-# python text_recognition.py --east frozen_east_text_detection.pb --image images/example_01.jpg
-# python text_recognition.py --east frozen_east_text_detection.pb --image images/example_04.jpg --padding 0.05
-
-# import the necessary packages
 from imutils.object_detection import non_max_suppression
 import numpy as np
 import pytesseract
-import argparse
 import cv2
 import matplotlib.pyplot as plt
+import os
 
-eastPath = 'textRecognition/opencv-text-recognition/frozen_east_text_detection.pb'
-imagePath = 'textRecognition/opencv-text-recognition/images/example_01.jpg'
+curDir = os.getcwd() + '/'
+eastPath = curDir + 'opencv-text-recognition/frozen_east_text_detection.pb'
+imagePath = curDir + 'opencv-text-recognition/images/example_01.jpg'
 
-# construct the argument parser and parse the arguments
-ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", type=str, default=imagePath,
-	help="path to input image")
-ap.add_argument("-east", "--east", type=str, default=eastPath,
-	help="path to input EAST text detector")
-ap.add_argument("-c", "--min-confidence", type=float, default=0.5,
-	help="minimum probability required to inspect a region")
-ap.add_argument("-w", "--width", type=int, default=320,	# Having width and height as args is a fucking lie
-	help="nearest multiple of 32 for resized width")	# Since the neural network requires 320 x 320 input
-ap.add_argument("-e", "--height", type=int, default=320,
-	help="nearest multiple of 32 for resized height")
-ap.add_argument("-p", "--padding", type=float, default=0.0,
-	help="amount of padding to add to each border of ROI")
-args = vars(ap.parse_args())
 
 def decode_predictions(scores, geometry, min_confidence=0.6):
 	# grab the number of rows and columns from the scores volume, then
@@ -91,6 +72,7 @@ def decode_predictions(scores, geometry, min_confidence=0.6):
 	# return a tuple of the bounding boxes and associated confidences
 	return (rects, confidences)
 
+
 def processImage(image):
 	image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	image = cv2.medianBlur(image,5)
@@ -101,6 +83,7 @@ def processImage(image):
 	image = cv2.bitwise_or(image, closing)
 
 	return image
+
 
 def loadImage(path, min_confidence=0.6):
 	# load the input image and grab the image dimensions
@@ -144,7 +127,7 @@ def loadImage(path, min_confidence=0.6):
 	# initialize the list of results
 	results = []
 
-	orig = processImage(orig)
+	#orig = processImage(orig)
 	# loop over the bounding boxes
 	for (startX, startY, endX, endY) in boxes:
 		# scale the bounding box coordinates based on the respective
@@ -170,11 +153,11 @@ def loadImage(path, min_confidence=0.6):
 		roi = orig[startY:endY, startX:endX]
 
 		# in order to apply Tesseract v4 to OCR text we must supply
-		# (1) a language, (2) an OEM flag of 4, indicating that the we
+		# (1) a language, (2) an OEM flag of 1, indicating that the we
 		# wish to use the LSTM neural net model for OCR, and finally
 		# (3) an OEM value, in this case, 7 which implies that we are
 		# treating the ROI as a single line of text
-		config = ("-c tessedit_char_whitelist=1234PMARTH --user-words foo --oem 1 --psm 11")
+		config = ("-c tessedit_char_whitelist=1234PMARTH --user-words foo --oem 1 --psm 7")
 		text = pytesseract.image_to_string(roi, config=config)
 
 		# add the bounding box coordinates and OCR'd text to the list
@@ -202,7 +185,9 @@ def loadImage(path, min_confidence=0.6):
 			cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
 
 		# show the output image
-		cv2.imshow("Text Detection", output)
+		#cv2.imshow("Text Detection", output)
+		plt.imshow(image)
+		plt.show()
 		cv2.waitKey(0)
 
 	return image, results
