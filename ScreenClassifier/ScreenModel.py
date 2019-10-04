@@ -57,7 +57,6 @@ def testModel():
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
-<<<<<<< HEAD
     from tensorflow.debugging import set_log_device_placement
     set_log_device_placement(True)
     """
@@ -71,8 +70,4 @@ if __name__ == '__main__':
     """
     
     makeModel()
-    # testModel()
-=======
-    # makeModel()
-    testModel()
->>>>>>> 7b3c0a9af57fbe1dd5690cc7ffffcf024b34aafe
+    #testModel()
