@@ -9,8 +9,10 @@ from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-from PIL import Image
+from PIL import Image, ImageFile
 from collections import OrderedDict
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True  # Not sure what image truncation is, but ignore it when it occurs
 
 
 # Given a directory where training data is located, and a dictionary containing

@@ -45,18 +45,19 @@ screenDict = OrderedDict({
 def makeModel():
     x_train, y_train = modelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
 
-    EPOCHS = 3
+    EPOCHS = 15
     BATCH_SIZE = 64
     return modelHelper.makeImageModel(x_train, y_train, modelPath, len(screenDict), EPOCHS, BATCH_SIZE)
 
 
 def testModel():
-    x_test, y_test = modelHelper.getTestingData(testingDir, screenDict, num_rows, num_cols)
+    x_test, y_test = modelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
     modelHelper.testModel(x_test, y_test, modelPath, screenDict)
 
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
+<<<<<<< HEAD
     from tensorflow.debugging import set_log_device_placement
     set_log_device_placement(True)
     """
@@ -71,3 +72,7 @@ if __name__ == '__main__':
     
     makeModel()
     # testModel()
+=======
+    # makeModel()
+    testModel()
+>>>>>>> 7b3c0a9af57fbe1dd5690cc7ffffcf024b34aafe

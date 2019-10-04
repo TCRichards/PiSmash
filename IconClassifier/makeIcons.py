@@ -84,5 +84,6 @@ def createTrainingData():
                 if i > 10:  # Only include 10 batches for testing
                     break   # otherwise the generator would loop indefinitely
 
-# Keep main call commented unless recreating training data
-# createTrainingData()
+
+if __name__ == '__main__':
+    createTrainingData()
