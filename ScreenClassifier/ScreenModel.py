@@ -45,7 +45,7 @@ screenDict = OrderedDict({
 def makeModel():
     x_train, y_train = modelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
 
-    EPOCHS = 12
+    EPOCHS = 3
     BATCH_SIZE = 64
     return modelHelper.makeImageModel(x_train, y_train, modelPath, len(screenDict), EPOCHS, BATCH_SIZE)
 
@@ -57,5 +57,17 @@ def testModel():
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
+    from tensorflow.debugging import set_log_device_placement
+    set_log_device_placement(True)
+    """
+    from tensorflow.python.client import device_lib #make sure GPU is being used
+    print(str(device_lib.list_local_devices()))
+    assert 'GPU' in str(device_lib.list_local_devices())
+    
+    from keras import backend
+    print(len(backend.tensorflow_backend._get_available_gpus()))
+    assert len(backend.tensorflow_backend._get_available_gpus()) > 0
+    """
+    
     makeModel()
     # testModel()
