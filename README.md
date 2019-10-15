@@ -41,7 +41,7 @@
     **ii.** There's lots of information online about the open-source OpenCV library, but after a week of trying to run text recognition and getting terrible results, I opted for Google Vision.  
     **iii.** Once the results screen is detected, use location of player text  (specifically 'P#') to segment screen into a separate panel for each player.  Below is an example of determining the outcome of a game based on the location of text in the victory screen:
     
-![Text Recognition](https://raw.githubusercontent.com/TCRichards/PiSmash/master/READMEImages/vicScreenText.png)
+![Text Recognition](https://raw.githubusercontent.com/TCRichards/PiSmash/master/READMEImages/vicScreenText.jpg)
 
 ## 5.	Create Website!
 ### Status: In progress
