@@ -1,5 +1,5 @@
 # "Technical Objectives for Smash Analysis Project
-### Last edited Saturday, June 27, 2019
+### Last edited Thursday, October 3, 2019
 
 ## 1.	Collect video and audio using Raspberry Pi or microcontroller
 ### Status: Complete
