@@ -1,22 +1,28 @@
 #----- Author: Nick Konz -----#
 
 from bokeh.layouts import column, row, widgetbox
-from bokeh.models import CustomJS, ColumnDataSource, Slider, Button, BoxZoomTool, Range1d
-from bokeh.plotting import Figure, output_file, show, save
+from bokeh.models import CustomJS, ColumnDataSource, Slider, Button, BoxZoomTool, Range1d, Select
+from bokeh.plotting import Figure, output_file, show, save, curdoc
 from bokeh.transform import linear_cmap
+from bokeh.models.tools import HoverTool
+from bokeh.palettes import Viridis256
+from bokeh.events import MouseEnter
 
 import numpy as np
 
 output_file("bargraphSmash.html")
 
+
 #example data for testing only
 #players = ['BEEF', 'Thomato', 'postmabone', 'curt', 'LONG']
 #counts = [75, 56, 69, 24, 101]
+
 
 players = []
 counts = []
 
 src = ColumnDataSource(data=dict(players = players, counts = counts))
+
 
 # sorting the bars means sorting the range factors
 #sorted_players = sorted(players, key=lambda x: counts[players.index(x)])
@@ -24,27 +30,35 @@ src = ColumnDataSource(data=dict(players = players, counts = counts))
 p = Figure(plot_height = 400, plot_width = 600, x_range=players,
            x_axis_label = 'player name',
            y_axis_label = '',
-           title="Stats per player", tools = "xpan, xwheel_zoom",
+           title="Stats Per Player", 
+           tools = "xpan, xwheel_zoom, reset",
            active_scroll='xwheel_zoom', active_drag = "xpan")
 
-p.xaxis.axis_label_text_font_size = "14pt"
-p.yaxis.axis_label_text_font_size = "14pt"
+p.title.text_font_size = "18pt"
+p.xaxis.axis_label_text_font_size = "12pt"
+p.yaxis.axis_label_text_font_size = "12pt"
+
 
 #try:
-#    p.vbar(source = src, x='players', top='wincounts', width=0.9, fill_color=linear_cmap('wincounts', 'Viridis256', 0, max(wincounts)))
+#    p.vbar(source = src, x='players', top='counts', width=0.9, fill_color=linear_cmap('counts', 'Viridis256', 0, max(counts)))
 #except ValueError: #this just happens because on page load, data isn't loaded so the plotting gets grumpy
-#    p.vbar(source = src, x='players', top='wincounts', width=0.9, fill_color=linear_cmap('wincounts', 'Viridis256', 0, 0))
+#    p.vbar(source = src, x='players', top='counts', width=0.9, fill_color=linear_cmap('counts', 'Viridis256', 0, 0))
 
 p.vbar(source = src, x='players', top='counts', width=0.9)
+
+# tools
+p.add_tools(HoverTool(tooltips=[("Player name", "@players"), ("Count", "@counts")]))
+
+
 # JS callbacks
 
-callbackWin = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
+callbackPlot = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
 
     p.reset.emit();
 
-    let result = createWinBars();
+    let result = createBars();
     let players_result = result[0];
-    let wincounts_result = result[1];
+    let counts_result = result[1];
 
     x_range.factors = players_result;
 
@@ -61,17 +75,18 @@ callbackWin = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0
 
     for (let i = 0; i < players_result.length; i++){
         players[i] = players_result[i];
-        counts[i] = wincounts_result[i];
+        counts[i] = counts_result[i];
     }
 
     data['players'] = players;
     data['counts'] = counts;
 
-    axis.axis_label = "Win Count";
+    axis.axis_label = barGraphAxis;
 
     src.change.emit();
     p.change.emit();
 """)
+
 
 callbackKO = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]), code="""
 
@@ -105,21 +120,30 @@ callbackKO = CustomJS(args=dict(src=src, p=p, x_range=p.x_range, axis=p.yaxis[0]
     p.change.emit();
 """)
 
-
 # layout
+options = ["KO Counts per Player", "Win Counts per Player", "Damage Done per Player"]
 
-buttonWin = Button(label = "Show Win Count (Default)", button_type = "primary")
-buttonWin.js_on_click(callbackWin)
-
-buttonKO = Button(label = "Show KO Count", button_type = "primary")
-buttonKO.js_on_click(callbackKO)
+select = Select(title =    "Data Category", 
+                 options =  options,   #list of options
+                 value =   "KO Counts per Player" #default value  
+                 )
 
 p.xgrid.grid_line_color = None
 p.y_range.start = 0
 
-buttons = row(buttonWin, buttonKO)
+widgets = row(select)
 
-layout = column(buttons, p)
+layout = column(widgets, p)
+
+curdoc().add_root(layout)
+curdoc().title = "Bar Graph"
+
+#interactivity
+
+p.js_on_event(MouseEnter, callbackPlot) #plot whichever axes are currently selected
+
+#select.js_on_change('value', callbackAxis)
+select.js_on_change('value', callbackPlot)
 
 #show(layout)
 save(layout)
