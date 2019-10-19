@@ -1,5 +1,5 @@
 # "Technical Objectives for Smash Analysis Project
-### Last edited Saturday, June 27, 2019
+### Last edited Thursday, October 3, 2019
 
 ## 1.	Collect video and audio using Raspberry Pi or microcontroller
 ### Status: Complete
@@ -39,8 +39,9 @@
   **b.**	Use text recognition to gather data on damage and kills within each panel   
     **i.**	Google Vision API provides incredible text recognition ability for relatively cheaply ($1.50 for 1000 images analyzed).  We're going with this approach 'for now'
     **ii.** There's lots of information online about the open-source OpenCV library, but after a week of trying to run text recognition and getting terrible results, I opted for Google Vision.  
-    **iii.** Once the results screen is detected, use location of player text  (specifically 'P#') to segment screen into a separate panel for each player.    
-
+    **iii.** Once the results screen is detected, use location of player text  (specifically 'P#') to segment screen into a separate panel for each player.  Below is an example of determining the outcome of a game based on the location of text in the victory screen:
+    
+![Text Recognition](https://raw.githubusercontent.com/TCRichards/PiSmash/master/READMEImages/vicScreenText.jpg)
 
 ## 5.	Create Website!
 ### Status: In progress
