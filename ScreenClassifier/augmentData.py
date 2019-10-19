@@ -27,6 +27,8 @@ datagen = ImageDataGenerator(
 
 # Training Data paths and sizes
 dataDirs = [os.path.join(trainingDir, x) for x in os.listdir(trainingDir)]
+dataDirs = [name for name in dataDirs if not name.startswith(os.path.join(trainingDir,"."))] #gets rid of ``invisible'' dirs
+
 dirSizes = [len(os.listdir(dir)) for dir in dataDirs]
 maxSize = max(dirSizes)
 
@@ -37,6 +39,9 @@ def augment(dataDir):
     size = len(contents)
     randomIdxs = np.random.randint(low=0, high=size, size=(maxSize - size))
     imgPaths = [os.path.join(dataDir, contents[idx]) for idx in randomIdxs]
+    imgPaths = [name for name in imgPaths if not name.startswith(os.path.join(dataDir, "."))]  #gets rid of ``invisible'' dirs
+    imgPaths = [name for name in imgPaths if "aug" not in name ]  #avoids augmenting already augmented images
+    
     imgs = [load_img(imgPath) for imgPath in imgPaths]
     imgArrs = [img_to_array(img) for img in imgs]
     imgArrs = [img.reshape((1,) + img.shape) for img in imgArrs]

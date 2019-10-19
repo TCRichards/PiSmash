@@ -1,6 +1,7 @@
 import vlc
 import os
 import time
+import sys
 
 # Create interface to easily edit the IP address on launch?
 PiIPAddress = '192.168.0.101'                   # Local address of my Raspberry Pi
@@ -20,6 +21,18 @@ def captureMedia(mediaPath, delay=0.3):
     vlcInstance = vlc.Instance()
     player = vlcInstance.media_player_new()
     player.set_mrl(mediaPath)
+    """
+    if sys.platform == "darwin": #necessary if run on a mac (DOESN'T WORK FOR NOW)
+            from PyQt5 import QtCore
+            from PyQt5 import QtGui
+            from PyQt5 import QtWidgets
+
+            vlcApp = QtWidgets.QApplication(sys.argv)
+            vlcWidget = QtWidgets.QFrame()
+            vlcWidget.resize(700,700)
+            vlcWidget.show()
+            player.set_nsobject(vlcWidget.winId())
+    """
     player.play()
 
     i = 0

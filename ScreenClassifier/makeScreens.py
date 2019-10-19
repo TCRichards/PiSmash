@@ -1,6 +1,6 @@
 '''
 Uses character icons from Nintendo to generate a ton of training data
-Author: Thomas Richards
+Authors: Thomas Richards and Nick Konz
 Date Modified: 6/11/19
 '''
 
@@ -16,6 +16,7 @@ import numpy as np
 
 curDir = os.path.dirname(__file__)
 trainingDir = os.path.join(curDir, 'trainingImages/')
+validationDir = os.path.join(curDir, 'validationImages/')
 testingDir = os.path.join(curDir, 'testingImages/')
 
 winDir = os.path.join(trainingDir, 'Victory/')
@@ -42,11 +43,11 @@ selectURLs = ['https://www.youtube.com/watch?v=KQvCBxsg_Z0',
               ]
 
 # Make new directories if necessary
-for directory in directories:
-    try:
-        os.mkdir(directory)
-    except FileExistsError:
-        pass
+# for directory in directories:
+#     try:
+#         os.mkdir(directory)
+#     except FileExistsError:
+#         pass
 
 
 # Helper function that instantiates a VLC media object using a Youtube video's URL

@@ -1,3 +1,8 @@
+'''
+The main loop of the entire process (once the model(s) are trained), 
+including screen classification, text and object recognition, etc.
+Authors: Thomas Richards and Nick Konz
+'''
 from textRecognition import selectDetect as sd
 from textRecognition import resultsDetect as rd
 from PiCamera import readStream
@@ -71,6 +76,9 @@ if __name__ == '__main__':
         guess = makePrediction(screenModel, screenDict, img)
         print(guess)
         # FSM chooses when to apply text recognition based on guess and current state
+
+        if guess == "Stage-Select" or guess == "Character-Select":
+            guess == "Select"
 
         if status.status is None:
             if guess == 'Select':

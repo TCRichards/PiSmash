@@ -3,6 +3,7 @@
 /IconClassifier/trainingImages/*
 /ScreenClassifier/trainingImages/*
 /ScreenClassifier/testingImages/*
+/ScreenClassifier/validationImages/*
 /textRecognition/resultsScreens/*
 /textRecognition/selectScreens/*
 /PiCamera/screenShots/*
@@ -34,3 +35,5 @@
 /ScreenClassifier/__pycache__/ScreenModel.cpython-36.pyc
 /PiSmash.sln
 /PiSmash.pyproj
+.DS_Store
+ScreenClassifier/diagnostics/history.png
