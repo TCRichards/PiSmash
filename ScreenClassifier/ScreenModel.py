@@ -48,7 +48,7 @@ def makeModel():
     x_validation, y_validation = modelHelper.getValidationData(validationDir, screenDict, num_rows, num_cols)
     x_train, y_train = modelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
 
-    EPOCHS = 10
+    EPOCHS = 19
     BATCH_SIZE = 64
 
     #from the way that data is divided into the folders: training/val/test: 80/10/10
@@ -89,6 +89,7 @@ if __name__ == '__main__':
     plt.title('Model accuracy')
     plt.ylabel('Accuracy')
     plt.xlabel('Epoch')
+    plt.ylim(0,1)
     plt.legend(['Train', 'Validation'], loc='upper left')
 
     plt.subplot(122)

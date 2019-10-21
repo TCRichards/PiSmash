@@ -122,29 +122,29 @@ def makeImageModel(x_train, y_train, x_validation, y_validation, modelName, numT
     model = keras.Sequential()
     # Create CNN model=======================================================================
     # Must define the input shape in the first layer of the neural network
-    model.add(keras.layers.Conv2D(filters=32, kernel_size=7, padding='same', activation='relu', input_shape=(num_rows, num_cols, 3)))
-    # model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Conv2D(filters=32, kernel_size=7, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu', input_shape=(num_rows, num_cols, 3)))
+    model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1)) # I'm not sure about these dropout layers before conv layers...if anything keep them small
     
-    model.add(keras.layers.Conv2D(filters=64, kernel_size=5, padding='same', activation='relu'))
-    # model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Conv2D(filters=64, kernel_size=5, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1))
     
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, padding='same', activation='relu'))
-    # model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1))
     
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, padding='same', activation='relu'))
-    # model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1))
     
     model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(512, activation='relu'))
-    # model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Dense(512, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001),))
+    model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.Dropout(0.5))
     model.add(keras.layers.Dense(numTargets, activation='softmax'))    # Final layer must have 1 node per character
     # Take a look at the model summary
