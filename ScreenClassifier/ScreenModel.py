@@ -48,7 +48,7 @@ def makeModel():
     x_validation, y_validation = modelHelper.getValidationData(validationDir, screenDict, num_rows, num_cols)
     x_train, y_train = modelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
 
-    EPOCHS = 19
+    EPOCHS = 100
     BATCH_SIZE = 64
 
     #from the way that data is divided into the folders: training/val/test: 80/10/10
