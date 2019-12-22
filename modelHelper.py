@@ -86,7 +86,6 @@ def getValidationData(validationDir, myDict, num_rows, num_cols):
     y_validation = validationLabelList                                      # Refer to the labels as y_test for continuity
     return x_validation, y_validation
 
-
 def getTestingData(testingDir, myDict, num_rows, num_cols):
     testFileList = np.array([], dtype=str)                          # List of filenames as str
     testLabelList = np.array([], dtype=int)

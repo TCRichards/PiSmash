@@ -1,5 +1,6 @@
 '''
-This program is used to define object recognition neural networks, using the YOLOv3 model
+This program is used to define object recognition neural networks, using the YOLOv3 model,
+including code that assists with image and bounding box conversion.
 Based on https://github.com/experiencor/keras-yolo3
 Author: Nick Konz
 '''
@@ -9,6 +10,8 @@ import numpy as np
 from keras.layers import Conv2D, Input, BatchNormalization, LeakyReLU, ZeroPadding2D, UpSampling2D
 from keras.layers.merge import add, concatenate
 from keras.models import Model
+from keras.preprocessing.image import load_img
+from keras.preprocessing.image import img_to_array
 import struct
 import cv2
 from inspect import getsourcefile
@@ -215,9 +218,38 @@ class WeightReader:
     def reset(self):
         self.offset = 0
 
+# load and prepare a single img, given some target shape. 
+# returns image ready to be used by keras, as well as original shape
+def load_image_pixels(filename, shape):
+    # to show the original photo later, need to scale bounding boxes from (416, 416) shape
+    # back to original image shape:
+    # load the img to get original shape
+    image = load_img('zebra.jpg')
+    width, height = image.size
 
-# rank object detector model constructor
-def makeObjModelRank():#x_train, y_train, x_validation, y_validation, modelName, numTargets, EPOCHS, BATCH_SIZE):
+    # load img with required size
+    image = load_img('zebra.jpg', target_size=(416, 416))
+    # convert to np arr
+    image = img_to_array(image)
+    # map pixel values to [0, 1]
+    image = image.astype('float32')
+    image /= 255.0
+    # add dim to be used by keras
+    image = np.expand_dims(image, 0)
+    return image, width, height
+
+def getTrainingData(photo_filename):
+    # TESTING WITH ONE IMG:
+    # define expected input shape for keras model
+    input_w, input_h = 416, 416
+    # load and prep image for keras
+    image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
+
+    return image, image_w, image_h
+
+
+# rank object detector initial model constructor
+def buildModelRank():
     # define model
     model = make_yolov3_model()
 
@@ -229,3 +261,11 @@ def makeObjModelRank():#x_train, y_train, x_validation, y_validation, modelName,
     weight_reader.load_weights(model)
 
     model.save('rankModel.h5')
+
+
+# TESTING
+def makePrediction(model, matchDict, image):
+    # make prediction
+    yhat = model.predict(image)
+    # summarize the shape of the list of arrs
+    print([a.shape for a in yhat]) # returns bounding boxes AND class labels (encoded)

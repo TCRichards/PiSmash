@@ -9,7 +9,7 @@ import sys
 import os
 from inspect import getsourcefile
 import matplotlib.pyplot as plt
-
+from keras.models import load_model
 
 current_path = os.path.abspath(getsourcefile(lambda: 0))    # Add parent directory to the path
 current_dir = os.path.dirname(current_path)
@@ -43,31 +43,36 @@ from collections import OrderedDict
 #     "Other": 7
 # })
 
-
-def makeModel():
+def trainModel():
     # x_validation, y_validation = objDetModelHelper.getValidationData(validationDir, screenDict, num_rows, num_cols)
     # x_train, y_train = objDetModelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
 
     # EPOCHS = 100
     # BATCH_SIZE = 64
 
-    objDetModelHelper.makeObjModelRank()
+    #objDetModelHelper.buildModelRank() #builds model initially with weights file
+
+    # load yolov3 model
+    model = load_model('rankModel.h5')
 
     # #from the way that data is divided into the folders: training/val/test: 80/10/10
     # return objDetModelHelper.makeImageModelScreen(x_train, y_train, x_validation, y_validation, modelPath, len(screenDict), EPOCHS, BATCH_SIZE)
 
 
-# def testModel():
+def testModel():
     # x_test, y_test = objDetModelHelper.getTestingData(testingDir, screenDict, num_rows, num_cols)
     # objDetModelHelper.testModel(x_test, y_test, modelPath, screenDict)
 
+    model = load_model('rankModel.h5')
+    image, image_w, image_h = objDetModelHelper.getTrainingData('zebra.jpg')
+    objDetModelHelper.makePrediction(model, None, image)
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
     
-    history = makeModel()
+    #history = trainModel()
 
-    # testModel()
+    testModel()
 
     # Plot training & validation accuracy values
     # plt.figure(1)
