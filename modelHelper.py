@@ -1,6 +1,6 @@
 '''
 This program is the bread and butter of the machine learning.  Provides a
-template  that can be used by any classification program that gathers
+templates that can be used by any classification program that gathers
 pre-generated training and testing data, and makes a generic image
 classification model.
 Authors: Thomas Richards and Nick Konz
@@ -115,8 +115,9 @@ def getTestingData(testingDir, myDict, num_rows, num_cols):
     y_test = testLabelList                                      # Refer to the labels as y_test for continuity
     return x_test, y_test
 
+# IMAGE MODELS
 
-def makeImageModel(x_train, y_train, x_validation, y_validation, modelName, numTargets, EPOCHS, BATCH_SIZE):
+def makeImageModelScreen(x_train, y_train, x_validation, y_validation, modelName, numTargets, EPOCHS, BATCH_SIZE):
     num_rows, num_cols = len(x_train[1]), len(x_train[2])
     # Make a sequential neural network
     model = keras.Sequential()
@@ -163,6 +164,55 @@ def makeImageModel(x_train, y_train, x_validation, y_validation, modelName, numT
 
     return history
 
+def makeImageModelIcon(x_train, y_train, x_validation, y_validation, modelName, numTargets, EPOCHS, BATCH_SIZE):
+    num_rows, num_cols = len(x_train[1]), len(x_train[2])
+    # Make a sequential neural network
+    model = keras.Sequential()
+    # Create CNN model=======================================================================
+    # Must define the input shape in the first layer of the neural network
+    model.add(keras.layers.Conv2D(filters=32, kernel_size=7, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu', input_shape=(num_rows, num_cols, 3)))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1)) # I'm not sure about these dropout layers before conv layers...if anything keep them small
+    
+    model.add(keras.layers.Conv2D(filters=64, kernel_size=5, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1))
+    
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1))
+    
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1))
+    
+    model.add(keras.layers.Flatten())
+    model.add(keras.layers.Dense(512, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001),))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Dropout(0.5))
+    model.add(keras.layers.Dense(numTargets, activation='softmax'))    # Final layer must have 1 node per character
+    # Take a look at the model summary
+    model.summary()
+
+    model.compile(loss='sparse_categorical_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
+
+    history = model.fit(x=x_train, y=y_train, validation_data=(x_validation, y_validation), epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=1)
+
+    # Save the model including architecture and weights in an h5 file
+    model.save(modelName)   # Make sure model is included in .gitignore -- too large to push
+
+    keras.utils.plot_model(model, to_file='iconClassifierModel.png')
+
+    return history
+
+
+# TESTING
 
 def testModel(x_test, y_test, modelPath, matchDict):
     # Evaluate how well the model did
@@ -195,7 +245,6 @@ def testModel(x_test, y_test, modelPath, matchDict):
         plt.pie(probabilities)
         plt.legend(loc=9, labels=probLabels, bbox_to_anchor=(0.5, 1.4), shadow=True, fancybox=True)
     plt.show()
-
 
 def makePrediction(model, matchDict, img):
     probs = model.predict(img)[0, :]    # Initial shape is (1, #possibilities)

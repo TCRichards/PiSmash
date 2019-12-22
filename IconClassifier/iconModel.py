@@ -168,7 +168,7 @@ def makeModel():
     EPOCHS = 75
     BATCH_SIZE = 32
 
-    return modelHelper.makeImageModel(x_train, y_train, modelPath, len(charDict), EPOCHS, BATCH_SIZE)
+    return modelHelper.makeImageModelIcon(x_train, y_train, modelPath, len(charDict), EPOCHS, BATCH_SIZE)
 
 
 def testModel():

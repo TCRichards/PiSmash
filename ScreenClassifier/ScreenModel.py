@@ -52,7 +52,7 @@ def makeModel():
     BATCH_SIZE = 64
 
     #from the way that data is divided into the folders: training/val/test: 80/10/10
-    return modelHelper.makeImageModel(x_train, y_train, x_validation, y_validation, modelPath, len(screenDict), EPOCHS, BATCH_SIZE)
+    return modelHelper.makeImageModelScreen(x_train, y_train, x_validation, y_validation, modelPath, len(screenDict), EPOCHS, BATCH_SIZE)
 
 
 def testModel():
