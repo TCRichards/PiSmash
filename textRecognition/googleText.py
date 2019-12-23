@@ -1,11 +1,16 @@
-# export GOOGLE_APPLICATION_CREDENTIALS=kyourcredentials.json
 import io
 import cv2
 import os
 import numpy as np
 from PIL import Image, ImageDraw
+
 # Imports the Google Cloud client library
 from google.cloud import vision
+
+try:
+    import imagePreProcessing as preproc
+except ModuleNotFoundError:
+    from . import imagePreProcessing as preproc
 
 # Explicitly add google credentials to the command line if not there already
 curDir = os.path.dirname(__file__)
@@ -19,11 +24,22 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = credentialsPath
 client = vision.ImageAnnotatorClient()
 
 
+# NOTE: The Vision API is unable to detect the numbers '1' or '2' from the results screen (due to their
+# wacky font).  I tried preprocessing the images to improve the clarity of these digits to no avail
+# Looks like the only place we can consistently gather position is from the victory screen once the
+# rankings are shown.  Do we need to make a separate classification between victory pose and victory-ranking screen?
+# We could also train our own model using ImageAI solely to search for the position of these numbers, which
+# are always present on the results screen
 def detect_text_vision(path, printing=False):
     """Detects text in the file."""
     from google.cloud import vision
     client = vision.ImageAnnotatorClient()
 
+    # Attempts to improve text detection by preprocessing the image first
+
+    # processedPath = path[:-4] + '_process.png'
+    # preproc.smoothImage(path, processedPath, showing=True)
+    # preproc.rotateImage(path, processedPath, showing=True)
     with io.open(path, 'rb') as image_file:
         content = image_file.read()
 
@@ -33,7 +49,6 @@ def detect_text_vision(path, printing=False):
 
     labels = np.array([])
     bounds = []
-    # print('Texts:')
 
     for text in texts:
         vertices = (['({},{})'.format(vertex.x, vertex.y)
@@ -62,15 +77,16 @@ def draw_boxes(path, bounds, color, width=5):
     return image
 
 
-def detectAndAnnotate(imagePath, showing=False):
+def detectAndAnnotate(imagePath, printing=False, showing=False):
     # detect_text_openCV(imagePath)
-    labels, bounds = detect_text_vision(imagePath)
-    annotatedImage = draw_boxes(imagePath, bounds, 'red')
+    labels, bounds = detect_text_vision(imagePath, printing=printing)
+    annotatedImage = np.array(draw_boxes(imagePath, bounds, 'red'))     # Needs to be an array for cv2 to show
     if showing:
-        cv2.imshow('Annotated Image', annotatedImage)
+        cv2.imshow('Annotated Image', cv2.cvtColor(annotatedImage, cv2.COLOR_BGR2RGB))
         cv2.waitKey(0)
         cv2.destroyAllWindows()
     return annotatedImage, labels, bounds
 
 
-detect_text_vision('textRecognition/images/example_01.jpg')
+if __name__ == '___main__':
+    detect_text_vision(os.path.join(curDir, 'textExamples/example_01.jpg'))

@@ -43,7 +43,7 @@ def getTrainingData(trainingDir, myDict, num_rows, num_cols):
     for i in range(numTrainingFiles):
         rawIm = Image.open(trainFileList[i])
         newIm = rawIm.resize((num_rows, num_cols))                  # Rescale the image to num_rows x num_cols
-        newIm_array = np.array(newIm)[:, :, :3].astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize    
+        newIm_array = np.array(newIm)[:, :, :3].astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
         x_train[i] = newIm_array                                    # Stack the new image at the bottom of the training set
     y_train = trainLabelList                                        # Refer to the labels as y_train for continuity
     return x_train, y_train
@@ -71,14 +71,14 @@ def getValidationData(validationDir, myDict, num_rows, num_cols):
         rawIm = Image.open(validationFileList[i])
         newIm = rawIm.resize((num_rows, num_cols))              # Rescale the image to num_rows x num_cols
         newIm_array = np.array(newIm).astype(float) / 255.      # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
-        
+
         # print(validationFileList[i])
         # print(newIm_array)
 
-        #print(newIm_array)  
+        #print(newIm_array)
 
         newIm_array = newIm_array[:,:,0:3] # If an img array has an extra feature dimension for some reason
-        
+
         #print(newIm_array)
 
         x_validation[i] = newIm_array                                 # Stack the new image at the bottom of the training set
@@ -126,69 +126,22 @@ def makeImageModelScreen(x_train, y_train, x_validation, y_validation, modelName
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1)) # I'm not sure about these dropout layers before conv layers...if anything keep them small
-    
+
     model.add(keras.layers.Conv2D(filters=64, kernel_size=5, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1))
-    
+
     model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1))
-    
+
     model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
     model.add(keras.layers.BatchNormalization())
     model.add(keras.layers.MaxPooling2D(pool_size=2))
     model.add(keras.layers.Dropout(0.1))
-    
-    model.add(keras.layers.Flatten())
-    model.add(keras.layers.Dense(512, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001),))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.Dropout(0.5))
-    model.add(keras.layers.Dense(numTargets, activation='softmax'))    # Final layer must have 1 node per character
-    # Take a look at the model summary
-    model.summary()
 
-    model.compile(loss='sparse_categorical_crossentropy',
-                  optimizer='adam',
-                  metrics=['accuracy'])
-
-    history = model.fit(x=x_train, y=y_train, validation_data=(x_validation, y_validation), epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=1)
-
-    # Save the model including architecture and weights in an h5 file
-    model.save(modelName)   # Make sure model is included in .gitignore -- too large to push
-
-    keras.utils.plot_model(model, to_file='screenClassifierModel.png')
-
-    return history
-
-def makeImageModelIcon(x_train, y_train, x_validation, y_validation, modelName, numTargets, EPOCHS, BATCH_SIZE):
-    num_rows, num_cols = len(x_train[1]), len(x_train[2])
-    # Make a sequential neural network
-    model = keras.Sequential()
-    # Create CNN model=======================================================================
-    # Must define the input shape in the first layer of the neural network
-    model.add(keras.layers.Conv2D(filters=32, kernel_size=7, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu', input_shape=(num_rows, num_cols, 3)))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.MaxPooling2D(pool_size=2))
-    model.add(keras.layers.Dropout(0.1)) # I'm not sure about these dropout layers before conv layers...if anything keep them small
-    
-    model.add(keras.layers.Conv2D(filters=64, kernel_size=5, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.MaxPooling2D(pool_size=2))
-    model.add(keras.layers.Dropout(0.1))
-    
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.MaxPooling2D(pool_size=2))
-    model.add(keras.layers.Dropout(0.1))
-    
-    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
-    model.add(keras.layers.BatchNormalization())
-    model.add(keras.layers.MaxPooling2D(pool_size=2))
-    model.add(keras.layers.Dropout(0.1))
-    
     model.add(keras.layers.Flatten())
     model.add(keras.layers.Dense(512, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001),))
     model.add(keras.layers.BatchNormalization())
@@ -210,6 +163,55 @@ def makeImageModelIcon(x_train, y_train, x_validation, y_validation, modelName, 
 
     return history
 
+def makeImageModelIcon(x_train, y_train, x_validation, y_validation, modelName, numTargets, EPOCHS, BATCH_SIZE):
+    num_rows, num_cols = len(x_train[1]), len(x_train[2])
+    # Make a sequential neural network
+    model = keras.Sequential()
+    # Create CNN model=======================================================================
+    # Must define the input shape in the first layer of the neural network
+    model.add(keras.layers.Conv2D(filters=32, kernel_size=7, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu', input_shape=(num_rows, num_cols, 3)))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1)) # I'm not sure about these dropout layers before conv layers...if anything keep them small
+
+    model.add(keras.layers.Conv2D(filters=64, kernel_size=5, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1))
+
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1))
+
+    model.add(keras.layers.Conv2D(filters=128, kernel_size=3, kernel_regularizer=keras.regularizers.l2(0.001), padding='same', activation='relu'))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.MaxPooling2D(pool_size=2))
+    model.add(keras.layers.Dropout(0.1))
+
+    model.add(keras.layers.Flatten())
+    model.add(keras.layers.Dense(512, activation='relu', kernel_regularizer=keras.regularizers.l2(0.001),))
+    model.add(keras.layers.BatchNormalization())
+    model.add(keras.layers.Dropout(0.5))
+    model.add(keras.layers.Dense(numTargets, activation='softmax'))    # Final layer must have 1 node per character
+    # Take a look at the model summary
+    model.summary()
+
+    model.compile(loss='sparse_categorical_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
+
+    history = model.fit(x=x_train, y=y_train, validation_data=(x_validation, y_validation), epochs=EPOCHS, batch_size=BATCH_SIZE, verbose=1)
+
+    # Save the model including architecture and weights in an h5 file
+    model.save(modelName)   # Make sure model is included in .gitignore -- too large to push
+
+    keras.utils.plot_model(model, to_file='iconClassifierModel.png')
+
+    return history
+
+
+# TESTING
 
 # TESTING
 

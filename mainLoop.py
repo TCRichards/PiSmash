@@ -68,7 +68,7 @@ if __name__ == '__main__':
     status = GameStatus()
     screenModel = keras.models.load_model(screenModelPath)
     # Constantly monitor the stream and take screenshots using a separate thread
-    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid1_short.MOV', 0.1), daemon=True)  # Runs forever
+    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid1_short.mp4', 0.1), daemon=True)  # Runs forever
     # Debugging ignoring stream
     streamThread.start()
 

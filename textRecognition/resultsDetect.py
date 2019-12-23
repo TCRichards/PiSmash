@@ -1,34 +1,45 @@
 '''
-Script that loads an image from the results screen and every player's ranking
-Given the list of players in the game (determined by selectDetect.py) as input,
+Script that loads an image from the victory screen and determines each player's ranking
+Given the list of players in the game (determined by selectDetect.py) as input
 and modifies each player's 'rank' field with the proper position
+
+Author: Thomas Richards
+Date Modified: 10/23/2019
 '''
-import sys
+
 import os
-
-sys.path.append(sys.path[0] + '/..')    # Allows us to pull this module from the parent directory
-from . import googleText as goog
-
-import cv2
 import numpy as np
 from collections import OrderedDict
 
-curDir = os.getcwd() + '/textRecognition/'
-screenDir = curDir + 'resultsScreens/'
-imagePath = screenDir + 'vicScreen_0_2.png'
+try:
+    import googleText as goog
+    from game import Game
+    from player import Player
+except ModuleNotFoundError:
+    from . import googleText as goog
+    from .game import Game
+    from .player import Player
+
+curDir = os.path.dirname(__file__)
+vicScreenDir = os.path.join(curDir, 'victoryScreens')
+resultsScreenDir = os.path.join(curDir, 'resultsScreens')
+
+resultsImagePath = os.path.join(resultsScreenDir, 'realResults0.png')
+victoryImagePath = os.path.join(vicScreenDir, 'realVic0.png')
 
 
 def rankOrder(labels, bounds, printing=False):
     playerBounds = []   # Make an array storing the bounding boxes for each time player number is seen
     playerNums = []
-    # Calculates the number of players present
+
+    # Calculates the number of players present by searching for ascending 'P#' numbers
     for i in range(1, 9):
         if ('P{}'.format(i)) in labels:
             index = np.where(labels == ('P{}'.format(i)))[0][0]
             playerBounds.append(bounds[index])
             playerNums.append(labels[index])
 
-    xBounds = [bound.vertices[0].x for bound in playerBounds]
+    xBounds = [bound.vertices[0].x for bound in playerBounds]   # We only need the x position of the player tag to determine order
 
     scoreDict = OrderedDict(sorted(zip(playerNums, xBounds), key=lambda t: t[1]))   # Sorts the player numbers with the x coordinates in ascending order
     if printing:
@@ -39,13 +50,7 @@ def rankOrder(labels, bounds, printing=False):
 
 
 def rankGame(path, game, printing=False, showing=False):
-    labels, bounds = goog.detect_text_vision(path, printing=printing)
-    annotated_image = goog.draw_boxes(path, bounds, 'red')
-    if showing:
-        # Display the image
-        cv2.imshow('Image', np.array(annotated_image))
-        cv2.waitKey(0)
-        cv2.destroyAllWindows()
+    annotated_image, labels, bounds = goog.detectAndAnnotate(path, printing=printing, showing=showing)
 
     sortedPlayers = rankOrder(labels, bounds, printing=False)   # List of players 'P{}' order of rank
     for rank, playerNum in enumerate(sortedPlayers, 1):
@@ -57,4 +62,15 @@ def rankGame(path, game, printing=False, showing=False):
     return game
 
 
-# loadImage(imagePath, printing=False, showing=True)
+if __name__ == '__main__':
+    THOMATO = Player('THOMATO', 'Shulk', 'P1', None)
+    BEEF = Player('BEEF', 'Ike', 'P2', None)
+
+    sampleGame = Game([THOMATO, BEEF])
+    print('Before analysis')
+    sampleGame.printOut()
+
+    rankGame(resultsImagePath, sampleGame, printing=True, showing=True)
+
+    print('\nAfter analysis')
+    sampleGame.printOut()

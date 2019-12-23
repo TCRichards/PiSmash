@@ -6,10 +6,11 @@
 /ScreenClassifier/validationImages/*
 /textRecognition/resultsScreens/*
 /textRecognition/selectScreens/*
+/textRecognition/RankingNumbers/*
 /PiCamera/screenShots/*
 /objectRecognition/rankClassifier/RankingNumbers/*
 /objectRecognition/BBox-Label-Tool-master
-objectRecognition/rankClassifier/zebra.jpg
+/objectRecognition/rankClassifier/zebra.jpg
 
 # Sample gameplay videos for testing
 /exampleVideos/*
