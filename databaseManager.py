@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import numpy as np
 import datetime
 
 from textRecognition.game import makeSampleGame
@@ -32,13 +33,15 @@ def getGameCount():
 
 def incrementGameCount():
     createMasterTable(reset=False)
-    count = getGameCount()
+    count = getGameCount()  # Retrieve the current number of games played
     cursor = conn.cursor()
     try:
+        # Update the games played field, incrementing by one
         cursor.execute('UPDATE master SET gameCount = "{}" WHERE gameCount = "{}"'.format(count + 1, count)) # Delete the old count
         conn.commit()
     except sqlite3.OperationalError:
         print('Error with incrementing value')
+
 
 # ONLY EXECUTE THIS WHEN WE FIRST CREATE THE TABLE
 def createGameTable():
@@ -46,6 +49,7 @@ def createGameTable():
     try:
         cursor.execute("""CREATE TABLE games (
                         timestamp TEXT,
+                        gameID INTEGER,
                         player1 TEXT,
                         player2 TEXT,
                         player3 TEXT,
@@ -59,7 +63,23 @@ def createGameTable():
         pass
     finally:
         conn.commit()
-        # conn.close()
+
+
+def logGame(game, gameID):
+    createGameTable()
+    cursor = conn.cursor()
+    now = datetime.datetime.now().strftime('%d-%m-%Y-%H-%M-%S')
+
+    # Iterate through the players in the game and define the ones that are present
+    allPlayers = ['#'] * 8              # Fill a list with the default empty value '#'
+    for i in range(len(game.players)):  # Replace '#' with the actual player's tag where applicable
+        allPlayers[i] = game.players[i].tag
+
+    # Execute the command storing the tags of each player, or '#' if empty
+    command = """INSERT INTO games VALUES ('{}', {}, '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')""".format(
+    now, gameID, allPlayers[0], allPlayers[1], allPlayers[2], allPlayers[3], allPlayers[4], allPlayers[5], allPlayers[6], allPlayers[7])
+    cursor.execute(command)
+    conn.commit()
 
 # Creates a table for the given player tag that stores data from each game
 def createPlayerTable(playerName):
@@ -79,39 +99,31 @@ def createPlayerTable(playerName):
         conn.commit()
 
 
-def logGame(game):
-    createGameTable()
-    cursor = conn.cursor()
-    command = """INSERT INTO games VALUES ('{}', '{}', {}, {})""".format(
-    player.tag, now, player.charName, player.rank, 69)
-
-    cursor.execute(command)
-    conn.commit()
-
-
 # Takes a player object as input and logs relevant information
-def logPlayer(player):
+def logPlayer(player, gameID):
     createPlayerTable(player.tag)   # Make sure that we have a table created for the player
     cursor = conn.cursor()
     now = datetime.datetime.now().strftime('%d-%m-%Y-%H-%M-%S')
-    command = """INSERT INTO {} VALUES ('{}', '{}', {}, {})""".format(
-    player.tag, now, player.charName, player.rank, 69)
-
+    command = """INSERT INTO {} VALUES ('{}', {}, '{}', {}, {})""".format(
+    player.tag, now, gameID, player.charName, player.rank, np.random.randint(0, 200))
     cursor.execute(command)
     conn.commit()
 
 
+# Store all of the relevant results for the game -- stores a record of the game and updates each player's page``````
 def logResults(game):
-    cursor = conn.cursor()
-    cursor.execute('SELECT gameCount FROM master')
-    numGames = cursor.fetchone()
-    # Create for each player in the game, create a database table if we need to
+    # Retrieve the current number of games and increment immediately
+    gameID = getGameCount()
+    incrementGameCount()
+
+    # Update the stats for each player in the game
     for player in game.players:
-        logPlayer(player)
-    logGame(game)
+        logPlayer(player, gameID)
+    logGame(game, gameID)   # Record the time, gameID, and players in the game
     conn.commit()
 
 
+# Returns all of the information stored about a given player
 def searchPlayer(playerTag):
     cursor = conn.cursor()
     # cursor.execute("SELECT * FROM games where player1 ='{}'".format(playerTag)) # Places Query result on the buffer
@@ -119,17 +131,18 @@ def searchPlayer(playerTag):
     return cursor.fetchall()    # Fetch the query result from the buffer
 
 
+# Returns all information about every game played
+def listGames():
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM games')
+    return cursor.fetchall()
+
 # Fill in sample data
 # cursor.execute("INSERT INTO games VALUES ('12-20-19.12:23:23', 'THOMATO', 'BEEF', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', 'NULL')")
 if __name__ == '__main__':
-    # game = makeSampleGame()
-    # logResults(game)
+    game = makeSampleGame()
+    logResults(game)
+
     # searchPlayer('THOMATO')
-
-
-    createMasterTable(reset=False)
-    print(getGameCount())
-    incrementGameCount()
-    print(getGameCount())
-
+    print(listGames())
     conn.close()
