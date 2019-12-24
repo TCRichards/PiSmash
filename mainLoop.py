@@ -3,7 +3,7 @@ The main loop of the entire process (once the model(s) are trained),
 including screen classification, text and object recognition, etc.
 Authors: Thomas Richards and Nick Konz
 '''
-# Import pretty much everything ========================
+# Import pretty much every file & library =================
 from textRecognition import selectDetect as sd
 from textRecognition import resultsDetect as rd
 from textRecognition.game import makeSampleGame
@@ -29,10 +29,6 @@ statsPath = os.path.join(curDir, '')
 
 iconModelPath = os.path.join(curDir, 'iconModelPrototype.h5')
 screenDir = readStream.imageDir
-
-conn = sqlite3.connect('gameLog.db')
-
-cursor = conn.cursor()
 
 
 # Simple struct that stores the current state of the game from ['character select', 'Black'...]
@@ -68,7 +64,7 @@ if __name__ == '__main__':
     status = GameStatus()
     screenModel = keras.models.load_model(screenModelPath)
     # Constantly monitor the stream and take screenshots using a separate thread
-    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid1_short.mp4', 0.1), daemon=True)  # Runs forever
+    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid2_short.mp4', 0.1), daemon=True)  # Runs forever
     # Debugging ignoring stream
     streamThread.start()
 
