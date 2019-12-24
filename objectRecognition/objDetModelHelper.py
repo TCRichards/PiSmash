@@ -7,6 +7,8 @@ Author: Nick Konz
 import argparse
 import os
 import numpy as np
+from PIL import Image, ImageFile
+from collections import OrderedDict
 from keras.layers import Conv2D, Input, BatchNormalization, LeakyReLU, ZeroPadding2D, UpSampling2D
 from keras.layers.merge import add, concatenate
 from keras.models import Model
@@ -67,6 +69,9 @@ labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", 
     "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator",
     "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
 
+
+# YOLO MODEL BUILDERS AND TOOLS
+
 # helper function used to create blocks of layers
 def _conv_block(inp, convs, skip=True):
     x = inp
@@ -90,7 +95,7 @@ def _conv_block(inp, convs, skip=True):
     return add([skip_connection, x]) if skip else x
 
 
-# self explanatory
+# constructs the structure of the yolov3 model (before any data used, or weights applied)
 def make_yolov3_model():
     input_image = Input(shape=(None, None, 3))
 
@@ -453,7 +458,40 @@ def load_image_pixels(filename, shape):
     image = np.expand_dims(image, 0)
     return image, width, height
 
-def getTestingData(photo_filename):
+# DATA HANDLING
+
+def getTrainingData(trainingDir, classDict, num_rows, num_cols):
+    # Create empty numpy arrays to store file names and corresponding labels
+    trainFileList = np.array([], dtype=str)          # List of filenames as str
+    trainLabelList = np.array([], dtype=int)
+
+    # Get training file paths and labels
+    for type in [name for name in os.listdir(trainingDir) if not name.startswith(".")]: # The list comprehension excludes ``hidden'' files (which appeared when running on a mac).                    # List all character directories
+        trainImageDir = trainingDir + type + '/'                  # Folder containing this character's images
+        trainingPics = np.array([name for name in os.listdir(trainImageDir) if not name.startswith(".")])            # Name of each image in the directory
+
+        for i in range(len(trainingPics)):
+            trainImagePath = trainImageDir + trainingPics[i]
+            trainFileList = np.append(trainFileList, trainImagePath)             # Inefficient to append at each iteration, but this was hard
+
+        value = classDict.get(type)
+        newLabels = np.ones(trainingPics.size, dtype=np.uint8) * value          # Make a list of labels that is the proper length and value
+        trainLabelList = np.append(trainLabelList, newLabels)
+
+    # Convert training data file paths to images
+    numTrainingFiles = len(trainFileList)
+    x_train = np.empty([numTrainingFiles, num_rows, num_cols, 3])   # Make x_train an empty 3D array, where 1st dimension corresponds to image number
+
+    for i in range(numTrainingFiles):
+        rawIm = Image.open(trainFileList[i])
+        newIm = rawIm.resize((num_rows, num_cols))                  # Rescale the image to num_rows x num_cols
+        newIm_array = np.array(newIm)[:, :, :3].astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize    
+        x_train[i] = newIm_array                                    # Stack the new image at the bottom of the training set
+    y_train = trainLabelList                                        # Refer to the labels as y_train for continuity
+    return x_train, y_train
+
+
+def getSingleTestingData(photo_filename):
     # TESTING WITH ONE IMG:
     # load and prep image for keras
     image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
@@ -481,6 +519,7 @@ def makePrediction(model, matchDict, image, image_h, image_w, image_filename):
     # make prediction
     yhat = model.predict(image)
     # summarize the shape of the list of arrs
+    print(yhat)
     print([a.shape for a in yhat]) # returns bounding boxes AND class labels (encoded)
     
     boxes = list() # list of bounding box outputs from the network
