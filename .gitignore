@@ -8,12 +8,24 @@
 /textRecognition/selectScreens/*
 /textRecognition/RankingNumbers/*
 /PiCamera/screenShots/*
-/objectRecognition/rankClassifier/RankingNumbers/*
+/objectRecognition/rankDetector/RankingNumbers/*
 /objectRecognition/BBox-Label-Tool-master
-/objectRecognition/rankClassifier/zebra.jpg
+/objectRecognition/rankDetector/zebra.jpg
+/objectRecognition/rankDetector/test_image_folder
+/objectRecognition/rankDetector/train_image_folder_unlabeled
+/objectRecognition/rankDetector/valid_image_folder_unlabeled
+/objectRecognition/rankDetector/train_image_folder
+/objectRecognition/rankDetector/valid_image_folder
+
 
 # Sample gameplay videos for testing
 /exampleVideos/*
+
+# Experiencor's yolov3 keras implementation repo
+objectRecognition/experiencorKerasYOLOv3
+
+# third party tools used to label/making bounding boxes, etc
+objectRecognition/tools
 
 # Visual Studio files
 /.vs/slnx.sqlite
@@ -50,7 +62,7 @@ ScreenClassifier/diagnostics/history.png
 /iconModel.h5
 /screenModel.h5
 /screenModel.h5.zip
-/objectRecognition/rankClassifier/rankModel.h5
+/objectRecognition/rankDetector/rankModel.h5
 
 # Same; but weight files
 *.weights

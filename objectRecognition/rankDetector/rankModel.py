@@ -9,7 +9,8 @@ import sys
 import os
 from inspect import getsourcefile
 import matplotlib.pyplot as plt
-
+from keras.models import load_model
+from collections import OrderedDict
 
 current_path = os.path.abspath(getsourcefile(lambda: 0))    # Add parent directory to the path
 current_dir = os.path.dirname(current_path)
@@ -44,6 +45,21 @@ from collections import OrderedDict
 # })
 
 
+# Translates screen type to an integer
+rankDict = OrderedDict({
+    "first": 0,
+    "second": 1,
+    "third": 2,
+    "fourth": 3,
+    "fifth": 4,
+    "sixth": 5,
+    "seventh": 6,
+    "eighth": 7
+})
+
+
+#def trainModel():
+
 def makeModel():
     # x_validation, y_validation = objDetModelHelper.getValidationData(validationDir, screenDict, num_rows, num_cols)
     # x_train, y_train = objDetModelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
@@ -60,6 +76,13 @@ def makeModel():
 # def testModel():
     # x_test, y_test = objDetModelHelper.getTestingData(testingDir, screenDict, num_rows, num_cols)
     # objDetModelHelper.testModel(x_test, y_test, modelPath, screenDict)
+
+def testModel():
+    image_filename = 'zebra.jpg'
+
+    model = load_model('rankModel.h5')
+    image, image_w, image_h = objDetModelHelper.getSingleTestingData(image_filename)
+    objDetModelHelper.makePrediction(model, None, image, image_h, image_w, image_filename)
 
 
 # Main function allows us to create and test our model seperately
