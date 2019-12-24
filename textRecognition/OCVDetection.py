@@ -71,21 +71,20 @@ def decode_predictions(scores, geometry, min_confidence=0.6):
 
 	# return a tuple of the bounding boxes and associated confidences
 	return (rects, confidences)
+	
+	def processImage(image):
+		image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+		image = cv2.medianBlur(image,5)
+		filtered = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,9, 11)
+		kernel = np.ones((1, 1), np.uint8)
+		opening = cv2.morphologyEx(filtered, cv2.MORPH_OPEN, kernel)
+		closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
+		image = cv2.bitwise_or(image, closing)
+
+		return image
 
 
-def processImage(image):
-	image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-	image = cv2.medianBlur(image,5)
-	filtered = cv2.adaptiveThreshold(image,255,cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY,9, 11)
-	kernel = np.ones((1, 1), np.uint8)
-	opening = cv2.morphologyEx(filtered, cv2.MORPH_OPEN, kernel)
-	closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel)
-	image = cv2.bitwise_or(image, closing)
-
-	return image
-
-
-def loadImage(path, min_confidence=0.6):
+	def loadImage(path, min_confidence=0.6):
 	# load the input image and grab the image dimensions
 	image = cv2.imread(path)
 	orig = image.copy()

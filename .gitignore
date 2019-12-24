@@ -6,6 +6,7 @@
 /ScreenClassifier/validationImages/*
 /textRecognition/resultsScreens/*
 /textRecognition/selectScreens/*
+/textRecognition/RankingNumbers/*
 /PiCamera/screenShots/*
 /objectRecognition/rankDetector/RankingNumbers/*
 /objectRecognition/BBox-Label-Tool-master
@@ -15,6 +16,7 @@
 /objectRecognition/rankDetector/valid_image_folder_unlabeled
 /objectRecognition/rankDetector/train_image_folder
 /objectRecognition/rankDetector/valid_image_folder
+
 
 # Sample gameplay videos for testing
 /exampleVideos/*
