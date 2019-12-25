@@ -13,3 +13,7 @@ class Player:
         print('Player Tag = ' + self.tag)
         print('Player Number = ' + str(object=self.playerNum))
         print('Current Rank = ' + str(self.rank))
+
+
+if __name__ == '__main__':
+    pass
