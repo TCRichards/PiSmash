@@ -5,7 +5,7 @@ Authors: Thomas Richards and Nick Konz
 '''
 # Import pretty much every file & library =================
 from textRecognition import selectDetect as sd
-from textRecognition import resultsDetect as rd
+import resultsDetect as rd
 from textRecognition.game import makeSampleGame
 from PiCamera import readStream
 from ScreenClassifier.ScreenModel import screenDict, num_rows, num_cols

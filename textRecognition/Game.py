@@ -1,3 +1,8 @@
+'''
+Defines the class used to parameterize smash games, and useful methods related to it.
+Authors: Thomas Richards and Nick Konz
+Date Modified: 12/26/2019
+'''
 class Game:
 
     def __init__(self, players):
