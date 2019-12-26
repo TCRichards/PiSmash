@@ -36,12 +36,25 @@ if __name__ == '__main__':
 
 
     trainFileListUnlabeled = np.array([], dtype=str)          # List of filenames as str
-    for path in [trainLabelFolderPath, validLabelFolderPath]:
-        for type in [name for name in os.listdir(path) if not name.startswith(".")]:
+
+    labelsPaths = [trainLabelFolderPath, validLabelFolderPath]
+    oldPaths = [trainImgFolderUnlabeledPath, validImgFolderUnlabeledPath]
+    newPaths = [trainImgFolderPath, validImgFolderPath]
+
+    count = 0
+    for i in range(2):
+        labelpath = labelsPaths[i]
+        for type in [name for name in os.listdir(labelpath) if not name.startswith(".")]:
             # get name of labeled file
             dataname = type.replace(".xml", "")
             imgname = dataname + ".png"
-            # move file
-            oldPath = os.path.join(trainImgFolderUnlabeledPath, imgname)
-            newPath = os.path.join(trainImgFolderPath, imgname)
-            os.rename(oldPath, newPath)
+
+            # move file (if img hasn't been moved yet)
+            oldPath = os.path.join(oldPaths[i], imgname)
+            if os.path.exists(oldPath):
+                newPath = os.path.join(newPaths[i], imgname)
+                os.rename(oldPath, newPath)
+                count += 1
+
+
+    print("%i images moved." % count)
