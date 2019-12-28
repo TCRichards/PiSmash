@@ -92,7 +92,7 @@ def logPlayer(player, gameID):
     cursor = conn.cursor()
     now = datetime.datetime.now().strftime('%d-%m-%Y-%H-%M-%S')
     command = """INSERT INTO {} VALUES ('{}', {}, '{}', {}, {})""".format(
-    player.tag, now, gameID, player.charName, player.rank, np.random.randint(0, 200))
+    player.tag, now, gameID, player.charName, player.rank, np.random.randint(0, 200))   # Use randomized dmg for now
     cursor.execute(command)
     conn.commit()
 
@@ -155,6 +155,14 @@ def countAllWins(playerTag):
     return len(wins)
 
 
+# returns a list of tuples of all the games where the player played the given character
+def findGamesWithCharacter(playerTag, charName):
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM {} WHERE charName = "{}"'.format(playerTag, charName))
+    games = cursor.fetchall()
+    return games
+
+
 # Returns a list of tuples with each of the games where the player won with the given character
 def findWinsWithCharacter(playerTag, charName):
     cursor = conn.cursor()
@@ -165,12 +173,9 @@ def findWinsWithCharacter(playerTag, charName):
 
 # Returns the win ratio for the given player and character
 def getWinRatio(playerTag, charName):
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM {} WHERE charName = "{}"'.format(playerTag, charName))
-    allGames = cursor.fetchall()
+    allGames = findGamesWithCharacter(playerTag, charName)
     if len(allGames) == 0:    # If no games have been played, give a ratio of 0
         return 0
-
     wonGames = findWinsWithCharacter(playerTag, charName)
     return len(wonGames) / len(allGames)
 
@@ -206,25 +211,27 @@ def gameContainsPlayer(gameID, playerTag):
 def getMatchupStats(playerTag_1, charName_1, playerTag_2, charName_2):
     allWins = 0
     allMatchups = 0
-    p1_wins = findWinsWithCharacter(playerTag_1, charName_1)    # All of the games where p1 won with the character
-    for win in p1_wins:
-        gameID = win[1]
-          # Look up the won game in the master database to find the other players
 
+    p1_games = findGamesWithCharacter(playerTag_1, charName_1)
+    for game in p1_games:
+        gameID = game[1]
+        p1_rank = game[3]
         if gameContainsPlayer(gameID, playerTag_2):    # If the other player was in the game
             allMatchups += 1
             p2_result = getPlayerResultsFromID(playerTag_2, gameID)
             p2_char = p2_result[2]
             if p2_char == charName_2:
-                allWins += 1
+                p2_rank = game[3]
+                if p1_rank < p2_rank:   # If p1 had a lower rank, then p1 'won' the game
+                    allWins += 1
     if allMatchups == 0:
         print('This matchup never occured')
     return (allWins, allMatchups)   # Return a tuple with the number of wins and the total games played
 
 
+
+# Fills the table with 'numGames' additional games with randomized stats (playerTag order is constant)
 def generateSampleData(numGames):
-    import pdb
-    pdb.set_trace()
     for log in range(numGames):
         numPlayers = np.random.randint(1, 4)
         sampleGame = makeSampleGame(numPlayers)
@@ -235,5 +242,5 @@ if __name__ == '__main__':
     #print(getGameCount())
     # generateSampleData(1000)
     # getWinRatio('THOMATO', 'fox')
-    getAllWinRatios('THOMATO')
-    #print(countAllWins('BEEF'))
+    # getAllWinRatios('THOMATO')
+    # print(countAllWins('BEEF'))
