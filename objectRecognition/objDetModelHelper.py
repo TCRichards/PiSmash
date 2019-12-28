@@ -1,6 +1,7 @@
 '''
 This program is used to define object recognition neural networks, using the YOLOv3 model,
 including code that assists with image and bounding box conversion.
+Used to call these models for predictions.
 Based on https://github.com/experiencor/keras-yolo3
 Author: Nick Konz
 '''
@@ -11,7 +12,7 @@ from PIL import Image, ImageFile
 from collections import OrderedDict
 from keras.layers import Conv2D, Input, BatchNormalization, LeakyReLU, ZeroPadding2D, UpSampling2D
 from keras.layers.merge import add, concatenate
-from keras.models import Model
+from keras.models import Model, load_model
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
 import struct
@@ -57,8 +58,8 @@ class_threshold = 0.6
 anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33,23]]
 
 # define the labels
-#labels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"]
-labels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck",
+#allLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"]
+allLabels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck",
     "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench",
     "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe",
     "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard",
@@ -414,9 +415,9 @@ def get_boxes(boxes, labels, thresh):
 	return v_boxes, v_labels, v_scores
 
 # draw all results for a prediction
-def draw_boxes(filename, v_boxes, v_labels, v_scores):
+def draw_boxes(image_path, v_boxes, v_labels, v_scores):
 	# load the image
-	data = pyplot.imread(filename)
+	data = pyplot.imread(image_path)
 	# plot the image
 	pyplot.imshow(data)
 	# get the context for drawing boxes
@@ -440,15 +441,15 @@ def draw_boxes(filename, v_boxes, v_labels, v_scores):
 
 # load and prepare a single img, given some target shape. 
 # returns image ready to be used by keras, as well as original shape
-def load_image_pixels(filename, shape):
+def load_image_pixels(image_path, shape):
     # to show the original photo later, need to scale bounding boxes from (416, 416) shape
     # back to original image shape:
     # load the img to get original shape
-    image = load_img('zebra.jpg')
+    image = load_img(image_path)
     width, height = image.size
 
     # load img with required size
-    image = load_img('zebra.jpg', target_size=(input_w, input_h))
+    image = load_img(image_path, target_size=(input_w, input_h))
     # convert to np arr
     image = img_to_array(image)
     # map pixel values to [0, 1]
@@ -491,16 +492,16 @@ def getTrainingData(trainingDir, classDict, num_rows, num_cols):
     return x_train, y_train
 
 
-def getSingleTestingData(photo_filename):
+def getSingleTestingData(image_path):
     # TESTING WITH ONE IMG:
     # load and prep image for keras
-    image, image_w, image_h = load_image_pixels(photo_filename, (input_w, input_h))
+    image, image_w, image_h = load_image_pixels(image_path, (input_w, input_h))
 
     return image, image_w, image_h
 
 
 # rank object detector initial model constructor
-def buildModelRank():
+def buildUntrainedModelRank():
     # define model
     model = make_yolov3_model()
 
@@ -514,8 +515,8 @@ def buildModelRank():
     model.save('rankModel.h5')
 
 
-# TESTING
-def makePrediction(model, matchDict, image, image_h, image_w, image_filename):
+# TESTING/PREDICTING
+def makePrediction(model, image, image_h, image_w, image_path):
     # make prediction
     yhat = model.predict(image)
     # summarize the shape of the list of arrs
@@ -536,7 +537,29 @@ def makePrediction(model, matchDict, image, image_h, image_w, image_filename):
 
     # now we have same no. of boxes, and we can extract boxes that are confident
     # get the details of the detected objects
-    v_boxes, v_labels, v_scores = get_boxes(boxes, labels, class_threshold)
+    v_boxes, v_labels, v_scores = get_boxes(boxes, allLabels, class_threshold)
 
     # summarize results
-    draw_boxes(image_filename, v_boxes, v_labels, v_scores)
+    draw_boxes(image_path, v_boxes, v_labels, v_scores)
+
+    return v_boxes, v_labels, v_scores
+
+def rankToInt(rankStr):
+    switcher = {
+        "first":    1,
+        "second":   2,
+        "third":    3,
+        "fourth":   4,
+        "fifth":    5,
+        "sixth":    6,
+        "seventh":  7,
+        "eighth":   8
+    }
+    return switcher.get(rankStr, None)
+
+def detectRanks(image_path):
+    model = load_model('rankModel.h5')
+    image, image_w, image_h = getSingleTestingData(image_path)
+    predictions = makePrediction(model, image, image_h, image_w, image_path)
+
+    return predictions

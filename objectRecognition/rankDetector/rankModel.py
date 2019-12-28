@@ -1,6 +1,7 @@
 '''
 Uses screenshots of victory screen player ranking numbers to create a model to recognize
-these numbers and rank players accordingly for a given match
+these numbers and rank players accordingly for a given match. Also used to test the model
+individually.
 Author: Nick Konz
 Date Modified: 12/20/19
 '''
@@ -58,19 +59,7 @@ rankDict = OrderedDict({
 })
 
 
-#def trainModel():
-
-def makeModel():
-    # x_validation, y_validation = objDetModelHelper.getValidationData(validationDir, screenDict, num_rows, num_cols)
-    # x_train, y_train = objDetModelHelper.getTrainingData(trainingDir, screenDict, num_rows, num_cols)
-
-    # EPOCHS = 100
-    # BATCH_SIZE = 64
-
-    objDetModelHelper.makeObjModelRank()
-
-    # #from the way that data is divided into the folders: training/val/test: 80/10/10
-    # return objDetModelHelper.makeImageModelScreen(x_train, y_train, x_validation, y_validation, modelPath, len(screenDict), EPOCHS, BATCH_SIZE)
+#def trainModel(): # training is accomplished through experiencor's third party yolov3 training scripts.
 
 
 # def testModel():
