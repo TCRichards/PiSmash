@@ -76,6 +76,4 @@ def testModel():
 
 # Main function allows us to create and test our model seperately
 if __name__ == '__main__':
-
-
     testModel()

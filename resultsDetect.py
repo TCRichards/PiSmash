@@ -11,16 +11,11 @@ import os
 import numpy as np
 from collections import OrderedDict
 
-try:
-    import textRecognition.googleText as goog
-    from textRecognition.game import Game
-    from textRecognition.player import Player
-    import objectRecognition.objDetModelHelper as objDetect
-except ModuleNotFoundError:
-    from . import textRecognition.googleText as goog
-    from .textRecognition.game import Game
-    from .textRecognition.player import Player
-    from . import objectRecognition.objDetModelHelper
+
+import textRecognition.googleText as goog
+from textRecognition.game import Game
+from textRecognition.player import Player
+import objectRecognition.objDetModelHelper as objDetect
 
 curDir = os.path.dirname(__file__)
 vicScreenDir = os.path.join(curDir, 'textRecognition', 'victoryScreens')
@@ -30,7 +25,8 @@ resultsImagePath = os.path.join(resultsScreenDir, 'realResults0.png')
 victoryImagePath = os.path.join(vicScreenDir, 'realVic0.png')
 
 
-def rankOrder(imagePath, labels, bounds, printing=False): # labels and bounds inputs are solely from text recognition; rank detection is done separately
+# labels and bounds inputs are solely from text recognition; rank detection is done separately
+def rankOrder(imagePath, labels, bounds, printing=False):
     #playerBounds = []   # Make an array storing the bounding boxes for each time player number is seen
     playerNums = [] # all detected "P#" text
 
@@ -40,15 +36,16 @@ def rankOrder(imagePath, labels, bounds, printing=False): # labels and bounds in
             index = np.where(labels == ('P{}'.format(i)))[0][0]
             playerNums.append(labels[index])
 
-    xBoundsPlayerNum = [bound.vertices[0].x for bound in playerBounds]   # We only need the x position of the player tag to determine order
-    
+    # We only need the x position of the player tag to determine order
+    # xBoundsPlayerNum = [bound.vertices[0].x for bound in playerBounds]
+
     detectedRankObjs = objDetect.detectRanks(imagePath)
     xBoundsRanks = [box.xmin for box in detectedRankObjs[0]]
     ranks = [objDetect.ranktoInt(rankLabel) for rankLabel in detectedRanks[1]] # list of ranks as ints
 
     # sorted from left to right onscreen
-    sortedPlayerNums = OrderedDict(sorted(zip(playerNums, xBoundsPlayerNum), key=lambda t: t[1])) 
-    sortedRanks = OrderedDict(sorted(zip(ranks, xBoundsRanks), key=lambda t: t[1])) 
+    sortedPlayerNums = OrderedDict(sorted(zip(playerNums, xBoundsPlayerNum), key=lambda t: t[1]))
+    sortedRanks = OrderedDict(sorted(zip(ranks, xBoundsRanks), key=lambda t: t[1]))
 
     # now that P#s are matched to ranks, sort these with respect to such ranks
     scoreDict = OrderedDict(sorted(zip(sortedPlayerNums.keys(), sortedRanks.keys()), key=lambda t: t[1]))   # Sorts the player numbers with the x coordinates in ascending order
@@ -80,7 +77,7 @@ if __name__ == '__main__':
     print('Before analysis')
     sampleGame.printOut()
 
-    rankGame(resultsImagePath, sampleGame, printing=True, showing=True)
+    rankGame(resultsImagePath, sampleGame, printing=False, showing=True)
 
     print('\nAfter analysis')
     sampleGame.printOut()

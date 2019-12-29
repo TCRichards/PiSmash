@@ -69,6 +69,7 @@ def createPlayerTable(playerName):
 
 # ================================ Functions to store new records ==================================
 
+# Only called by logResults() -- stores data in the game table and master table
 def logGame(game, gameID):
     createGameTable()
     cursor = conn.cursor()
@@ -86,6 +87,7 @@ def logGame(game, gameID):
     conn.commit()
 
 
+# Only called by logResults()
 # Takes a player object as input and logs relevant information
 def logPlayer(player, gameID):
     createPlayerTable(player.tag)   # Make sure that we have a table created for the player
@@ -156,7 +158,7 @@ def countAllWins(playerTag):
 
 
 # returns a list of tuples of all the games where the player played the given character
-def findGamesWithCharacter(playerTag, charName):
+def getGamesWithCharacter(playerTag, charName):
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM {} WHERE charName = "{}"'.format(playerTag, charName))
     games = cursor.fetchall()
@@ -164,7 +166,7 @@ def findGamesWithCharacter(playerTag, charName):
 
 
 # Returns a list of tuples with each of the games where the player won with the given character
-def findWinsWithCharacter(playerTag, charName):
+def getWinsWithCharacter(playerTag, charName):
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM {} WHERE rank = 1 AND charName = "{}"'.format(playerTag, charName))
     wins = cursor.fetchall()
@@ -173,10 +175,10 @@ def findWinsWithCharacter(playerTag, charName):
 
 # Returns the win ratio for the given player and character
 def getWinRatio(playerTag, charName):
-    allGames = findGamesWithCharacter(playerTag, charName)
+    allGames = getGamesWithCharacter(playerTag, charName)
     if len(allGames) == 0:    # If no games have been played, give a ratio of 0
         return 0
-    wonGames = findWinsWithCharacter(playerTag, charName)
+    wonGames = getWinsWithCharacter(playerTag, charName)
     return len(wonGames) / len(allGames)
 
 
@@ -188,11 +190,6 @@ def getAllWinRatios(playerTag):
         ratio = getWinRatio(playerTag, charName)
         outDict[charName] = ratio
     return outDict
-
-
-# Returns the number of games won by a player with a given character
-def countWinsWithCharacter(playerTag, charName):
-    return len(findWinsWithCharacter(playerTag, charName))
 
 
 # Returns TRUE if the player was involved in the given game
@@ -207,27 +204,25 @@ def gameContainsPlayer(gameID, playerTag):
 
 
 # Counts the number of games where player1 playing character1 beat player2 playing character2
-# TODO: Modify to count not only wins but other ranks for multiplayer
 def getMatchupStats(playerTag_1, charName_1, playerTag_2, charName_2):
     allWins = 0
     allMatchups = 0
 
-    p1_games = findGamesWithCharacter(playerTag_1, charName_1)
+    p1_games = getGamesWithCharacter(playerTag_1, charName_1)       # Iterate through all games where p1 played the character
     for game in p1_games:
-        gameID = game[1]
-        p1_rank = game[3]
-        if gameContainsPlayer(gameID, playerTag_2):    # If the other player was in the game
-            allMatchups += 1
+        gameID = game[1]                                            # Get the gameID
+        p1_rank = game[3]                                           # Get player 1's rank
+        if gameContainsPlayer(gameID, playerTag_2):                 # If the other player was in the game
             p2_result = getPlayerResultsFromID(playerTag_2, gameID)
             p2_char = p2_result[2]
             if p2_char == charName_2:
-                p2_rank = game[3]
+                allMatchups += 1                                    # Increment if both players are playing the characters
+                p2_rank = game[3]                                   # Player 2's rank
                 if p1_rank < p2_rank:   # If p1 had a lower rank, then p1 'won' the game
                     allWins += 1
     if allMatchups == 0:
         print('This matchup never occured')
     return (allWins, allMatchups)   # Return a tuple with the number of wins and the total games played
-
 
 
 # Fills the table with 'numGames' additional games with randomized stats (playerTag order is constant)
@@ -239,7 +234,7 @@ def generateSampleData(numGames):
 
 
 if __name__ == '__main__':
-    #print(getGameCount())
+    # print(getGameCount())
     # generateSampleData(1000)
     # getWinRatio('THOMATO', 'fox')
     # getAllWinRatios('THOMATO')

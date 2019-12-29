@@ -77,18 +77,18 @@ allLabels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train
 def _conv_block(inp, convs, skip=True):
     x = inp
     count = 0
-    
+
     for conv in convs:
         if count == (len(convs) - 2) and skip:
             skip_connection = x
         count += 1
-        
+
         if conv['stride'] > 1: x = ZeroPadding2D(((1,0),(1,0)))(x) # peculiar padding as darknet prefer left and top
-        x = Conv2D(conv['filter'], 
-                   conv['kernel'], 
-                   strides=conv['stride'], 
+        x = Conv2D(conv['filter'],
+                   conv['kernel'],
+                   strides=conv['stride'],
                    padding='valid' if conv['stride'] > 1 else 'same', # peculiar padding as darknet prefer left and top
-                   name='conv_' + str(conv['layer_idx']), 
+                   name='conv_' + str(conv['layer_idx']),
                    use_bias=False if conv['bnorm'] else True)(x)
         if conv['bnorm']: x = BatchNormalization(epsilon=0.001, name='bnorm_' + str(conv['layer_idx']))(x)
         if conv['leaky']: x = LeakyReLU(alpha=0.1, name='leaky_' + str(conv['layer_idx']))(x)
@@ -124,9 +124,9 @@ def make_yolov3_model():
     for i in range(7):
         x = _conv_block(x, [{'filter': 128, 'kernel': 1, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 16+i*3},
                             {'filter': 256, 'kernel': 3, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 17+i*3}])
-        
+
     skip_36 = x
-        
+
     # Layer 37 => 40
     x = _conv_block(x, [{'filter': 512, 'kernel': 3, 'stride': 2, 'bnorm': True, 'leaky': True, 'layer_idx': 37},
                         {'filter': 256, 'kernel': 1, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 38},
@@ -136,9 +136,9 @@ def make_yolov3_model():
     for i in range(7):
         x = _conv_block(x, [{'filter': 256, 'kernel': 1, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 41+i*3},
                             {'filter': 512, 'kernel': 3, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 42+i*3}])
-        
+
     skip_61 = x
-        
+
     # Layer 62 => 65
     x = _conv_block(x, [{'filter': 1024, 'kernel': 3, 'stride': 2, 'bnorm': True, 'leaky': True, 'layer_idx': 62},
                         {'filter':  512, 'kernel': 1, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 63},
@@ -148,7 +148,7 @@ def make_yolov3_model():
     for i in range(3):
         x = _conv_block(x, [{'filter':  512, 'kernel': 1, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 66+i*3},
                             {'filter': 1024, 'kernel': 3, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 67+i*3}])
-        
+
     # Layer 75 => 79
     x = _conv_block(x, [{'filter':  512, 'kernel': 1, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 75},
                         {'filter': 1024, 'kernel': 3, 'stride': 1, 'bnorm': True, 'leaky': True, 'layer_idx': 76},
@@ -190,7 +190,7 @@ def make_yolov3_model():
                                {'filter': 256, 'kernel': 3, 'stride': 1, 'bnorm': True,  'leaky': True,  'layer_idx': 104},
                                {'filter': 255, 'kernel': 1, 'stride': 1, 'bnorm': False, 'leaky': False, 'layer_idx': 105}], skip=False)
 
-    model = Model(input_image, [yolo_82, yolo_94, yolo_106])    
+    model = Model(input_image, [yolo_82, yolo_94, yolo_106])
     return model
 
 
@@ -208,12 +208,12 @@ class WeightReader:
                 w_f.read(4)
 
             transpose = (major > 1000) or (minor > 1000)
-            
+
             binary = w_f.read()
 
         self.offset = 0
         self.all_weights = np.frombuffer(binary, dtype='float32')
-        
+
     def read_bytes(self, size):
         self.offset = self.offset + size
         return self.all_weights[self.offset-size:self.offset]
@@ -232,14 +232,14 @@ class WeightReader:
                     beta  = self.read_bytes(size) # bias
                     gamma = self.read_bytes(size) # scale
                     mean  = self.read_bytes(size) # mean
-                    var   = self.read_bytes(size) # variance            
+                    var   = self.read_bytes(size) # variance
 
-                    weights = norm_layer.set_weights([gamma, beta, mean, var])  
+                    weights = norm_layer.set_weights([gamma, beta, mean, var])
 
                 if len(conv_layer.get_weights()) > 1:
                     bias   = self.read_bytes(np.prod(conv_layer.get_weights()[1].shape))
                     kernel = self.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-                    
+
                     kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
                     kernel = kernel.transpose([2,3,1,0])
                     conv_layer.set_weights([kernel, bias])
@@ -249,8 +249,8 @@ class WeightReader:
                     kernel = kernel.transpose([2,3,1,0])
                     conv_layer.set_weights([kernel])
             except ValueError:
-                print("no convolution #" + str(i))     
-    
+                print("no convolution #" + str(i))
+
     def reset(self):
         self.offset = 0
 
@@ -262,7 +262,7 @@ class BoundBox:
         self.ymin = ymin
         self.xmax = xmax
         self.ymax = ymax
-        
+
         self.objness = objness
         self.classes = classes
 
@@ -272,13 +272,13 @@ class BoundBox:
     def get_label(self):
         if self.label == -1:
             self.label = np.argmax(self.classes)
-        
+
         return self.label
-    
+
     def get_score(self):
         if self.score == -1:
             self.score = self.classes[self.get_label()]
-            
+
         return self.score
 
 # simple sigmoid fn
@@ -302,26 +302,26 @@ def decode_netout(netout, anchors, obj_thresh, net_h, net_w):
     for i in range(grid_h*grid_w):
         row = i / grid_w
         col = i % grid_w
-        
+
         for b in range(nb_box):
             # 4th element is objectness score
             objectness = netout[int(row)][int(col)][b][4]
             #objectness = netout[..., :4]
-            
+
             #if(objectness.all() <= obj_thresh): continue
             if (objectness <= obj_thresh).all(): continue #modified from original
-            
+
             # first 4 elements are x, y, w, and h
             x, y, w, h = netout[int(row)][int(col)][b][:4]
 
             x = (col + x) / grid_w # center position, unit: image width
             y = (row + y) / grid_h # center position, unit: image height
             w = anchors[2 * b + 0] * np.exp(w) / net_w # unit: image width
-            h = anchors[2 * b + 1] * np.exp(h) / net_h # unit: image height  
-            
+            h = anchors[2 * b + 1] * np.exp(h) / net_h # unit: image height
+
             # last elements are class probabilities
             classes = netout[int(row)][col][b][5:]
-            
+
             box = BoundBox(x-w/2, y-h/2, x+w/2, y+h/2, objectness, classes)
             #box = BoundBox(x-w/2, y-h/2, x+w/2, y+h/2, None, classes)
 
@@ -337,11 +337,11 @@ def correct_yolo_boxes(boxes, image_h, image_w, net_h, net_w):
     else:
         new_h = net_w
         new_w = (image_w*net_h)/image_h
-        
+
     for i in range(len(boxes)):
         x_offset, x_scale = (net_w - new_w)/2./net_w, float(new_w)/net_w
         y_offset, y_scale = (net_h - new_h)/2./net_h, float(new_h)/net_h
-        
+
         boxes[i].xmin = int((boxes[i].xmin - x_offset) / x_scale * image_w)
         boxes[i].xmax = int((boxes[i].xmax - x_offset) / x_scale * image_w)
         boxes[i].ymin = int((boxes[i].ymin - y_offset) / y_scale * image_h)
@@ -349,14 +349,14 @@ def correct_yolo_boxes(boxes, image_h, image_w, net_h, net_w):
 
 # the model has predicted many potential bounding boxes, which mostly refer to the same obj
 # this list of boxes can be filtered, and overlapping boxes can be merged
-# the threshold for the amount of overlap to signal a merge 
-# is characterized by non-maximal suppresion    
+# the threshold for the amount of overlap to signal a merge
+# is characterized by non-maximal suppresion
 def do_nms(boxes, nms_thresh):
     if len(boxes) > 0:
         nb_class = len(boxes[0].classes)
     else:
         return
-        
+
     for c in range(nb_class):
         sorted_indices = np.argsort([-box.classes[c] for box in boxes])
 
@@ -370,18 +370,18 @@ def do_nms(boxes, nms_thresh):
 
                 if bbox_iou(boxes[index_i], boxes[index_j]) >= nms_thresh:
                     boxes[index_j].classes[c] = 0
-           
+
 def bbox_iou(box1, box2):
     intersect_w = _interval_overlap([box1.xmin, box1.xmax], [box2.xmin, box2.xmax])
     intersect_h = _interval_overlap([box1.ymin, box1.ymax], [box2.ymin, box2.ymax])
-    
+
     intersect = intersect_w * intersect_h
 
     w1, h1 = box1.xmax-box1.xmin, box1.ymax-box1.ymin
     w2, h2 = box2.xmax-box2.xmin, box2.ymax-box2.ymin
-    
+
     union = w1*h1 + w2*h2 - intersect
-    
+
     return float(intersect) / union
 
 def _interval_overlap(interval_a, interval_b):
@@ -397,7 +397,7 @@ def _interval_overlap(interval_a, interval_b):
         if x2 < x3:
              return 0
         else:
-            return min(x2,x4) - x3   
+            return min(x2,x4) - x3
 
 # get all of the results above a threshold
 def get_boxes(boxes, labels, thresh):
@@ -439,7 +439,7 @@ def draw_boxes(image_path, v_boxes, v_labels, v_scores):
 	# show the plot
 	pyplot.show()
 
-# load and prepare a single img, given some target shape. 
+# load and prepare a single img, given some target shape.
 # returns image ready to be used by keras, as well as original shape
 def load_image_pixels(image_path, shape):
     # to show the original photo later, need to scale bounding boxes from (416, 416) shape
@@ -486,7 +486,7 @@ def getTrainingData(trainingDir, classDict, num_rows, num_cols):
     for i in range(numTrainingFiles):
         rawIm = Image.open(trainFileList[i])
         newIm = rawIm.resize((num_rows, num_cols))                  # Rescale the image to num_rows x num_cols
-        newIm_array = np.array(newIm)[:, :, :3].astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize    
+        newIm_array = np.array(newIm)[:, :, :3].astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
         x_train[i] = newIm_array                                    # Stack the new image at the bottom of the training set
     y_train = trainLabelList                                        # Refer to the labels as y_train for continuity
     return x_train, y_train
@@ -505,7 +505,7 @@ def buildUntrainedModelRank():
     # define model
     model = make_yolov3_model()
 
-    # load model weights 
+    # load model weights
     weightsPath = os.path.join(parent_dir, 'objectRecognition/yolov3.weights')
     weight_reader = WeightReader(weightsPath)
 
@@ -522,15 +522,15 @@ def makePrediction(model, image, image_h, image_w, image_path):
     # summarize the shape of the list of arrs
     print(yhat)
     print([a.shape for a in yhat]) # returns bounding boxes AND class labels (encoded)
-    
+
     boxes = list() # list of bounding box outputs from the network
     for i in range(len(yhat)):
         # decode the output of the network
         boxes += decode_netout(yhat[i][0], anchors[i], class_threshold, input_h, input_w)
 
     # next, stretch the bounding boxes back to fit the original image
-    correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w) 
-    
+    correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w)
+
     # non-maximal boxes are suppressed (prob -> 0), but not removed, so that
     # they remain to be used to detect another obj type
     do_nms(boxes, nms_thresh)
@@ -563,3 +563,7 @@ def detectRanks(image_path):
     predictions = makePrediction(model, image, image_h, image_w, image_path)
 
     return predictions
+
+
+if __name__ == '__main__':
+    buildUntrainedModelRank()
