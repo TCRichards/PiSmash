@@ -55,10 +55,12 @@ class_threshold = 0.6
 # define the anchors; ``average'' dimensions of bounding boxes found in training set
 # this is like a starting guess for the bounding box anchors
 """ SHOULD MODIFY THIS ACCORDING TO OWN TRAINING SET FOR POTENTIAL SPEEDUP """
-anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33,23]]
+#anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33,23]]
+anchors = [[12,29, 13,19, 14,22], [14,26, 15,37, 16,31], [17,26, 19,34, 20,44]]
 
 # define the labels
-#allLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"]
+allLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"]#, "eighth"]
+"""
 allLabels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck",
     "boat", "traffic light", "fire hydrant", "stop sign", "parking meter", "bench",
     "bird", "cat", "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe",
@@ -69,7 +71,7 @@ allLabels = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train
     "chair", "sofa", "pottedplant", "bed", "diningtable", "toilet", "tvmonitor", "laptop", "mouse",
     "remote", "keyboard", "cell phone", "microwave", "oven", "toaster", "sink", "refrigerator",
     "book", "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
-
+"""
 
 # YOLO MODEL BUILDERS AND TOOLS
 
@@ -520,8 +522,8 @@ def makePrediction(model, image, image_h, image_w, image_path):
     # make prediction
     yhat = model.predict(image)
     # summarize the shape of the list of arrs
-    print(yhat)
-    print([a.shape for a in yhat]) # returns bounding boxes AND class labels (encoded)
+    #print(yhat)
+    #print([a.shape for a in yhat]) # returns bounding boxes AND class labels (encoded)
     
     boxes = list() # list of bounding box outputs from the network
     for i in range(len(yhat)):

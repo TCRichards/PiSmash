@@ -40,7 +40,7 @@ def augment(dataDir):
     randomIdxs = np.random.randint(low=0, high=size, size=(maxSize - size))
     imgPaths = [os.path.join(dataDir, contents[idx]) for idx in randomIdxs]
     imgPaths = [name for name in imgPaths if not name.startswith(os.path.join(dataDir, "."))]  #gets rid of ``invisible'' dirs
-    imgPaths = [name for name in imgPaths if "aug" not in name ]  #avoids augmenting already augmented images
+    imgPaths = [name for name in imgPaths if "aug" not in str(name) ]  #avoids augmenting already augmented images
     
     imgs = [load_img(imgPath) for imgPath in imgPaths]
     imgArrs = [img_to_array(img) for img in imgs]
