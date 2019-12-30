@@ -1,5 +1,5 @@
 # "Technical Objectives for Smash Analysis Project
-### Last edited Thursday, October 3, 2019
+### Last edited Sunday, December 29, 2019
 
 ## 1.	Collect video and audio using Raspberry Pi or microcontroller
 ### Status: Complete
@@ -28,13 +28,15 @@
   **b.**	The PC running the sketch can capture this rtsp stream using VLC's Python library.  This was very straightforward to accomplish.
 
 
-## 4.	Use Deep Learning to continuously classify screenshots from the game:
+## 4.	Use Deep Learning-based image classification to continuously classify screenshots from the game:
 ### Status: Complete
 
   **a.**	Use image classification to detect constantly monitor the status of the game and detect the victory screen.   
     **i.** Make neural network capable of choosing between [Character Select, Stage Select, Pre-Game, Game, Victory, Results, TV OFF, and Menu Screens] (this works surprisingly well).
 
 ![Screen Classification](https://raw.githubusercontent.com/TCRichards/PiSmash/master/READMEImages/ScreenClassTest.png)
+## 5.	Use Deep Learning-based object recognition to extract results of matches
+### Status: In progress
     **ii.** Make neural network capable of detecting player icons (Not implemented - would be cool to tell who killed whom)
   **b.**	Use text recognition to gather data on damage and kills within each panel   
     **i.**	Google Vision API provides incredible text recognition ability for relatively cheaply ($1.50 for 1000 images analyzed).  We're going with this approach 'for now'
@@ -42,20 +44,21 @@
     **iii.** Once the results screen is detected, use location of player text  (specifically 'P#') to segment screen into a separate panel for each player.  Below is an example of determining the outcome of a game based on the location of text in the victory screen:
     
 ![Text Recognition](https://raw.githubusercontent.com/TCRichards/PiSmash/master/READMEImages/vicScreenText.jpg)
+   **iv.** From here, object recognition acting on match results screens will be used to determine the rankings of players, which will be cross-referenced with the results of text recognition on these screens to extract individual player statistics.
 
-## 5.	Create Website!
+## 6.	Create Website!
 ### Status: In progress
 
    **a.**	Website's backend will store the database with all smash data.  
    **b.**	Website's frontend will provide an interface for users to access to see all statistics
         **i.**	Provide capabilities for determining probabilities based on certain matchups, record the characters played in all games to provide substantially improved control over Smash's built-in statistics."
 
-## 6.	Send detections and processed data from host computer to database:
+## 7.	Send detections and processed data from host computer to database:
 ### Status: Not started
 
    **a.**	It doesn't look like there's a way for a website to store it's own data file, so instead we can have the computer serving the website locally store a database with all data logged.  Whenever the website is launched, a JavaScript callback will retrieve the data from the server and update the website.
 
-## 7.	Gather data from Server
+## 8.	Gather data from Server
 ### Status: Not Started
 
   **a.**	Have the Raspberry Pi also continually monitor the website backend's database and alert players when there is a change (maybe blinking LED?)
