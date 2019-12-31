@@ -26,7 +26,7 @@ objectRecognition/experiencorKerasYOLOv3
 
 # third party tools used to label/making bounding boxes, augment data, etc
 objectRecognition/tools
-objectRecognition/Tutorial-Image-and-Multiple-Bounding-Boxes-Augmentation-for-Deep-Learning-in-4-Steps-master
+objectRecognition/data_aug.py
 
 # Visual Studio files
 /.vs/slnx.sqlite
