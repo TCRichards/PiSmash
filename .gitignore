@@ -24,8 +24,9 @@
 # Experiencor's yolov3 keras implementation repo
 objectRecognition/experiencorKerasYOLOv3
 
-# third party tools used to label/making bounding boxes, etc
+# third party tools used to label/making bounding boxes, augment data, etc
 objectRecognition/tools
+objectRecognition/Tutorial-Image-and-Multiple-Bounding-Boxes-Augmentation-for-Deep-Learning-in-4-Steps-master
 
 # Visual Studio files
 /.vs/slnx.sqlite

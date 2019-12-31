@@ -1,7 +1,7 @@
 <annotation>
 	<folder>train_image_folder_unlabeled</folder>
-	<filename>pic_0901-232107_64.png</filename>
-	<path>/Users/nickk124/research/projects/pismash/PiSmashRepo/objectRecognition/rankDetector/train_image_folder_unlabeled/pic_0901-232107_64.png</path>
+	<filename>pic_0901-232107_64.jpeg</filename>
+	<path>/Users/nickk124/research/projects/pismash/PiSmashRepo/objectRecognition/rankDetector/train_image_folder_unlabeled/pic_0901-232107_64.jpeg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
