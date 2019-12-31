@@ -32,6 +32,7 @@ from keras.layers.merge import add, concatenate
 from keras.models import Model
 import struct
 import cv2
+import xml.etree.ElementTree as ET
 
 # this function modified from voc.py.
 def parse_voc_annotation(ann_dir, img_dir, labels=[]):

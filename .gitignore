@@ -24,7 +24,7 @@
 # Experiencor's yolov3 keras implementation repo
 objectRecognition/experiencorKerasYOLOv3
 
-# third party tools used to label/making bounding boxes, augment data, etc
+# third party tools used to label/making bounding boxes, augment data, etc that only need to be used by devs
 objectRecognition/tools
 objectRecognition/data_aug.py
 
