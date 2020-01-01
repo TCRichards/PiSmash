@@ -35,15 +35,19 @@ import cv2
 import xml.etree.ElementTree as ET
 
 # this function modified from voc.py.
-def parse_voc_annotation(ann_dir, img_dir, labels=[]):
+def parse_voc_annotation(ann_dir, img_dir, labels=[], ignoreAugmented = False):
     # if os.path.exists(cache_name):
     #     with open(cache_name, 'rb') as handle:
     #         cache = pickle.load(handle)
     #     all_insts, seen_labels = cache['all_insts'], cache['seen_labels']
     all_insts = []
     seen_labels = {}
-    
-    for ann in sorted(os.listdir(ann_dir)):
+
+    anns = os.listdir(ann_dir)
+    if ignoreAugmented: # ignores augmented files
+        anns = [ann for ann in os.listdir(ann_dir) if "aug" not in ann]
+
+    for ann in sorted(anns):
         img = {'object':[]}
 
         try:

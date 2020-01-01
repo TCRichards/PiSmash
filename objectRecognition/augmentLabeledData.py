@@ -27,6 +27,8 @@ current_dir = os.path.dirname(current_path)
 
 from objDetModelHelper import allLabels
 
+minObjCount = 100 # minimum count of needed instances of each class
+
 
 def getBoxesArrAndLabels(all_train_ints_element_obj): # returns the bounding boxes and corresponding labels for a single img
     boxes = []
@@ -41,7 +43,15 @@ def getBoxesArrAndLabels(all_train_ints_element_obj): # returns the bounding box
 
     return np.array(boxes), np.array(labels)
 
-def augmentSingleImg(all_train_ints_element):#augments a single image and saves the new augmented image and it's xml label file)
+def getNewAugPath(imgpath, ind): # makes sure that multiple augmented images from same source image are labeled differently
+    add = "_aug{}.jpeg".format(str(ind))
+    augimgpath = imgpath.replace(".jpeg", add)
+    if not os.path.exists(augimgpath):
+        return augimgpath, ind
+    else:
+        return getNewAugPath(imgpath, ind + 1)
+
+def augmentSingleImg(all_train_ints_element, labelPath):#augments a single image and saves the new augmented image and it's xml label file)
     boxes, labels = getBoxesArrAndLabels(all_train_ints_element['object'])
     #print(boxes, labels) 
     imgpath = all_train_ints_element['filename']
@@ -54,7 +64,7 @@ def augmentSingleImg(all_train_ints_element):#augments a single image and saves 
     # auged_bbox = (xmin, ymin, xmax, ymax)
 
     # save augmented image
-    augimgpath = imgpath.replace(".jpeg", "_aug.jpeg")
+    augimgpath, newInd = getNewAugPath(imgpath, 0)
     cv2.imwrite(augimgpath, auged_img)
 
     #print(img.shape, auged_img.shape)
@@ -111,8 +121,8 @@ def augmentSingleImg(all_train_ints_element):#augments a single image and saves 
                             root.remove(elem)
                             print("a bounding box dissapeared upon augmentation")
 
-
-    augxmlpath = xmlpath.replace(".xml", "_aug.xml")
+    add = "_aug{}.xml".format(str(newInd))
+    augxmlpath = xmlpath.replace(".xml", add)
     #print(str(ET.tostring(tree.getroot())))
 
     # save label file
@@ -120,31 +130,83 @@ def augmentSingleImg(all_train_ints_element):#augments a single image and saves 
 
     return
 
-if __name__ == '__main__':
+def augmentAndBalanceData(modelFolder):
+    modelPath         = os.path.join(current_dir, modelFolder)
+    imgPath = os.path.join(modelPath, "train_image_folder/")
+    labelPath = os.path.join(modelPath, "train_annot_folder/")
 
+
+    ###################
+
+    all_train_ints, seen_train_labels = parse_voc_annotation(labelPath, imgPath, allLabels, ignoreAugmented=True) #These args are the same as in config.json
+    # ^ all non-augmented training instances
+    all_train_ints_inclAug, seen_train_labels_inclAug = parse_voc_annotation(labelPath, imgPath, allLabels)
+    # ^ ALL instances, including augmented
+
+    labelsCounts = {lbl : 0 for lbl in allLabels} # ~ {num of label1 objects, num of label2 objects, ... etc} for entire training set
+    labelsCountsInclAug = {lbl : 0 for lbl in allLabels} 
+
+    for all_train_ints_element in all_train_ints: # examine the population of class labels for the whole training set
+        imgLabels = list(getBoxesArrAndLabels(all_train_ints_element['object'])[1])
+        for lbl in imgLabels:
+            labelsCounts[lbl] += 1
+
+    for all_train_ints_element in all_train_ints_inclAug: # examine the population of class labels for the whole training set
+        imgLabels = list(getBoxesArrAndLabels(all_train_ints_element['object'])[1])
+        for lbl in imgLabels:
+            labelsCountsInclAug[lbl] += 1
+
+    print("Total number of labels before new augmentation: \n", labelsCountsInclAug, "\n")
+    print("Total number of non-augmented labels before new augmentation: \n", labelsCounts, "\n")
+
+    ###################
+
+    # Balance the dataset via augmentation:
+    # Begin by making sure that each class has at least 100 examples (including augmented)
+    for label in allLabels:
+        if labelsCountsInclAug[label] < minObjCount: # augments images that have this label until 100 instances of this underrepresented class is reached. prioritizes augmented images with fewer objects.
+            nonAugObjCount = labelsCounts[label]
+            lowTrainInts = [trainInt for trainInt in all_train_ints if label in list(getBoxesArrAndLabels(trainInt['object'])[1])]
+            # ^ list of train instances that have this low-represented class
+            lowTrainIntLabelLists = [list(getBoxesArrAndLabels(trainInt['object'])[1]) for trainInt in all_train_ints if label in list(getBoxesArrAndLabels(trainInt['object'])[1])]
+            # ^ their corresponding label lists
+            lowTrainIntLabelCounts = [len(lblList) for lblList in lowTrainIntLabelLists]
+            # ^ the number of labels in each of them
+
+            sortedLowTrainInts = [x for _, x in sorted(zip(lowTrainIntLabelCounts, lowTrainInts), key=lambda pair: pair[0])]
+            # ^ list of train instances that have this low-represented class, sorted with number of labels increasing
+            sortedLowTrainIntLabelLists = [list(getBoxesArrAndLabels(trainInt['object'])[1]) for trainInt in sortedLowTrainInts if label in list(getBoxesArrAndLabels(trainInt['object'])[1])]
+            # ^ list of corresponding labels
+
+
+            ct = nonAugObjCount # running total number of training data that have this class, INCLUDING augmented.
+            i = 0 # index used to loop over available non-augmented training data
+            #print(len(sortedLowTrainInts))
+            while ct < minObjCount:
+                #print(ct - nonAugObjCount, nonAugObjCount - 1)
+                i = (( ct - nonAugObjCount ) % (nonAugObjCount - 1) )
+                
+                #print(i, ct, nonAugObjCount)
+                augmentSingleImg(sortedLowTrainInts[i], labelPath)
+
+
+                for lbl in sortedLowTrainIntLabelLists[i]: # updates count
+                    labelsCountsInclAug[lbl] += 1
+
+                i += 1
+                ct += 1
+            
+
+    
+    print("Total number of labels after augmentation: \n", labelsCountsInclAug, "\n")
+
+    ###################
+
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
     parser.add_argument("modelFolder",type=str)
 
     args              = parser.parse_args()
     modelFolder       = args.modelFolder
 
-    modelPath         = os.path.join(current_dir, modelFolder)
-    imgPath = os.path.join(modelPath, "train_image_folder/")
-    labelPath = os.path.join(modelPath, "train_annot_folder/")
-
-    all_train_ints, seen_train_labels = parse_voc_annotation(labelPath, imgPath, allLabels) #These args are the same as in config.json
-    # ^ all training instances
-
-    labelsCounts = {lbl : 0 for lbl in allLabels} # ~ {num of label1 objects, num of label2 objects, ... etc} for entire training set
-    for all_train_ints_element in all_train_ints: # examine the population of class labels for the whole training set
-        imgLabels = list(getBoxesArrAndLabels(all_train_ints_element['object'])[1])
-        for lbl in imgLabels:
-            labelsCounts[lbl] += 1
-
-
-    print(labelsCounts)
-
-    for all_train_ints_element in all_train_ints: # each iteration augments an image and saves the new augmented image and it's xml label file
-        #augmentSingleImg(all_train_ints_element)
-
-        break
+    augmentAndBalanceData(modelFolder)
