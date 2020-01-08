@@ -26,6 +26,7 @@ current_path = os.path.abspath(getsourcefile(lambda: 0))    # Add parent directo
 current_dir = os.path.dirname(current_path)
 
 from objDetModelHelper import allLabels
+# allLabels = []
 
 minObjCount = 100 # minimum count of needed instances of each class
 
@@ -43,19 +44,20 @@ def getBoxesArrAndLabels(all_train_ints_element_obj): # returns the bounding box
 
     return np.array(boxes), np.array(labels)
 
-def getNewAugPath(imgpath, ind): # makes sure that multiple augmented images from same source image are labeled differently
-    add = "_aug{}.jpeg".format(str(ind))
-    augimgpath = imgpath.replace(".jpeg", add)
+def getNewAugPath(imgpath, ind, file_extension): # makes sure that multiple augmented images from same source image are labeled differently
+    add = "_aug{}{}".format(str(ind), file_extension)
+    augimgpath = imgpath.replace(file_extension, add)
     if not os.path.exists(augimgpath):
         return augimgpath, ind
     else:
-        return getNewAugPath(imgpath, ind + 1)
+        return getNewAugPath(imgpath, ind + 1, file_extension)
 
 def augmentSingleImg(all_train_ints_element, labelPath):#augments a single image and saves the new augmented image and it's xml label file)
     boxes, labels = getBoxesArrAndLabels(all_train_ints_element['object'])
     #print(boxes, labels) 
     imgpath = all_train_ints_element['filename']
     imgfilename = os.path.basename(imgpath)
+    _, imgfile_extension = os.path.splitext(imgpath)
     img = cv2.imread(imgpath)
 
     # Do augmentation
@@ -64,7 +66,7 @@ def augmentSingleImg(all_train_ints_element, labelPath):#augments a single image
     # auged_bbox = (xmin, ymin, xmax, ymax)
 
     # save augmented image
-    augimgpath, newInd = getNewAugPath(imgpath, 0)
+    augimgpath, newInd = getNewAugPath(imgpath, 0, imgfile_extension)
     cv2.imwrite(augimgpath, auged_img)
 
     #print(img.shape, auged_img.shape)
@@ -74,7 +76,7 @@ def augmentSingleImg(all_train_ints_element, labelPath):#augments a single image
     #print(auged_bboxes, auged_labels)
     # [[385 322 451 382], [647 288 712 355], [883 238 961 324]] 
     # ['second' 'third' 'first']
-    xmlpath = os.path.join(labelPath, imgfilename.replace(".jpeg", ".xml"))
+    xmlpath = os.path.join(labelPath, imgfilename.replace(imgfile_extension, ".xml"))
     tree = ET.parse(xmlpath)
     #print(str(ET.tostring(tree.getroot())))
     for elem in tree.iter():

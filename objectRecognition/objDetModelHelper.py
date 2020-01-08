@@ -44,6 +44,8 @@ current_path = os.path.abspath(getsourcefile(lambda: 0))    # Add parent directo
 current_dir = os.path.dirname(current_path)
 parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
 
+rankDetectDir = os.path.join(current_dir, "rankDetector/")
+
 
 # CONSTANTS
 input_w, input_h = 416, 416 #fixed dimensions of neural network img inputs
@@ -52,13 +54,12 @@ input_w, input_h = 416, 416 #fixed dimensions of neural network img inputs
 nms_thresh = 0.5
 
 # define the probability threshold for detected objects
-class_threshold = 0.6
+obj_thresh = 0.6
 
 # define the anchors; ``average'' dimensions of bounding boxes found in training set
 # this is like a starting guess for the bounding box anchors
-""" SHOULD MODIFY THIS ACCORDING TO OWN TRAINING SET FOR POTENTIAL SPEEDUP """
-#anchors = [[116,90, 156,198, 373,326], [30,61, 62,45, 59,119], [10,13, 16,30, 33,23]]
-anchors = [[12,29, 13,19, 14,22], [14,26, 15,37, 16,31], [17,26, 19,34, 20,44]]
+# found with gen_anchors.py with experiencor's keras-yolo3
+anchors = [12,22, 12,30, 14,26, 15,37, 15,21, 16,31, 17,26, 19,34, 19,44]
 
 # define the labels
 allLabels = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"] #, "eighth"]
@@ -103,50 +104,49 @@ def getSingleTestingData(image_path):
 
     return image, image_w, image_h
 
-
 # rank object detector initial model constructor
-def buildUntrainedModelRank():
-    # define model
-    model = make_yolov3_model()
+# def buildUntrainedModelRank():
+#     # define model
+#     model = make_yolov3_model()
 
-    # load model weights 
-    weightsPath = os.path.join(parent_dir, 'objectRecognition/yolov3.weights')
-    weight_reader = WeightReader(weightsPath)
+#     # load model weights 
+#     weightsPath = os.path.join(parent_dir, 'objectRecognition/yolov3.weights')
+#     weight_reader = WeightReader(weightsPath)
 
-    # load weights into model
-    weight_reader.load_weights(model)
+#     # load weights into model
+#     weight_reader.load_weights(model)
 
-    model.save('rankModel.h5')
-
+#     model.save('rankModel.h5')
 
 # TESTING/PREDICTING
-def makePrediction(model, image, image_h, image_w, image_path):
-    # make prediction
-    yhat = model.predict(image)
-    # summarize the shape of the list of arrs
-    #print(yhat)
-    #print([a.shape for a in yhat]) # returns bounding boxes AND class labels (encoded)
+def fixLabel(label_str): #code I added to fix mislabeling
+    # if len(label_str) == 0:
+    #     return label_str
+    # else:
+    #     short = label_str.split(" ")[0]
+    switcher = {
+        "first":    "fifth",
+        "second":   "first",
+        "third":    "fourth",
+        "fourth":   "second",
+        "fifth":    "seventh",
+        "sixth":    "sixth",
+        "seventh":  "third"
+    }
+    return switcher.get(label_str, None)
+        
+def makePrediction(infer_model, image_path):
+    image = cv2.imread(image_path)
+
+    # predict the bounding boxes
+    boxes = get_yolo_boxes(infer_model, [image], input_h, input_w, anchors, obj_thresh, nms_thresh)[0]
     
-    boxes = list() # list of bounding box outputs from the network
-    for i in range(len(yhat)):
-        # decode the output of the network
-        boxes += decode_netout(yhat[i][0], anchors[i], class_threshold, input_h, input_w)
+    # fix mislabeling
+    for box in boxes:
+        box.label = fixLabel(box.label)
 
-    # next, stretch the bounding boxes back to fit the original image
-    correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w) 
-    
-    # non-maximal boxes are suppressed (prob -> 0), but not removed, so that
-    # they remain to be used to detect another obj type
-    do_nms(boxes, nms_thresh)
+    return boxes
 
-    # now we have same no. of boxes, and we can extract boxes that are confident
-    # get the details of the detected objects
-    v_boxes, v_labels, v_scores = get_boxes(boxes, allLabels, class_threshold)
-
-    # summarize results
-    draw_boxes(image_path, v_boxes, v_labels, v_scores)
-
-    return v_boxes, v_labels, v_scores
 
 def rankToInt(rankStr):
     switcher = {
@@ -162,8 +162,9 @@ def rankToInt(rankStr):
     return switcher.get(rankStr, None)
 
 def detectRanks(image_path):
-    model = load_model('rankModel.h5')
+    model_dir = os.path.join(rankDetectDir, 'rankModel.h5')
+    model = load_model(model_dir)
     image, image_w, image_h = getSingleTestingData(image_path)
-    predictions = makePrediction(model, image, image_h, image_w, image_path)
+    boxes = makePrediction(model, image, image_h, image_w, image_path)
 
-    return predictions
+    return boxes

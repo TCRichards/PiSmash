@@ -67,3 +67,4 @@ ScreenClassifier/diagnostics/history.png
 
 # Same; but weight files
 *.weights
+objectRecognition/rankDetector/rankModel.h5.zip

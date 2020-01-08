@@ -42,9 +42,9 @@ def rankOrder(imagePath, labels, bounds, printing=False): # labels and bounds in
 
     xBoundsPlayerNum = [bound.vertices[0].x for bound in playerBounds]   # We only need the x position of the player tag to determine order
     
-    detectedRankObjs = objDetect.detectRanks(imagePath)
-    xBoundsRanks = [box.xmin for box in detectedRankObjs[0]]
-    ranks = [objDetect.ranktoInt(rankLabel) for rankLabel in detectedRanks[1]] # list of ranks as ints
+    detectedRankBoxes = objDetect.detectRanks(imagePath)
+    xBoundsRanks = [box.xmin for box in detectedRankBoxes]
+    ranks = [objDetect.ranktoInt(box.label) for box in detectedRankBoxes] # list of ranks as ints
 
     # sorted from left to right onscreen
     # if below isn't working, check that I sorted things correctly below
