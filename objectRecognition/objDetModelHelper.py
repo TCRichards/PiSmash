@@ -164,7 +164,6 @@ def rankToInt(rankStr):
 def detectRanks(image_path):
     model_dir = os.path.join(rankDetectDir, 'rankModel.h5')
     model = load_model(model_dir)
-    image, image_w, image_h = getSingleTestingData(image_path)
-    boxes = makePrediction(model, image, image_h, image_w, image_path)
+    boxes = makePrediction(model, image_path)
 
     return boxes

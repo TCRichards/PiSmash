@@ -19,32 +19,19 @@ parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
 
 if __name__ == '__main__':  # If we're running the file here, then imports are relative to here
     sys.path.insert(0, parent_dir)  # Add it
-    import objDetModelHelper              # Import module from parent directory
+    import objDetModelHelper        # Import module from parent directory
 else:   # If we're running the program from mainLoop, then paths are relative to project folder
     import objDetModelHelper
 from collections import OrderedDict
 
-# trainingDir = os.path.join(curDir, 'trainingImages/')
-# validationDir = os.path.join(curDir, 'validationImages/')
-testingDir = os.path.join(current_dir, 'test_image_folder/')
+trainingDir = os.path.join(current_dir, 'training_annot_folder')
+validationDir = os.path.join(current_dir, 'valid_annot_folder')
+testingDir = os.path.join(current_dir, 'test_image_folder')
 
 # Image dimensions
 # num_rows, num_cols = makeScreens.num_rows, makeScreens.num_cols
 
 # modelPath = os.path.join(parent_dir, 'rankModel.h5')
-
-# Translates screen type to an integer
-# screenDict = OrderedDict({
-#     "Black": 0,
-#     "Stage-Select": 1,
-#     "Character-Select": 2,
-#     "Pre-Game": 3,
-#     "Game": 4,
-#     "Victory": 5,
-#     "Results": 6,
-#     "Other": 7
-# })
-
 
 # Translates screen type to an integer
 rankDict = OrderedDict({
@@ -68,10 +55,11 @@ rankDict = OrderedDict({
 
 def testModel():
     model = load_model('rankModel.h5')
-    for type in [name for name in os.listdir(testingDir) if not name.startswith(".")]:
-        testImageDir = testingDir + type #+ '/'   
-        image, image_w, image_h = objDetModelHelper.getSingleTestingData(testImageDir)
-        objDetModelHelper.makePrediction(model, image, image_h, image_w, testImageDir)
+    for imgName in [name for name in os.listdir(testingDir) if not name.startswith(".")]:
+        testImagePath = os.path.join(testingDir, imgName)
+        # image, image_w, image_h = objDetModelHelper.getSingleTestingData(testImagePath)
+        # objDetModelHelper.makePrediction(model, testImagePath)
+        objDetModelHelper.detectRanks(testImagePath)
 
 
 # Main function allows us to create and test our model seperately
