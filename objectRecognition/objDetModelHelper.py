@@ -285,6 +285,7 @@ class BoundBox:
 def _sigmoid(x):
     return 1. / (1. + np.exp(-x))
 
+
 # decodes the neural net output into usable bounding boxes and class predictions
 def decode_netout(netout, anchors, obj_thresh, net_h, net_w):
     grid_h, grid_w = netout.shape[:2]
