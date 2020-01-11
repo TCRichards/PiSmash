@@ -36,16 +36,16 @@ def rankOrder(imagePath, labels, bounds, printing=False):
             index = np.where(labels == ('P{}'.format(i)))[0][0]
             playerNums.append(labels[index])
 
-    # We only need the x position of the player tag to determine order
-    # xBoundsPlayerNum = [bound.vertices[0].x for bound in playerBounds]
+    xBoundsPlayerNum = [bound.vertices[0].x for bound in playerBounds]   # We only need the x position of the player tag to determine order
 
-    detectedRankObjs = objDetect.detectRanks(imagePath)
-    xBoundsRanks = [box.xmin for box in detectedRankObjs[0]]
-    ranks = [objDetect.ranktoInt(rankLabel) for rankLabel in detectedRanks[1]] # list of ranks as ints
+    detectedRankBoxes = objDetect.detectRanks(imagePath)
+    xBoundsRanks = [box.xmin for box in detectedRankBoxes]
+    ranks = [objDetect.ranktoInt(box.label) for box in detectedRankBoxes] # list of ranks as ints
 
     # sorted from left to right onscreen
-    sortedPlayerNums = OrderedDict(sorted(zip(playerNums, xBoundsPlayerNum), key=lambda t: t[1]))
-    sortedRanks = OrderedDict(sorted(zip(ranks, xBoundsRanks), key=lambda t: t[1]))
+    # if below isn't working, check that I sorted things correctly below
+    sortedPlayerNums = OrderedDict(sorted(zip(xBoundsPlayerNum, playerNums), key=lambda t: t[0]))
+    sortedRanks = OrderedDict(sorted(zip(xBoundsRanks, ranks), key=lambda t: t[0]))
 
     # now that P#s are matched to ranks, sort these with respect to such ranks
     scoreDict = OrderedDict(sorted(zip(sortedPlayerNums.keys(), sortedRanks.keys()), key=lambda t: t[1]))   # Sorts the player numbers with the x coordinates in ascending order

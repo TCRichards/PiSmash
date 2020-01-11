@@ -26,7 +26,7 @@ from collections import OrderedDict
 
 # trainingDir = os.path.join(curDir, 'trainingImages/')
 # validationDir = os.path.join(curDir, 'validationImages/')
-# testingDir = os.path.join(curDir, 'testingImages/')
+testingDir = os.path.join(current_dir, 'test_image_folder/')
 
 # Image dimensions
 # num_rows, num_cols = makeScreens.num_rows, makeScreens.num_cols
@@ -67,11 +67,11 @@ rankDict = OrderedDict({
     # objDetModelHelper.testModel(x_test, y_test, modelPath, screenDict)
 
 def testModel():
-    image_filename = 'zebra.jpg'
-
     model = load_model('rankModel.h5')
-    image, image_w, image_h = objDetModelHelper.getSingleTestingData(image_filename)
-    objDetModelHelper.makePrediction(model, None, image, image_h, image_w, image_filename)
+    for type in [name for name in os.listdir(testingDir) if not name.startswith(".")]:
+        testImageDir = testingDir + type #+ '/'   
+        image, image_w, image_h = objDetModelHelper.getSingleTestingData(testImageDir)
+        objDetModelHelper.makePrediction(model, image, image_h, image_w, testImageDir)
 
 
 # Main function allows us to create and test our model seperately

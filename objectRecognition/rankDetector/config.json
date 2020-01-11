@@ -1,0 +1,40 @@
+{
+    "model" : {
+        "min_input_size":       352,
+        "max_input_size":       448,
+        "anchors":              [12,22, 12,30, 14,26, 15,37, 15,21, 16,31, 17,26, 19,34, 19,44],
+        "labels":               ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"]
+    },
+
+    "train": {
+        "train_image_folder":   "/Users/nickk124/research/projects/pismash/PiSmashRepo/objectRecognition/rankDetector/train_image_folder/",
+        "train_annot_folder":   "/Users/nickk124/research/projects/pismash/PiSmashRepo/objectRecognition/rankDetector/train_annot_folder/",
+        "cache_name":           "rank_train.pkl",
+
+        "train_times":          8,
+        "batch_size":           16,
+        "learning_rate":        1e-4,
+        "nb_epochs":            100,
+        "warmup_epochs":        3,
+        "ignore_thresh":        0.5,
+        "gpus":                 "0,1",
+
+        "grid_scales":          [1,1,1],
+        "obj_scale":            5,
+        "noobj_scale":          1,
+        "xywh_scale":           1,
+        "class_scale":          1,
+
+        "tensorboard_dir":      "logs",
+        "saved_weights_name":   "rankModel.h5",
+        "debug":                true
+    },
+
+    "valid": {
+        "valid_image_folder":   "/Users/nickk124/research/projects/pismash/PiSmashRepo/objectRecognition/rankDetector/valid_image_folder/",
+        "valid_annot_folder":   "/Users/nickk124/research/projects/pismash/PiSmashRepo/objectRecognition/rankDetector/valid_annot_folder/",
+        "cache_name":           "rank_valid.pkl",
+
+        "valid_times":          1
+    }
+}

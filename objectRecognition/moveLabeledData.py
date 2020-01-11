@@ -15,15 +15,9 @@ from inspect import getsourcefile
 current_path = os.path.abspath(getsourcefile(lambda: 0))    # Add parent directory to the path
 current_dir = os.path.dirname(current_path)
 
-if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
-    parser.add_argument("modelFolder",type=str)
-
-    args              = parser.parse_args()
-    modelFolder       = args.modelFolder
+def moveLabeledData(modelFolder):
     modelPath         = os.path.join(current_dir, modelFolder)
-
 
     trainImgFolderUnlabeledPath = os.path.join(modelPath, "train_image_folder_unlabeled")
     validImgFolderUnlabeledPath = os.path.join(modelPath, "valid_image_folder_unlabeled")
@@ -33,9 +27,6 @@ if __name__ == '__main__':
 
     trainLabelFolderPath = os.path.join(modelPath, "train_annot_folder")
     validLabelFolderPath = os.path.join(modelPath, "valid_annot_folder")
-
-
-    trainFileListUnlabeled = np.array([], dtype=str)          # List of filenames as str
 
     labelsPaths = [trainLabelFolderPath, validLabelFolderPath]
     oldPaths = [trainImgFolderUnlabeledPath, validImgFolderUnlabeledPath]
@@ -58,3 +49,13 @@ if __name__ == '__main__':
 
 
     print("%i images moved." % count)
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
+    parser.add_argument("modelFolder",type=str)
+
+    args              = parser.parse_args()
+    modelFolder       = args.modelFolder
+    
+    moveLabeledData(modelFolder)
