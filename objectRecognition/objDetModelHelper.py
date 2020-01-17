@@ -21,7 +21,10 @@ from inspect import getsourcefile
 import matplotlib.pyplot as pyplot
 from matplotlib.patches import Rectangle
 
-from kerasYOLO3 import *
+try:
+    from kerasYOLO3 import *
+except ModuleNotFoundError:
+    from .kerasYOLO3 import *
 
 # np.set_printoptions(threshold=np.nan)
 # os.environ["CUDA_DEVICE_ORDER"]="PCI_BUS_ID"
@@ -135,6 +138,7 @@ def fixLabel(label_str): #code I added to fix mislabeling
     }
     return switcher.get(label_str, None)
 
+
 def makePrediction(infer_model, image_path):
     image = cv2.imread(image_path)
 
@@ -161,9 +165,9 @@ def rankToInt(rankStr):
     }
     return switcher.get(rankStr, None)
 
-def detectRanks(image_path):
-    model_dir = os.path.join(rankDetectDir, 'rankModel.h5')
-    model = load_model(model_dir)
-    boxes = makePrediction(model, image_path)
-
-    return boxes
+# def detectRanks(image_path):
+#     model_dir = os.path.join(rankDetectDir, 'rankModel.h5')
+#     model = load_model(model_dir)
+#     boxes = makePrediction(model, image_path)
+#
+#     return boxes

@@ -64,13 +64,13 @@ if __name__ == '__main__':
     status = GameStatus()
     screenModel = keras.models.load_model(screenModelPath)
     # Constantly monitor the stream and take screenshots using a separate thread
-    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid2_short.mp4', 0.1), daemon=True)  # Runs forever
+    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid1_short.mp4', 0.1), daemon=True)  # Runs forever
     # Debugging ignoring stream
     streamThread.start()
 
-    time.sleep(3)   # Give the other thread a 3 second headstart (needs to fully launc before we can proceed)
+    time.sleep(5)   # Give the other thread a 3 second headstart (needs to fully launc before we can proceed)
 
-    game = makeSampleGame()
+    game = makeSampleGame(2)
     lastFile = ''
 
     queueSize = 3
