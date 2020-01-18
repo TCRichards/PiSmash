@@ -35,6 +35,7 @@ if __name__ == '__main__':
             break
 
     if foundWifi:   # Only begin the stream if wifi is detected
+        print('Starting The Stream')
         # create two files to hold the output and errors, respectively
         with open(curDir + 'streamLogs.txt', 'w+') as logs:    # Errors (although everything from streaming is interpreted as an error)
             firstCommand = subprocess.Popen(    # I have no idea wtf this does but it works!
