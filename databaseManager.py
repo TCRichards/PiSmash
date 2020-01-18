@@ -51,10 +51,12 @@ def createGameTable():
 
 # Creates a table for the given player tag that stores data from each game
 def createPlayerTable(playerName):
+    # import pdb
+    # pdb.set_trace()
     cursor = conn.cursor()
     try:
         # Create the table if it doesn't already exist
-        cursor.execute("""CREATE TABLE {} (
+        cursor.execute("""CREATE TABLE [{}] (
                         timestamp TEXT,
                         gameID INTEGER,
                         charName TEXT,
@@ -93,7 +95,7 @@ def logPlayer(player, gameID):
     createPlayerTable(player.tag)   # Make sure that we have a table created for the player
     cursor = conn.cursor()
     now = datetime.datetime.now().strftime('%d-%m-%Y-%H-%M-%S')
-    command = """INSERT INTO {} VALUES ('{}', {}, '{}', {}, {})""".format(
+    command = """INSERT INTO [{}] VALUES ('{}', {}, '{}', {}, {})""".format(
     player.tag, now, gameID, player.charName, player.rank, np.random.randint(0, 200))   # Use randomized dmg for now
     cursor.execute(command)
     conn.commit()
@@ -113,6 +115,15 @@ def logResults(game):
 
 
 # =========================== Functions to fetch and interpret existing results ============================
+def playerExists(playerTag):
+    createMasterTable(reset=False)
+    cursor = conn.cursor()
+    try:
+        cursor.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='{}' '''.format(playerTag))
+    except sqlite3.OperationalError:
+        return False
+    return bool(cursor.fetchone()[0])
+
 
 # Returns the total number of games played -- stored in the master sheet in the database
 def getGameCount():
@@ -182,7 +193,6 @@ def getWinRatio(playerTag, charName):
     return len(wonGames) / len(allGames)
 
 
-
 # Returns a sorted dictionary with characters as the keys and win ratios as the values
 def getAllWinRatios(playerTag):
     outDict = copy.deepcopy(charDict)  # Creates a copy of the dictionary
@@ -233,9 +243,13 @@ def generateSampleData(numGames):
         logResults(sampleGame)
 
 
+# Add a function that looks up to see if a player has ever been used
+# so that we can easily look up what players are real, and filter noise in the character select screen
+
 if __name__ == '__main__':
     # print(getGameCount())
-    # generateSampleData(1000)
+    # generateSampleData(200)
     # getWinRatio('THOMATO', 'fox')
     # getAllWinRatios('THOMATO')
     # print(countAllWins('BEEF'))
+    print(playerExists('BEEF'))

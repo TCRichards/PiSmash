@@ -26,6 +26,7 @@ def makeSampleGame(numPlayers):
     sys.path.insert(0, parent_dir)
 
     import numpy as np
+
     try:
         from .player import Player      # Class wrapping a Player's character, tag, and rank
     except ModuleNotFoundError:
@@ -33,7 +34,7 @@ def makeSampleGame(numPlayers):
     from IconClassifier.iconModel import charDict
 
     # Create the data entries
-    playerNames = ['THOMATO', 'BEEF', 'gottapoot', 'protosnipe', 'gary-san', 'LIGMA', 'BIRD', 'QLIVER']
+    playerNames = ['Gary-san', 'LONG', 'BEEF', 'THOMATO', 'protosnipe', 'LIGMA', 'BIRD', 'QLIVER']
     ranks = np.arange(1, numPlayers + 1)
     orders = np.arange(1, numPlayers + 1)
 

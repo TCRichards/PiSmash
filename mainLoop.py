@@ -12,6 +12,7 @@ from ScreenClassifier.ScreenModel import screenDict, num_rows, num_cols
 from ScreenClassifier.ScreenModel import modelPath as screenModelPath
 from modelHelper import makePrediction
 from collections import deque
+import databaseManager as dbm
 
 import sqlite3
 from tensorflow import keras
@@ -37,12 +38,6 @@ class GameStatus:
         self.status = None
 
 
-# TODO: Creates a sample game to test text recognition
-def makeGame():
-    game = sd.loadImage(sd.imagePath)       # Create the game object using selectDetect's OCR
-    rd.loadImage(rd.imagePath, game)        # Fill in the ranking at the end of the game using resultsDetect's OCRw
-
-
 # Returns the most recent file added to a directory excluding the last file checked
 def getMostRecentFile(directory, lastFile):
     fileNames = [os.path.join(screenDir, file) for file in os.listdir(screenDir)]
@@ -64,16 +59,16 @@ if __name__ == '__main__':
     status = GameStatus()
     screenModel = keras.models.load_model(screenModelPath)
     # Constantly monitor the stream and take screenshots using a separate thread
-    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid1_short.mp4', 0.1), daemon=True)  # Runs forever
+    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid2_short.mp4', 0.05), daemon=True)  # Runs forever
     # Debugging ignoring stream
     streamThread.start()
 
-    time.sleep(5)   # Give the other thread a 3 second headstart (needs to fully launc before we can proceed)
+    time.sleep(4)   # Give the other thread a 3 second headstart (needs to fully launc before we can proceed)
 
     game = makeSampleGame(2)
     lastFile = ''
 
-    queueSize = 3
+    queueSize = 4
     classifyQueue = deque(maxlen=queueSize)         # Stores the 'maxlen' most recent classifications for comparison
 
     while True:
@@ -98,31 +93,44 @@ if __name__ == '__main__':
                 guess = classifyQueue[0]
             else:
                 raise ValueError  # We will manually catch this error below
-            print(guess)
-            # FSM chooses when to apply text recognition based on guess and current state
-            if guess == "Stage-Select" or guess == "Character-Select":
-                guess == "Select"
 
-            if status.status is None:
-                if guess == 'Select':
-                    status.status = 'Select'
-                    game = sd.imageToGame(latestFile, printing=True)  # Apply recognition the first time select is
+
+            print(guess)
+
+            if status.status is None or status.status == 'Other':
+                if guess == 'Character-Select':
+                    status.status = 'Character-Select'
+                    # game = sd.imageToGame(latestFile, printing=False)  # Apply recognition the first time select is
+                    print('\nIDENTIFIED CHARACTER SELECT SCREEN\n')
 
             # TODO: What about when people change character within a select screen? This only applies
             # TR once. Leave as is for now
-            elif status.status == 'Select':
+            elif status.status == 'Character-Select':
+                    if guess == 'Pre-Game':
+                        status.status = 'Pre-Game'
+                        print('\nIDENTIFIED PRE-GAME SCREEN\n')
+
+            elif status.status == 'Pre-Game':
                 if guess == 'Game':
                     status.status = 'Game'
+                    print('\nIDENTIFIED GAME SCREEN\n')
+
 
             # TODO: How it's currently implemented this will cause issues with the starts of victory screens
             # when the results aren't clear
             elif status.status == 'Game':
                 if guess == 'Victory':
                     status.status = 'Victory'
-                    rd.rankGame(latestFile, game, printing=True)    # Take the results of the game and update player ranks
-                    for player in game.players:     # Print out the game's results
+                    print('\nIDENTIFIED VICTORY SCREEN\n')
+
+            elif status.status == 'Victory':
+                if guess == 'Results':
+                    print('\nIDENTIFIED RESULTS SCREEN\n')
+                    rd.assignRanks(latestFile, game)    # Take the results of the game and update player ranks
+                    for player in game.players:         # Print out the game's results
                         player.printOut()
-                    status.status = None
+                    dbm.logResults(game)
+                    status.status = None                # Reset the status for the next game
 
         except ValueError:
             pass

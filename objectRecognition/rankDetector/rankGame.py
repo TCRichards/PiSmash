@@ -67,4 +67,4 @@ def rankGame(inputPath, draw_output=False):
 
 
 if __name__ == '__main__':
-    predict(imagePath)
+    rankGame(imagePath)

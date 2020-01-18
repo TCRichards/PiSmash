@@ -6,34 +6,39 @@ Date Created: 7/21/2019
 import os
 import sys
 from inspect import getsourcefile
+import cv2
+import numpy as np
 
 current_path = os.path.abspath(getsourcefile(lambda: 0))
 current_dir = os.path.dirname(current_path)
 parent_dir = current_dir[:current_dir.rfind(os.path.sep)]
-
 sys.path.insert(0, parent_dir)
 from IconClassifier import iconModel
-from . import googleText as goog
-from .player import Player   # Class wrapping a Player's character, tag, and rank
-from .game import Game
+import databaseManager as dbm
 
-import cv2
-import numpy as np
+try:
+    import googleText as goog
+    from player import Player   # Class wrapping a Player's character, tag, and rank
+    from game import Game
+except ModuleNotFoundError or ImportError:
+    from . import googleText as goog
+    from .player import Player   # Class wrapping a Player's character, tag, and rank
+    from .game import Game
 
-curDir = os.getcwd() + '/textRecognition/'
-screenDir = curDir + '/SelectScreens/'
-imagePath = screenDir + 'screen4.png'
+
+curDir = os.path.dirname(__file__)
+screenDir = os.path.join(curDir, 'charSelectScreens')
+imagePath = os.path.join(screenDir, 'realChar0.png')
 
 
+# TODO: Currently doesn't work first characters that are more than 1 word (e.g. Dark Pit)
 def imageToGame(path, printing=False, showing=False):
-    import pdb
-    pdb.set_trace()
     labels, bounds = goog.detect_text_vision(path, printing=printing)
     bottomLabels = np.array([])
     bottomBounds = np.array([])
     imgHeight = cv2.imread(path).shape[0]
     for i in range(len(bounds)):
-        if bounds[i].vertices[0].y >= imgHeight * 2 // 3:  # Only look at the text near the bottom of the screen
+        if bounds[i].vertices[0].y >= imgHeight * 1 // 2:  # Only look at the text near the bottom of the screen
             bottomLabels = np.append(bottomLabels, labels[i])
             bottomBounds = np.append(bottomBounds, bounds[i])
 
@@ -54,7 +59,7 @@ def imageToGame(path, printing=False, showing=False):
         isPNum = False
         # If the label matches P{} for any integer 1-9, then this will be True
         for i in range(1, 10):
-            isPNum |= label == 'P{}'.format(i) or label == 'CPU'
+            isPNum = isPNum or (label == 'P{}'.format(i) or label == 'CPU')
         return isPNum
 
     def isCharacter(label):
@@ -70,56 +75,38 @@ def imageToGame(path, printing=False, showing=False):
         else:
             tagColumn.append([label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
 
-    charHeight = charColumn[0][2]
-    playerNumHeight = playerColumn[0][2]
+    # Lists storing the relevant labels as well as the bottom x & y coordinates of each
+    charHeight = charColumn[0][2]   # Stores the players found ['P1', x_cord, y_cord]
+    playerNumHeight = playerColumn[0][2]    # Stores the characters found ['isabelle', x_cord, y_cord]
 
-    # Goes through the contents of otherCol and keeps only tag names
-    def filterTags(tagCol):
-        for o in tagCol:  # Tag names are the only text located between player numbers and character names
-            if not charHeight + 20 < o[2] < playerNumHeight - 20:
-                tagCol.remove(o)
-
-        for o in tagCol:
-            if o[0] == 'Player':   # In order to get the proper player number, look for an integer directly to the right
-                possibleNums = sorted(tagCol, key=lambda entry: abs(entry[1] - o[1]))
-                for entry in possibleNums:
-                    val = entry[0]
-                    try:
-                        int(val)    # Will throw a TypeError exception if not a number
-                        tagCol.remove(entry)    # After we find the number, remove it from the list
-                        o[0] += ' ' + val
-                        break       # Move onto the next input
-                    except ValueError:
-                        pass
-
-    filterTags(tagColumn)  # Filter the tagColumn so that it only contains player tags
-
+    # Filtered all possible tags to only those that have been registered in the database
+    filteredTags = list(filter(lambda entry: (dbm.playerExists(entry[0])), tagColumn))
     # Matches each player name with character name, and stores the matched duple in a Player object
     def matchLabels(charCol, playerCol, tagCol):
         players = []
-        for i in range(len(charCol)):
-            charName = charCol[i][0]    # Name of the character
-            charX = charCol[i][1]       # x-position of one of the vertices
-            # Sort player names by distance to the character we're looking at
-            sortedPlayers = sorted(playerCol, key=lambda play: abs(play[1] - charX))
-            sortedTags = sorted(tagCol, key=lambda tag: abs(tag[1] - charX))
-            playerTag = sortedTags[0][0]
+        for i in range(len(tagCol)):
+            import pdb; pdb.set_trace()
+            if not dbm.playerExists(tagCol[i][0]): continue     # Only run the matching if this player is registered
+            playerTag = tagCol[i][0]
+            tagX, tagY = tagCol[i][1], tagCol[i][2]             # x, y coordinates of the player tag
+
+            sortedPlayers = sorted(playerCol, key=lambda play: abs(play[1] - tagX)) # Sort player number by x position
+            sortedChars = sorted(charCol, key=lambda char: abs((char[2] - tagY))**2 + (char[1] - tagX) ** 2)     # Sort character played by absolute position
             playerNum = sortedPlayers[0][0]
-            if playerNum == 'CPU':
-                playerTag = 'CPU'   # CPU doesn't have a tag so just copy 'CPU' over
+            charName = sortedChars[0][0]
+            if playerTag == 'CPU':
+                playerNum = 'CPU'   # CPU doesn't have a tag so just copy 'CPU' over
             newPlayer = Player(playerTag, charName, playerNum, -1)
             players.append(newPlayer)
-            playerCol.remove(sortedPlayers[0])
-            tagCol.remove(sortedTags[0])
 
         return players
 
-    players = matchLabels(charColumn, playerColumn, tagColumn)  # Matches each text label to fully describe each player
+    players = matchLabels(charColumn, playerColumn, filteredTags)  # Matches each text label to fully describe each player
     game = Game(players)
     return game
 
 
 if __name__ == '__main__':
-    game = imageToGame(imagePath, printing=False, showing=False)
+    game = imageToGame(imagePath, printing=True, showing=False)
     for player in game.players:
         player.printOut()

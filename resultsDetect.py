@@ -22,43 +22,14 @@ resultsScreenDir = os.path.join(curDir,'objectRecognition', 'rankDetector', 'inp
 resultsImagePath = os.path.join(resultsScreenDir, 'realResults0.png')
 
 
-# labels and bounds inputs are solely from text recognition; rank detection is done separately
-def rankOrder(imagePath, printing=False):
-    playerBounds = []   # Make an array storing the bounding boxes for each time player number is seen
-    playerNums = []     # all detected "P#" text
-
-    # Calculates the number of players present by searching for ascending 'P#' numbers
-    for i in range(1, 9):
-        if ('P{}'.format(i)) in labels:
-            index = np.where(labels == ('P{}'.format(i)))[0][0]
-            playerNums.append(labels[index])
-
-    xBoundsPlayerNum = [bound.vertices[0].x for bound in playerBounds]   # We only need the x position of the player tag to determine order
-
-    detectedRankBoxes = objDetect.detectRanks(imagePath)
-    xBoundsRanks = [box.xmin for box in detectedRankBoxes]
-    ranks = rankGame(imagePath)     # list of ranks as ints, sorted in ascending player order
-
-    # sorted from left to right onscreen
-    # if below isn't working, check that I sorted things correctly below
-    sortedPlayerNums = OrderedDict(sorted(zip(xBoundsPlayerNum, playerNums), key=lambda t: t[0]))
-
-    # now that P#s are matched to ranks, sort these with respect to such ranks
-    scoreDict = OrderedDict(sorted(zip(sortedPlayerNums.keys(), sortedRanks.keys()), key=lambda t: t[1]))   # Sorts the player numbers with the x coordinates in ascending order
-    if printing:
-        print('Rankings are:')
-        for item in scoreDict.items():
-            print('P{}'.format(item[0]))
-    return scoreDict.keys()     # Returns a list of players 'P{}' in sorted order of rank
-
-
+# Assigns the ranks depicted in the screenshot of the provided results screen to the input game
 def assignRanks(imagePath, game, showing=False):
-    sortedRanks = rankGame(imagePath, draw_output=showing)  # Ranks are pre-sorted in ascending player order
-    for playerNum, rank in enumerate(sortedRanks, 1):   # Search through playerNumbers starting at 1
+    sortedRanks = rankGame(imagePath, draw_output=showing)  # IMPORTANT: Ranks must be pre-sorted in ascending player order
+    for playerNum, rank in enumerate(sortedRanks, 1):       # Search through playerNumbers starting at 1
         for player in game.players:
             if player.playerNum == 'P{}'.format(playerNum):
                 player.rank = rank
-                break           # Breaks out of the inner loop -> next rank
+                break                  # Breaks out of the inner loop -> next rank
     return game
 
 
