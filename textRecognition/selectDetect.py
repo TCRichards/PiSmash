@@ -67,12 +67,44 @@ def imageToGame(path, printing=False, showing=False):
         return iconModel.isCharacter(label)
 
     # Iterate over all the text and sort into proper lists
+
+    avoidedCPU_idxs = set([])   # Store a set of the indices of CPU labels to avoid counting
     for i, label in enumerate(bottomLabels):
+        if i in avoidedCPU_idxs:
+            continue
         if isCharacter(label):
             formattedName = isCharacter(label)  # Convert the label to the same format as stored in iconModel's charDict
             charColumn.append([formattedName, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
         elif isPlayerNum(label):
-            playerColumn.append([label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
+            if label == 'CPU':  # Since CPU is counted as a player number AND a tag, we have to add it to both
+                closestCPU_dist = np.inf
+                closestCPU_idx = 0
+                for j in range(len(bottomBounds)):  # Search through all the labels and find the closest one that's also a CPU
+                    if j == i:  # Don't count the same distance
+                        continue
+                    if bottomLabels[j] == 'CPU':
+                        distance_x = abs(bottomBounds[j].vertices[0].x - bottomBounds[i].vertices[0].x)
+                        print('Distance From {} to {} = {}'.format(i, j, distance_x))
+                        if j not in avoidedCPU_idxs:
+                            if distance_x < closestCPU_dist:
+                                closestCPU_idx = j
+                                closestCPU_dist = distance_x        # Update the closest distance
+                    # if bottomLabels[j] == 'CPU' and bottomLabels[j] not in avoidedCPU_idxs:
+                    #     if abs(bottomBounds[j].vertices[0].x - bottomBounds[i].vertices[0].x) < closestCPU_dist:
+                    #         closestCPU_idx = j
+                avoidedCPU_idxs.add(closestCPU_idx)  # Mark j as an index to avoid to prevent double-counting
+
+                # If the label we're looking at is higher on the screen, match that with the player tag
+
+                if bottomBounds[i].vertices[0].y < bottomBounds[j].vertices[0].y:
+                    tagColumn.append([label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
+                    playerColumn.append([label, bottomBounds[j].vertices[0].x, bottomBounds[j].vertices[0].y])
+                else:
+                    tagColumn.append([label, bottomBounds[j].vertices[0].x, bottomBounds[j].vertices[0].y])
+                    playerColumn.append([label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
+
+            else:
+                playerColumn.append([label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
         else:
             tagColumn.append([label, bottomBounds[i].vertices[0].x, bottomBounds[i].vertices[0].y])
 

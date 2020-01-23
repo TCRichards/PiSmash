@@ -26,8 +26,6 @@ def capture(videoSource, targetDir, maxCapacity=100, total=1000, delay=1, output
     i = 0
     while i < total:
         picNum = i % maxCapacity    # Modulo everything by the maximum capacity to only keep that many most recent images
-        # import pdb
-        # pdb.set_trace()
         if outputFormat == 'number':
             label = 'shot_{}.png'.format(picNum)
         else:

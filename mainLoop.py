@@ -75,12 +75,12 @@ if __name__ == '__main__':
     status = GameStatus()
     screenModel = keras.models.load_model(screenModelPath)
     # Constantly monitor the stream and take screenshots using a separate thread
-    # streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid2_short.mp4', 0.05), daemon=True)  # Runs forever
-    streamThread = threading.Thread(target=readStream.captureStream, daemon=True)
+    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid2_short.mp4', 0.001), daemon=True)  # Runs forever
+    # streamThread = threading.Thread(target=readStream.captureStream, daemon=True)
     # Debugging ignoring stream
     streamThread.start()
 
-    time.sleep(5)   # Give the other thread a headstart (needs to fully launc before we can proceed)
+    time.sleep(4)   # Give the other thread a headstart (needs to fully launc before we can proceed)
     lastFile = ''
 
     classifyQueueSize = 5
@@ -115,7 +115,7 @@ if __name__ == '__main__':
             # Check if all of the elements match.  If they do, we're confident about the result and proceed
             if classifyQueue.count(classifyQueue[0]) >= classifyQueueSize:
                 guess = classifyQueue[0]    # confident guess
-                print(guess)
+                print(guess)    # Print the guess when debugging
             else:
                 raise ValueError  # We will manually catch this error below
 
@@ -130,7 +130,7 @@ if __name__ == '__main__':
                 if guess == 'Black' and not status.analyzedCharSelect:
                     charSelectPath = os.path.join(screenDir, 'Character-Select-Read.png')
                     imageQueue.pop().save(charSelectPath)
-                    game = sd.imageToGame(charSelectPath, printing=False, showing=True)  # Apply recognition the first time select
+                    game = sd.imageToGame(charSelectPath, printing=False, showing=False)  # Apply recognition the first time select
                     print('ANALYZING CHARACTER SELECT SCREENSHOT {}'.format(latestFile))
                     game.printOut()
 
@@ -154,7 +154,7 @@ if __name__ == '__main__':
                 if guess == 'Results':
                     print('\nIDENTIFIED RESULTS SCREEN\n')
                     rd.assignRanks(latestFile, game, showing=True)    # Take the results of the game and update player ranks
-                    for player in game.players:         # Print out the game's results
+                    for player in game.players:                       # Print out the game's results
                         player.printOut()
                     dbm.logResults(game)
                     status.clearGame()  # Reset the game for the next use

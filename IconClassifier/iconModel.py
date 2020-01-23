@@ -101,7 +101,7 @@ charDict = {
     "yoshi": 74,
     "youngLink": 75,
     "zelda": 76,
-    "zeroSuitSamus": 77
+    "zeroSuitSamus": 77,
 }
 
 
@@ -157,7 +157,7 @@ def isCharacter(label):
         return 'youngLink'
     elif label == 'ZERO':
         return 'zeroSuitSamus'
-    elif label == 'RANDOM':
+    elif label == 'RANDOM': # Catch the random
         return 'random'
     return None
 
