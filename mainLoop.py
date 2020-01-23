@@ -14,7 +14,9 @@ from modelHelper import makePrediction
 from collections import deque
 import databaseManager as dbm
 
+import cv2
 import sqlite3
+import matplotlib.pyplot as plt
 from tensorflow import keras
 import os
 import pandas as pd
@@ -31,10 +33,24 @@ statsPath = os.path.join(curDir, '')
 iconModelPath = os.path.join(curDir, 'iconModelPrototype.h5')
 screenDir = readStream.imageDir
 
+try:
+    os.mkdir(screenDir)
+except FileExistsError:
+    pass
+
 
 # Simple struct that stores the current state of the game from ['character select', 'Black'...]
 class GameStatus:
+
     def __init__(self):
+        self.status = None
+        self.statusSet = set([])
+
+        self.analyzedCharSelect = False
+        self.analyzedResults = False
+
+    def clearGame(self):
+        self.statusSet.clear()
         self.status = None
 
 
@@ -64,13 +80,16 @@ if __name__ == '__main__':
     # Debugging ignoring stream
     streamThread.start()
 
-    time.sleep(4)   # Give the other thread a 3 second headstart (needs to fully launc before we can proceed)
-
-    game = makeSampleGame(2)
+    time.sleep(5)   # Give the other thread a headstart (needs to fully launc before we can proceed)
     lastFile = ''
 
-    queueSize = 4
-    classifyQueue = deque(maxlen=queueSize)         # Stores the 'maxlen' most recent classifications for comparison
+    classifyQueueSize = 5
+    imageQueueSize = classifyQueueSize + 2
+    classifyQueue = deque(maxlen=classifyQueueSize)         # Stores the 'maxlen' most recent classifications for comparison
+    imageQueue = deque(maxlen=imageQueueSize)           # Store the 'maxlen' most recent images (numpy matrices)
+
+    # Define these outside of the loop so they always exist
+    game = None         # Game object to be accessed and modified by subsequent code
 
     while True:
         try:
@@ -81,44 +100,51 @@ if __name__ == '__main__':
             rawIm = Image.open(latestFile)
             newIm = rawIm.resize((num_rows, num_cols))          # Rescale the image to num_rows x num_cols
             img = np.array(newIm).astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
-            img = img.reshape((1,) + img.shape)                 # Make 4D so that model can interpret
-            guess = makePrediction(screenModel, screenDict, img)# String prediction of the screen type
+            img = img.reshape((1,) + img.shape)                 # Make 4D (add 1 bogus dimension) so that model can interpret
+            currentGuess = makePrediction(screenModel, screenDict, img)# String prediction of the screen type
 
             # Keep the queue size limited to queueSize and add the new element
-            if len(classifyQueue) >= queueSize:
+            if len(classifyQueue) >= classifyQueueSize:
                 classifyQueue.pop()
-            classifyQueue.appendleft(guess)
+            classifyQueue.appendleft(currentGuess)
+
+            if len(imageQueue) >= imageQueueSize:
+                imageQueue.pop()
+            imageQueue.appendleft(rawIm)  # Convert the image back to 3 dimensions so we can use later
 
             # Check if all of the elements match.  If they do, we're confident about the result and proceed
-            if classifyQueue.count(classifyQueue[0]) >= queueSize:
-                guess = classifyQueue[0]
+            if classifyQueue.count(classifyQueue[0]) >= classifyQueueSize:
+                guess = classifyQueue[0]    # confident guess
+                print(guess)
             else:
                 raise ValueError  # We will manually catch this error below
-
-
-            print(guess)
 
             if status.status is None or status.status == 'Other':
                 if guess == 'Character-Select':
                     status.status = 'Character-Select'
-                    # game = sd.imageToGame(latestFile, printing=False)  # Apply recognition the first time select is
                     print('\nIDENTIFIED CHARACTER SELECT SCREEN\n')
 
             # TODO: What about when people change character within a select screen? This only applies
             # TR once. Leave as is for now
             elif status.status == 'Character-Select':
-                    if guess == 'Pre-Game':
-                        status.status = 'Pre-Game'
-                        print('\nIDENTIFIED PRE-GAME SCREEN\n')
+                if guess == 'Black' and not status.analyzedCharSelect:
+                    charSelectPath = os.path.join(screenDir, 'Character-Select-Read.png')
+                    imageQueue.pop().save(charSelectPath)
+                    game = sd.imageToGame(charSelectPath, printing=False, showing=True)  # Apply recognition the first time select
+                    print('ANALYZING CHARACTER SELECT SCREENSHOT {}'.format(latestFile))
+                    game.printOut()
+
+                    status.analyzedCharSelect = True
+
+                elif guess == 'Pre-Game':
+                    status.status = 'Pre-Game'
+                    print('\nIDENTIFIED PRE-GAME SCREEN\n')
 
             elif status.status == 'Pre-Game':
                 if guess == 'Game':
                     status.status = 'Game'
                     print('\nIDENTIFIED GAME SCREEN\n')
 
-
-            # TODO: How it's currently implemented this will cause issues with the starts of victory screens
-            # when the results aren't clear
             elif status.status == 'Game':
                 if guess == 'Victory':
                     status.status = 'Victory'
@@ -127,16 +153,19 @@ if __name__ == '__main__':
             elif status.status == 'Victory':
                 if guess == 'Results':
                     print('\nIDENTIFIED RESULTS SCREEN\n')
-                    rd.assignRanks(latestFile, game)    # Take the results of the game and update player ranks
+                    rd.assignRanks(latestFile, game, showing=True)    # Take the results of the game and update player ranks
                     for player in game.players:         # Print out the game's results
                         player.printOut()
                     dbm.logResults(game)
-                    status.status = None                # Reset the status for the next game
+                    status.clearGame()  # Reset the game for the next use
 
-        except ValueError:
+        except ValueError:  # This is raised if not all guesses in the queue are equal
             pass
 
         finally:    # We always need to update the files regardless of if the classification was correct
             lastFile = latestFile   # Keep around the last file's name so it can be used to avoid double-counting
-            if latestFile is not None:
-                os.remove(latestFile)   # Remove the example file from the directory to avoid clutter and false positives
+            if latestFile is not None:    # Delete the image last removed from the queue
+                try:    # Remove the image if it still exists (may already have been deleted)
+                    os.remove(latestFile)     # Remove the example file from the directory to avoid clutter and false positives
+                except FileNotFoundError:   #  Do nothing if the file is already removed
+                    pass

@@ -33,7 +33,8 @@ imagePath = os.path.join(screenDir, 'realChar0.png')
 
 # TODO: Currently doesn't work first characters that are more than 1 word (e.g. Dark Pit)
 def imageToGame(path, printing=False, showing=False):
-    labels, bounds = goog.detect_text_vision(path, printing=printing)
+    # We only need to see the raw results if we're running the script from this file
+    labels, bounds = goog.detect_text_vision(path, printing=(printing and __name__ == '__main__'))
     bottomLabels = np.array([])
     bottomBounds = np.array([])
     imgHeight = cv2.imread(path).shape[0]
@@ -85,7 +86,6 @@ def imageToGame(path, printing=False, showing=False):
     def matchLabels(charCol, playerCol, tagCol):
         players = []
         for i in range(len(tagCol)):
-            import pdb; pdb.set_trace()
             if not dbm.playerExists(tagCol[i][0]): continue     # Only run the matching if this player is registered
             playerTag = tagCol[i][0]
             tagX, tagY = tagCol[i][1], tagCol[i][2]             # x, y coordinates of the player tag
@@ -103,6 +103,10 @@ def imageToGame(path, printing=False, showing=False):
 
     players = matchLabels(charColumn, playerColumn, filteredTags)  # Matches each text label to fully describe each player
     game = Game(players)
+
+    if printing:
+        for player in players:
+            player.printOut()
     return game
 
 

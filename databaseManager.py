@@ -238,7 +238,7 @@ def getMatchupStats(playerTag_1, charName_1, playerTag_2, charName_2):
 # Fills the table with 'numGames' additional games with randomized stats (playerTag order is constant)
 def generateSampleData(numGames):
     for log in range(numGames):
-        numPlayers = np.random.randint(1, 4)
+        numPlayers = np.random.randint(1, 8)
         sampleGame = makeSampleGame(numPlayers)
         logResults(sampleGame)
 
@@ -248,8 +248,8 @@ def generateSampleData(numGames):
 
 if __name__ == '__main__':
     # print(getGameCount())
-    # generateSampleData(200)
+    generateSampleData(20)
     # getWinRatio('THOMATO', 'fox')
     # getAllWinRatios('THOMATO')
     # print(countAllWins('BEEF'))
-    print(playerExists('BEEF'))
+    # print(playerExists('BEEF'))

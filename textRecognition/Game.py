@@ -34,7 +34,7 @@ def makeSampleGame(numPlayers):
     from IconClassifier.iconModel import charDict
 
     # Create the data entries
-    playerNames = ['Gary-san', 'LONG', 'BEEF', 'THOMATO', 'protosnipe', 'LIGMA', 'BIRD', 'QLIVER']
+    playerNames = ['brity8', 'postmabone', 'LONG', 'BEEF', 'THOMATO', 'Protosnipe', 'BIRD', 'QLIVER']
     ranks = np.arange(1, numPlayers + 1)
     orders = np.arange(1, numPlayers + 1)
 

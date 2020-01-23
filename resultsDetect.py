@@ -23,7 +23,9 @@ resultsImagePath = os.path.join(resultsScreenDir, 'realResults0.png')
 
 
 # Assigns the ranks depicted in the screenshot of the provided results screen to the input game
-def assignRanks(imagePath, game, showing=False):
+def assignRanks(imagePath, game, printing=False, showing=False):
+    if printing:
+        print('Analyzing Results Screen')
     sortedRanks = rankGame(imagePath, draw_output=showing)  # IMPORTANT: Ranks must be pre-sorted in ascending player order
     for playerNum, rank in enumerate(sortedRanks, 1):       # Search through playerNumbers starting at 1
         for player in game.players:
