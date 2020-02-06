@@ -2,9 +2,9 @@ class Player:
 
     # Initialize a player object
     def __init__(self, tag, charName, playerNum, rank=None):
-        self.tag = tag                      # Username. e.g. 'THOMATO'
-        self.charName = charName            # Name of the charcter being played
-        self.playerNum = playerNum          # Player number assignment. e.g. 'P1'
+        self.tag = tag                      # Username. e.g. 'THOMATO' or 'CPU'
+        self.charName = charName            # Name of the charcter being played e.g. 'chrom'
+        self.playerNum = playerNum          # Player number assignment. e.g. 'P1' or 'CPU'
         self.rank = rank                    # How did the player do?  This will be None until assigned at the end
 
     # Conviniently print out all data fields

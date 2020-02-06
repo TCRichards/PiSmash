@@ -26,20 +26,32 @@ resultsImagePath = os.path.join(resultsScreenDir, 'realResults0.png')
 def assignRanks(imagePath, game, printing=False, showing=False):
     if printing:
         print('Analyzing Results Screen')
+
     sortedRanks = rankGame(imagePath, draw_output=showing)  # IMPORTANT: Ranks must be pre-sorted in ascending player order
-    for playerNum, rank in enumerate(sortedRanks, 1):       # Search through playerNumbers starting at 1
-        for player in game.players:
-            if player.playerNum == 'P{}'.format(playerNum):
-                player.rank = rank
-                break                  # Breaks out of the inner loop -> next rank
+
+    # TODO: Make this work for a CPU
+    def playerOrder(player):
+        if player.playerNum == 'CPU':
+            return -1
+        return int(player.playerNum[1]) # Returns only the 1 in the playerNum 'P1'
+
+    sortedPlayers = sorted(game.players, key=playerOrder)
+    for i, player in enumerate(sortedPlayers):
+        player.rank = sortedRanks[i]
+    #
+    # for playerNum, rank in enumerate(sortedRanks, 1):       # Search through playerNumbers starting at 1
+    #     for player in game.players:
+    #         if player.playerNum == 'P{}'.format(playerNum):
+    #             player.rank = rank
+    #             break                  # Breaks out of the inner loop -> next rank
     return game
 
 
 if __name__ == '__main__':
-    THOMATO = Player('THOMATO', 'HERO', 'P1', None)
-    BEEF = Player('BEEF', 'Ike', 'P2', None)
+    BEEF = Player('BEEF', 'HERO', 'P1', None)
+    BIRD = Player('BIRD', 'Ike', 'P2', None)
     LONG = Player('LONG', 'Villager', 'P3', None)
-    BIRD = Player('BIRD', 'Marth', 'P4', None)
+    THOMATO = Player('THOMATO', 'Marth', 'P4', None)
 
 
     sampleGame = Game([THOMATO, BEEF, LONG, BIRD])

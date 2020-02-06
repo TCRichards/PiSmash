@@ -84,7 +84,6 @@ def imageToGame(path, printing=False, showing=False):
                         continue
                     if bottomLabels[j] == 'CPU':
                         distance_x = abs(bottomBounds[j].vertices[0].x - bottomBounds[i].vertices[0].x)
-                        print('Distance From {} to {} = {}'.format(i, j, distance_x))
                         if j not in avoidedCPU_idxs:
                             if distance_x < closestCPU_dist:
                                 closestCPU_idx = j

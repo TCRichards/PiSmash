@@ -9,7 +9,7 @@ from IconClassifier.iconModel import charDict       # Needed to run statistics o
 from textRecognition.game import makeSampleGame     # Used to populate the database with sample data
 
 curDir = os.path.dirname(__file__)
-dataPath = os.path.join(curDir, 'gameLog.db')
+dataPath = os.path.join(curDir, 'realGames.db')
 conn = sqlite3.connect(dataPath)    # Stores the connection to the database
 
 # ======== Functions to create new tables -- automatically called on every use to be safe =======================
@@ -248,8 +248,12 @@ def generateSampleData(numGames):
 
 if __name__ == '__main__':
     # print(getGameCount())
-    generateSampleData(20)
+    # generateSampleData(20)
     # getWinRatio('THOMATO', 'fox')
     # getAllWinRatios('THOMATO')
     # print(countAllWins('BEEF'))
     # print(playerExists('BEEF'))
+    createMasterTable(reset=True)
+    players = ['THOMATO', 'Gary-san', 'gottapOOt', 'BEEF', 'sivad']
+    for player in players:
+        createPlayerTable(player)

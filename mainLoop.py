@@ -97,7 +97,10 @@ if __name__ == '__main__':
             if latestFile is None:                              # If there's no new screenshot, continue
                 continue
 
-            rawIm = Image.open(latestFile)
+            try:
+                rawIm = Image.open(latestFile)
+            except OSError:
+                continue
             newIm = rawIm.resize((num_rows, num_cols))          # Rescale the image to num_rows x num_cols
             img = np.array(newIm).astype(float) / 255.          # Convert greyscale image to a numpy array (num_rows x num_cols) and normalize
             img = img.reshape((1,) + img.shape)                 # Make 4D (add 1 bogus dimension) so that model can interpret
@@ -115,7 +118,7 @@ if __name__ == '__main__':
             # Check if all of the elements match.  If they do, we're confident about the result and proceed
             if classifyQueue.count(classifyQueue[0]) >= classifyQueueSize:
                 guess = classifyQueue[0]    # confident guess
-                print(guess)    # Print the guess when debugging
+                # print(guess)    # Print the guess when debugging
             else:
                 raise ValueError  # We will manually catch this error below
 
@@ -132,8 +135,6 @@ if __name__ == '__main__':
                     imageQueue.pop().save(charSelectPath)
                     game = sd.imageToGame(charSelectPath, printing=False, showing=False)  # Apply recognition the first time select
                     print('ANALYZING CHARACTER SELECT SCREENSHOT {}'.format(latestFile))
-                    game.printOut()
-
                     status.analyzedCharSelect = True
 
                 elif guess == 'Pre-Game':
@@ -154,8 +155,7 @@ if __name__ == '__main__':
                 if guess == 'Results':
                     print('\nIDENTIFIED RESULTS SCREEN\n')
                     rd.assignRanks(latestFile, game, showing=True)    # Take the results of the game and update player ranks
-                    for player in game.players:                       # Print out the game's results
-                        player.printOut()
+                    game.printOut()
                     dbm.logResults(game)
                     status.clearGame()  # Reset the game for the next use
 
