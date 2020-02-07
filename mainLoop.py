@@ -15,6 +15,7 @@ from collections import deque
 import databaseManager as dbm
 
 import cv2
+import argparse
 import sqlite3
 import matplotlib.pyplot as plt
 from tensorflow import keras
@@ -26,6 +27,12 @@ import numpy as np
 import time
 # ========================================================
 
+parser = argparse.ArgumentParser(description='Mainloop Inputs')
+parser.add_argument('--media')
+args = parser.parse_args()
+command = args.media
+
+print(command)
 
 curDir = os.path.dirname(__file__)
 statsPath = os.path.join(curDir, '')
@@ -75,8 +82,11 @@ if __name__ == '__main__':
     status = GameStatus()
     screenModel = keras.models.load_model(screenModelPath)
     # Constantly monitor the stream and take screenshots using a separate thread
-    streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid2_short.mp4', 0.001), daemon=True)  # Runs forever
-    # streamThread = threading.Thread(target=readStream.captureStream, daemon=True)
+
+    if command == 'saved':
+        streamThread = threading.Thread(target=readStream.captureMedia, args=('exampleVideos/smashVid2_short.mp4', 0.001), daemon=True)  # Runs forever
+    else:   # e.g. 'stream'
+        streamThread = threading.Thread(target=readStream.captureStream, daemon=True)
     # Debugging ignoring stream
     streamThread.start()
 
