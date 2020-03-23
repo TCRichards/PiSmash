@@ -1,0 +1,12 @@
+{% extends "dataviewer/header.html" %}
+
+<body>
+<div>
+    <p>Welcome to the PiSmash Dataviewer! This page visualizes Super Smash Bros Ultimate match history.</p>
+</div>
+<div>
+    {% block content %}	
+    {% include "dataviewer/includes/plots.html" %}
+    {% endblock %}	
+</div>
+</body>
