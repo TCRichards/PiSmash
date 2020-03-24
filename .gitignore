@@ -68,3 +68,41 @@ ScreenClassifier/diagnostics/history.png
 # Same; but weight files
 *.weights
 objectRecognition/rankDetector/rankModel.h5.zip
+# our databases
+*.sqlite3
+*.db
+*.pyc
+db.sqlite3
+
+# weird files
+pismashwebsite/__pycache__/settings.cpython-37.pyc
+pismashwebsite/__pycache__/urls.cpython-37.pyc
+
+# has secret encryption info
+pismashwebsite/settings.py
+
+
+# not our code
+dataviewer/static/js/jquery-3.1.1.min.js
+dataviewer/static/js/bootstrap.bundle.js
+dataviewer/static/js/bootstrap.bundle.js.map
+dataviewer/static/js/bootstrap.bundle.min.js
+dataviewer/static/js/bootstrap.bundle.min.js.map
+dataviewer/static/js/bootstrap.js
+dataviewer/static/js/bootstrap.js.map
+dataviewer/static/js/bootstrap.min.js
+dataviewer/static/js/bootstrap.min.js.map
+dataviewer/static/css/bootstrap-grid.css
+dataviewer/static/css/bootstrap-grid.css.map
+dataviewer/static/css/bootstrap-grid.min.css
+dataviewer/static/css/bootstrap-grid.min.css.map
+dataviewer/static/css/bootstrap-reboot.css
+dataviewer/static/css/bootstrap-reboot.css.map
+dataviewer/static/css/bootstrap-reboot.min.css
+dataviewer/static/css/bootstrap-reboot.min.css.map
+dataviewer/static/css/bootstrap.css
+dataviewer/static/css/bootstrap.css.map
+dataviewer/static/css/bootstrap.min.css
+dataviewer/static/css/bootstrap.min.css.map
+dataviewer/__pycache__/urls.cpython-37.pyc
+dataviewer/__pycache__/views.cpython-37.pyc
