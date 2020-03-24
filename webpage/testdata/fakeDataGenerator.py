@@ -55,13 +55,10 @@ def generateMatches(N):
     f.close()
     return;
 
-def main():
-
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter)
     parser.add_argument("N", type=str, help="number of matches generated")
     
     args = parser.parse_args()
     N = args.N
     generateMatches(int(N))
-    
-main()
